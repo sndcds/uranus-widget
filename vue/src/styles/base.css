@@ -1,0 +1,60 @@
+:host {
+  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --color-text: #1a1a1a;
+  --color-text-muted: #777;
+  --color-text-subtle: #888;
+  --color-border: #e0e0e0;
+  --color-border-strong: #ccc;
+  --color-surface: #fff;
+  --color-surface-hover: #f0f0f0;
+  --color-surface-alt: #fafafa;
+  --color-primary: #1a73e8;
+  --color-danger: #d32f2f;
+  --radius: 8px;
+  --radius-pill: 20px;
+  display: block;
+}
+
+.widget {
+  font-family: var(--font-family);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--color-text);
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.widget-header {
+  margin-bottom: 16px;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.widget-title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.event-count {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+.events-container {
+  min-height: 120px;
+}
+
+.loading,
+.error,
+.empty {
+  padding: 40px 0;
+  text-align: center;
+  color: var(--color-text-subtle);
+}
+
+.error {
+  color: var(--color-danger);
+}

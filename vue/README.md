@@ -4,15 +4,42 @@ Vue3-basiertes Events-Widget als **Web Component** (`<uranus-widget>`), das sich
 
 ## Aufbau
 
+Die Codepbasis ist modular aufgebaut: eigene Components für die einzelnen Ansichten (Übersicht, Detail), getrennte CSS-Dateien sowie ein Composable für die komplette API-/Daten-Logik.
+
 ```
 vue/
-├── index.html          # Dev-Demo für `vite dev`
-├── vite.config.js      # Vite-Konfiguration (IIFE-Library-Build)
+├── index.html                # Dev-Demo für `vite dev`
+├── vite.config.js            # Vite-Konfiguration (Library-Build als Custom Element)
 ├── src/
-│   ├── main.js         # registeriert das Custom Element
-│   └── UranusWidget.vue# Vue3-SFC mit der gesamten Logik
-└── demo/embed.html     # Beispiel: Einbindung auf einer Website
+│   ├── main.js               # registeriert das Custom Element
+│   ├── UranusWidget.vue      # Root-Component: komponiert Ansichten und lädt Styles
+│   ├── components/
+│   │   ├── WidgetHeader.vue  # Titel + Event-Gesamtzahl
+│   │   ├── FilterBar.vue     # Kategorie-Filter-Chips (v-model:selectedCategories)
+│   │   ├── EventsList.vue    # Übersicht: Liste / leer / Laden / Fehler
+│   │   ├── EventCard.vue     # einzelne Event-Karte (Klick → Detail)
+│   │   ├── Pagination.vue    # Seitensteuerung ← Seite X von Y →
+│   │   └── EventDetail.vue   # Detailansicht (Bild, Datum, Ort, Beschreibung, Links)
+│   ├── composables/
+│   │   └── useEventsApi.js   # API-Logik + Zustand (ähnlich einem Pinia-Store)
+│   ├── lib/
+│   │   ├── constants.js      # BASE_URL, PARAM_MAP, CATEGORIES
+│   │   └── format.js         # Datums-/HTML-Helfer
+│   └── styles/
+│       ├── index.css         # bündelt alle Style-Module (im Shadow DOM injiziert)
+│       ├── base.css          # CSS-Variablen, Layout, Lade-/Fehler-Zustände
+│       ├── filter.css        # FilterBar
+│       ├── events.css        # Karten, Liste, Pagination
+│       ├── detail.css        # Detailansicht
+│       └── media.css         # responsive Regeln
+└── demo/embed.html           # Beispiel: Einbindung auf einer Website
 ```
+
+## Neue Views / Funktionen erweitern
+
+- **Neue Ansicht**: Component unter `src/components/` anlegen und in `UranusWidget.vue` per Ansichts-Kondition (z. B. `v-if="view === 'planner'"`) einblenden.
+- **Kompakte Styles**: Neues CSS-Modul unter `src/styles/` anlegen und in `src/styles/index.css` per `@import` aufnehmen. Alle Styles landen global im Shadow Root des Custom Elements — Kind-Components brauchen keinen eigenen `<style>`-Block.
+- **Neue Daten-/API-Funktion**: Im Composable `useEventsApi.js` bündeln und in `UranusWidget.vue` zurückgeben.
 
 ## Build
 

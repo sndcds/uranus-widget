@@ -1,0 +1,116 @@
+.events-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.event-card {
+  display: flex;
+  gap: 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--color-surface);
+  cursor: pointer;
+  transition: box-shadow 0.2s;
+}
+
+.event-card:hover {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.event-image {
+  flex: 0 0 150px;
+  width: 150px;
+  height: 150px;
+  overflow: hidden;
+}
+
+.event-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.image-placeholder {
+  width: 100%;
+  height: 100%;
+  background: var(--color-surface-hover);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  font-size: 0.85rem;
+}
+
+.event-content {
+  flex: 1;
+  padding: 12px 12px 12px 0;
+  min-width: 0;
+}
+
+.event-title {
+  margin: 0 0 4px;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.event-subtitle {
+  margin: 0 0 6px;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.event-meta {
+  margin: 0 0 8px;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.event-summary {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #444;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-border);
+}
+
+.pagination button {
+  padding: 6px 16px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 6px;
+  background: var(--color-surface-alt);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.15s, opacity 0.15s;
+}
+
+.pagination button:hover:not(:disabled) {
+  background: var(--color-surface-hover);
+}
+
+.pagination button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.page-info {
+  color: #555;
+  font-weight: 500;
+  min-width: 140px;
+  text-align: center;
+  font-size: 0.9rem;
+}
