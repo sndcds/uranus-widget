@@ -8,8 +8,8 @@ defineProps({
 </script>
 
 <template>
-  <div class="widget-header">
-    <h2 class="widget-title">Events</h2>
-    <span v-if="summary" class="event-count">{{ summary.total_event_count }} Events</span>
+  <div class="uw-widget__header">
+    <h2 class="uw-widget__title">Events</h2>
+    <span v-if="summary" class="uw-widget__count">{{ summary.total_event_count }} Events</span>
   </div>
 </template>

@@ -40,17 +40,17 @@ const venueCity = computed(() => venue.value?.venue_city || '')
 </script>
 
 <template>
-  <div class="detail-container">
-    <div v-if="loading" class="loading">Lade Details...</div>
-    <div v-else-if="error" class="error">Fehler beim Laden: {{ error }}</div>
-    <div v-else-if="data" class="detail">
-      <div v-if="data.images?.main?.url" class="detail-image">
+  <div class="uw-detail__container">
+    <div v-if="loading" class="uw-is-loading">Lade Details...</div>
+    <div v-else-if="error" class="uw-is-error">Fehler beim Laden: {{ error }}</div>
+    <div v-else-if="data" class="uw-detail">
+      <div v-if="data.images?.main?.url" class="uw-detail__image">
         <img :src="`${data.images.main.url}/?ratio=16:9&width=900`" :alt="data.title">
       </div>
-      <div class="detail-body">
-        <h2 class="detail-title">{{ data.title }}</h2>
-        <p v-if="data.subtitle" class="detail-subtitle">{{ data.subtitle }}</p>
-        <div class="detail-meta">
+      <div class="uw-detail__body">
+        <h2 class="uw-detail__title">{{ data.title }}</h2>
+        <p v-if="data.subtitle" class="uw-detail__subtitle">{{ data.subtitle }}</p>
+        <div class="uw-detail__meta">
           <p v-if="dateStr">
             <strong>Datum &amp; Uhrzeit:</strong> {{ dateStr }}
           </p>
@@ -60,10 +60,10 @@ const venueCity = computed(() => venue.value?.venue_city || '')
         </div>
         <div
           v-if="data.description"
-          class="detail-description"
+          class="uw-detail__description"
           v-html="renderDescription(data.description)"
         ></div>
-        <div class="detail-links">
+        <div class="uw-detail__links">
           <a
             v-for="link in links"
             :key="link.url"

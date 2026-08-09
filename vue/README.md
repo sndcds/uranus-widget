@@ -22,7 +22,8 @@ vue/
 │   │   └── EventDetail.vue   # Detailansicht (Bild, Datum, Ort, Beschreibung, Links)
 │   ├── composables/
 │   │   ├── useEventsApi.js     # API-Logik (Events, Detail, Filter, Pagination)
-│   │   └── useWidgetConfig.js  # Konfig-Ladung (Props, JSON, externer Pfad)
+│   │   ├── useWidgetConfig.js  # Konfig-Ladung (Props, JSON, externer Pfad)
+│   │   └── useStyles.js        # lädt externes CSS in den Shadow Root
 │   ├── lib/
 │   │   ├── constants.js      # BASE_URL, PARAM_MAP, CATEGORIES
 │   │   └── format.js         # Datums-/HTML-Helfer
@@ -35,7 +36,8 @@ vue/
 │       └── media.css         # responsive Regeln
 ├── demo/
 │   ├── embed.html            # Beispiel: Einbindung auf einer Website
-│   └── config.json           # Beispiel: externe Konfigurationsdatei
+│   ├── config.json           # Beispiel: externe Konfigurationsdatei
+│   └── theme.css             # Beispiel: externes Theme-CSS
 ```
 
 ## Neue Views / Funktionen erweitern
@@ -77,7 +79,8 @@ Das Widget lädt seine Konfiguration aus einer externen JSON-Datei. Im Tag steht
   "tags": "Klimapark,Energie",
   "start": "2026-07-01",
   "end": "2026-12-31",
-  "categories": "2,4"
+  "categories": "2,4",
+  "styles": ["./theme.css"]
 }
 ```
 
@@ -97,17 +100,79 @@ Das Widget lädt seine Konfiguration aus einer externen JSON-Datei. Im Tag steht
 
 ## Konfigurierbare Optionen
 
-| Schlüssel    | Typ    | Beschreibung                     | Beispiel            |
-|--------------|--------|----------------------------------|---------------------|
-| `limit`      | number | Events pro Seite                 | `12`                |
-| `tags`       | string | Kommagetrennte Tags              | `Klimapark,Energie` |
-| `venue`      | string | Venue-Name                       | `artefact`          |
-| `city`       | string | Stadt                            | `Glücksburg`        |
-| `start`      | string | Startdatum (ISO)                 | `2026-07-01`        |
-| `end`        | string | Enddatum (ISO)                   | `2026-12-31`        |
-| `categories` | string | Kommagetrennte Kategorie-IDs     | `2,4`               |
+| Schlüssel    | Typ          | Beschreibung                     | Beispiel            |
+|--------------|--------------|----------------------------------|---------------------|
+| `limit`      | number       | Events pro Seite                 | `12`                |
+| `tags`       | string       | Kommagetrennte Tags              | `Klimapark,Energie` |
+| `venue`      | string       | Venue-Name                       | `artefact`          |
+| `city`       | string       | Stadt                            | `Glücksburg`        |
+| `start`      | string       | Startdatum (ISO)                 | `2026-07-01`        |
+| `end`        | string       | Enddatum (ISO)                   | `2026-12-31`        |
+| `categories` | string       | Kommagetrennte Kategorie-IDs     | `2,4`               |
+| `styles`     | string/array | Externe CSS-Dateien zum Überschreiben | `"./theme.css"` oder `["./a.css","./b.css"]` |
 
 Die Optionen sind identisch mit den Widget-Attributen (Variant B). Sie können sowohl in der JSON-Datei als auch direkt als Attribut gesetzt werden. Wird beides angegeben, hat eine **extern geladene JSON-Datei** Vorrang; das `config`-Prop (Programm-Einbindung) überschreibt beide.
+
+## Eigene Styles (externes CSS)
+
+Über die Option `styles` in der `config.json` lässt sich beliebiges eigenes CSS einbinden — z. B. um das Design des Widgets an eine Website anzupassen. Es wird **nach** dem internen Standard-CSS in den Shadow Root geladen und überschreibt dadurch gleichnamige Klassen. Wird kein `styles` angegeben, greift automatisch das interne Standard-CSS.
+
+```json
+{
+  "city": "Glücksburg",
+  "styles": ["./custom/theme.css"]
+}
+```
+
+Der Pfad bezieht sich — wie bei `config-url` — auf die einbindende Seite. `styles` akzeptiert einen einzelnen Pfad (`"./theme.css"`) oder ein Array mehrerer Dateien. Dateien werden in der angegebenen Reihenfolge geladen (spätere gewinnen).
+
+### Klassen-Referenz (BEM, `uw-`-Präfix)
+
+Diese Klassen sind die stabile, öffentliche Schnittstelle zum Styling. Das schnellste Theming passiert über die **CSS-Variablen auf `:host`** (Farbe, Radii, Schrift):
+
+| Variable (auf `:host`) | Beschreibung |
+|------------------------|--------------|
+| `--font-family` | Schriftfamilie |
+| `--color-text` / `--color-text-muted` / `--color-text-subtle` | Textfarben |
+| `--color-border` / `--color-border-strong` | Rahmenfarben |
+| `--color-surface` / `--color-surface-hover` / `--color-surface-alt` | Flächen |
+| `--color-primary` | Akzentfarbe (Chips, Links) |
+| `--color-danger` | Fehlerfarbe |
+| `--radius` / `--radius-pill` | Eckenrundung |
+
+Konkrete Layout-Klassen:
+
+| Klasse | Element |
+|--------|---------|
+| `.uw-widget` | Root-Container |
+| `.uw-widget__header` / `__title` / `__count` | Kopfbereich (Titel + Zähler) |
+| `.uw-filter` / `.uw-filter__chip` / `.uw-filter__chip--active` | Filterleiste / Chip / aktiver Chip |
+| `.uw-container` | Behälter der Listenansicht |
+| `.uw-list` | Liste der Karten |
+| `.uw-card` / `__image` / `__placeholder` / `__content` / `__title` / `__subtitle` / `__meta` / `__summary` | Event-Karte und ihre Teile |
+| `.uw-pagination` / `__button` / `__button--prev` / `__button--next` / `__info` | Seitensteuerung |
+| `.uw-btn-back` | Zurück-Button in der Detailansicht |
+| `.uw-detail` / `__container` / `__image` / `__body` / `__title` / `__subtitle` / `__meta` / `__description` / `__links` | Detailansicht |
+| `.uw-is-loading` / `.uw-is-error` / `.uw-is-empty` | Zustände (Laden, Fehler, leer) |
+
+**Beispiel** — `theme.css`:
+
+```css
+:host {
+  --color-primary: #2e7d32;
+  --radius: 12px;
+}
+
+.uw-widget {
+  max-width: 1100px;
+  background: #fffdf5;
+}
+
+.uw-card { flex-direction: column; }
+.uw-card__image { width: 100%; height: 180px; }
+```
+
+
 
 ## Funktionen
 

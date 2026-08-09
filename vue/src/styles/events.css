@@ -1,10 +1,10 @@
-.events-list {
+.uw-list {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-.event-card {
+.uw-card {
   display: flex;
   gap: 16px;
   border: 1px solid var(--color-border);
@@ -15,25 +15,25 @@
   transition: box-shadow 0.2s;
 }
 
-.event-card:hover {
+.uw-card:hover {
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
 }
 
-.event-image {
+.uw-card__image {
   flex: 0 0 150px;
   width: 150px;
   height: 150px;
   overflow: hidden;
 }
 
-.event-image img {
+.uw-card__image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
 
-.image-placeholder {
+.uw-card__placeholder {
   width: 100%;
   height: 100%;
   background: var(--color-surface-hover);
@@ -44,31 +44,31 @@
   font-size: 0.85rem;
 }
 
-.event-content {
+.uw-card__content {
   flex: 1;
   padding: 12px 12px 12px 0;
   min-width: 0;
 }
 
-.event-title {
+.uw-card__title {
   margin: 0 0 4px;
   font-size: 1.125rem;
   font-weight: 600;
 }
 
-.event-subtitle {
+.uw-card__subtitle {
   margin: 0 0 6px;
   font-size: 0.95rem;
   color: #555;
 }
 
-.event-meta {
+.uw-card__meta {
   margin: 0 0 8px;
   font-size: 0.85rem;
   color: var(--color-text-muted);
 }
 
-.event-summary {
+.uw-card__summary {
   margin: 0;
   font-size: 0.9rem;
   color: #444;
@@ -78,7 +78,7 @@
   overflow: hidden;
 }
 
-.pagination {
+.uw-pagination {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -88,7 +88,7 @@
   border-top: 1px solid var(--color-border);
 }
 
-.pagination button {
+.uw-pagination__button {
   padding: 6px 16px;
   border: 1px solid var(--color-border-strong);
   border-radius: 6px;
@@ -98,16 +98,16 @@
   transition: background 0.15s, opacity 0.15s;
 }
 
-.pagination button:hover:not(:disabled) {
+.uw-pagination__button:hover:not(:disabled) {
   background: var(--color-surface-hover);
 }
 
-.pagination button:disabled {
+.uw-pagination__button:disabled {
   opacity: 0.4;
   cursor: default;
 }
 
-.page-info {
+.uw-pagination__info {
   color: #555;
   font-weight: 500;
   min-width: 140px;

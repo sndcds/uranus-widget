@@ -2,6 +2,7 @@
 import { onMounted, onUnmounted } from 'vue'
 import useEventsApi from './composables/useEventsApi'
 import useWidgetConfig from './composables/useWidgetConfig'
+import useStyles from './composables/useStyles'
 import WidgetHeader from './components/WidgetHeader.vue'
 import FilterBar from './components/FilterBar.vue'
 import EventsList from './components/EventsList.vue'
@@ -24,6 +25,7 @@ const {
   config,
   configLoaded,
   configError,
+  styles,
   init: initConfig
 } = useWidgetConfig(props)
 
@@ -48,8 +50,11 @@ const {
   onUrlChange
 } = useEventsApi(config)
 
+const { host: rootEl, styleError, applyStyles } = useStyles()
+
 async function start() {
   await initConfig()
+  applyStyles(styles.value)
   window.addEventListener('popstate', onUrlChange)
   onUrlChange()
 }
@@ -64,17 +69,17 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="widget">
+  <div ref="rootEl" class="uw-widget">
     <template v-if="configError">
-      <div class="error">Konfiguration konnte nicht geladen werden: {{ configError }}</div>
+      <div class="uw-is-error">Konfiguration konnte nicht geladen werden: {{ configError }}</div>
     </template>
 
     <template v-else-if="!configLoaded">
-      <div class="loading">Lade Konfiguration...</div>
+      <div class="uw-is-loading">Lade Konfiguration...</div>
     </template>
 
     <template v-else-if="detailUuid">
-      <button class="btn-back" @click="closeDetail">← Zurück zur Übersicht</button>
+      <button class="uw-btn-back" @click="closeDetail">← Zurück zur Übersicht</button>
       <EventDetail
         :loading="detailLoading"
         :error="detailError"
@@ -107,6 +112,8 @@ onUnmounted(() => {
         @next="loadEvents('next')"
       />
     </template>
+
+    <div v-if="styleError" class="uw-is-error">Styles konnten nicht geladen werden: {{ styleError }}</div>
   </div>
 </template>
 

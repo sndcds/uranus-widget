@@ -1,11 +1,11 @@
-.filter-bar {
+.uw-filter {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   margin-bottom: 16px;
 }
 
-.filter-chip {
+.uw-filter__chip {
   padding: 6px 16px;
   border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-pill);
@@ -15,11 +15,11 @@
   transition: background 0.15s, border-color 0.15s, color 0.15s;
 }
 
-.filter-chip:hover {
+.uw-filter__chip:hover {
   background: var(--color-surface-hover);
 }
 
-.filter-chip.active {
+.uw-filter__chip--active {
   background: var(--color-primary);
   color: #fff;
   border-color: var(--color-primary);

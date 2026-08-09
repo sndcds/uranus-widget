@@ -20,11 +20,11 @@ defineEmits(['open'])
 </script>
 
 <template>
-  <div class="events-container">
-    <div v-if="loading" class="loading">Lade Events...</div>
-    <div v-else-if="error" class="error">{{ error }}</div>
-    <div v-else-if="events.length === 0" class="empty">Keine Events gefunden.</div>
-    <div v-else class="events-list">
+  <div class="uw-container">
+    <div v-if="loading" class="uw-is-loading">Lade Events...</div>
+    <div v-else-if="error" class="uw-is-error">{{ error }}</div>
+    <div v-else-if="events.length === 0" class="uw-is-empty">Keine Events gefunden.</div>
+    <div v-else class="uw-list">
       <EventCard
         v-for="e in events"
         :key="`${e.uuid}-${e.date_slug}`"

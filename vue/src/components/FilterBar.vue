@@ -24,12 +24,12 @@ function toggle(id) {
 </script>
 
 <template>
-  <div class="filter-bar">
+  <div class="uw-filter">
     <button
       v-for="c in CATEGORIES"
       :key="c.id"
-      class="filter-chip"
-      :class="{ active: modelValue.includes(c.id) }"
+      class="uw-filter__chip"
+      :class="{ 'uw-filter__chip--active': modelValue.includes(c.id) }"
       @click="toggle(c.id)"
     >{{ c.label }}</button>
   </div>

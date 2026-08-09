@@ -15,7 +15,7 @@
   display: block;
 }
 
-.widget {
+.uw-widget {
   font-family: var(--font-family);
   font-size: 16px;
   line-height: 1.5;
@@ -25,36 +25,36 @@
   padding: 16px;
 }
 
-.widget-header {
+.uw-widget__header {
   margin-bottom: 16px;
   display: flex;
   align-items: baseline;
   gap: 12px;
 }
 
-.widget-title {
+.uw-widget__title {
   margin: 0;
   font-size: 1.5rem;
   font-weight: 700;
 }
 
-.event-count {
+.uw-widget__count {
   font-size: 0.9rem;
   color: var(--color-text-muted);
 }
 
-.events-container {
+.uw-container {
   min-height: 120px;
 }
 
-.loading,
-.error,
-.empty {
+.uw-is-loading,
+.uw-is-error,
+.uw-is-empty {
   padding: 40px 0;
   text-align: center;
   color: var(--color-text-subtle);
 }
 
-.error {
+.uw-is-error {
   color: var(--color-danger);
 }

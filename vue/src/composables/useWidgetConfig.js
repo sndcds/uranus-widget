@@ -1,4 +1,4 @@
-import { ref, computed, watch } from 'vue'
+import { ref, watch } from 'vue'
 
 const DEFAULT_LIMIT = 12
 
@@ -6,6 +6,11 @@ export default function useWidgetConfig(props) {
   const config = ref({})
   const configLoaded = ref(false)
   const configError = ref('')
+  const styles = ref([])
+
+  function extractStyles(value) {
+    return value && Array.isArray(value.styles) ? value.styles : value && value.styles ? [value.styles] : []
+  }
 
   function fromProps() {
     const cfg = {}
@@ -20,6 +25,7 @@ export default function useWidgetConfig(props) {
   }
 
   function applyConfig(value) {
+    styles.value = extractStyles(value)
     if (value && typeof value === 'object') {
       config.value = { ...value }
     } else {
@@ -77,6 +83,7 @@ export default function useWidgetConfig(props) {
     config,
     configLoaded,
     configError,
+    styles,
     init,
     applyConfig
   }
