@@ -1,34 +1,31 @@
 <script setup>
-import { computed, onMounted, onUnmounted } from 'vue'
+import { onMounted, onUnmounted } from 'vue'
 import useEventsApi from './composables/useEventsApi'
+import useWidgetConfig from './composables/useWidgetConfig'
 import WidgetHeader from './components/WidgetHeader.vue'
 import FilterBar from './components/FilterBar.vue'
 import EventsList from './components/EventsList.vue'
 import Pagination from './components/Pagination.vue'
 import EventDetail from './components/EventDetail.vue'
-import { PARAM_MAP } from './lib/constants'
 
 const props = defineProps({
-  limit: { type: Number, default: 12 },
+  limit: { type: Number, default: null },
   tags: { type: String, default: '' },
   venue: { type: String, default: '' },
   city: { type: String, default: '' },
   start: { type: String, default: '' },
   end: { type: String, default: '' },
-  categories: { type: String, default: '' }
+  categories: { type: String, default: '' },
+  config: { type: Object, default: null },
+  configUrl: { type: String, default: '' }
 })
 
-const config = computed(() => {
-  const cfg = { limit: props.limit || 12 }
-  for (const key of Object.keys(PARAM_MAP)) {
-    if (key === 'limit') continue
-    const val = props[key]
-    if (val !== undefined && val !== null && val !== '') {
-      cfg[key] = Array.isArray(val) ? val : String(val)
-    }
-  }
-  return cfg
-})
+const {
+  config,
+  configLoaded,
+  configError,
+  init: initConfig
+} = useWidgetConfig(props)
 
 const {
   events,
@@ -51,9 +48,14 @@ const {
   onUrlChange
 } = useEventsApi(config)
 
-onMounted(() => {
+async function start() {
+  await initConfig()
   window.addEventListener('popstate', onUrlChange)
   onUrlChange()
+}
+
+onMounted(() => {
+  start()
 })
 
 onUnmounted(() => {
@@ -63,7 +65,15 @@ onUnmounted(() => {
 
 <template>
   <div class="widget">
-    <template v-if="detailUuid">
+    <template v-if="configError">
+      <div class="error">Konfiguration konnte nicht geladen werden: {{ configError }}</div>
+    </template>
+
+    <template v-else-if="!configLoaded">
+      <div class="loading">Lade Konfiguration...</div>
+    </template>
+
+    <template v-else-if="detailUuid">
       <button class="btn-back" @click="closeDetail">← Zurück zur Übersicht</button>
       <EventDetail
         :loading="detailLoading"

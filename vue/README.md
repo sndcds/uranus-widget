@@ -21,7 +21,8 @@ vue/
 │   │   ├── Pagination.vue    # Seitensteuerung ← Seite X von Y →
 │   │   └── EventDetail.vue   # Detailansicht (Bild, Datum, Ort, Beschreibung, Links)
 │   ├── composables/
-│   │   └── useEventsApi.js   # API-Logik + Zustand (ähnlich einem Pinia-Store)
+│   │   ├── useEventsApi.js     # API-Logik (Events, Detail, Filter, Pagination)
+│   │   └── useWidgetConfig.js  # Konfig-Ladung (Props, JSON, externer Pfad)
 │   ├── lib/
 │   │   ├── constants.js      # BASE_URL, PARAM_MAP, CATEGORIES
 │   │   └── format.js         # Datums-/HTML-Helfer
@@ -32,7 +33,9 @@ vue/
 │       ├── events.css        # Karten, Liste, Pagination
 │       ├── detail.css        # Detailansicht
 │       └── media.css         # responsive Regeln
-└── demo/embed.html           # Beispiel: Einbindung auf einer Website
+├── demo/
+│   ├── embed.html            # Beispiel: Einbindung auf einer Website
+│   └── config.json           # Beispiel: externe Konfigurationsdatei
 ```
 
 ## Neue Views / Funktionen erweitern
@@ -55,9 +58,35 @@ Ergebnis in `dist/`:
 
 ## Einbindung auf einer Website
 
-```html
-<script src="uranus-widget-vue.iife.js" defer></script>
+### Variante A — Externe Konfigurationsdatei (empfohlen)
 
+Das Widget lädt seine Konfiguration aus einer externen JSON-Datei. Im Tag steht nur noch der relative Pfad zu dieser Datei — Konfigurationen lassen sich so unkompliziert extern bearbeiten und austauschen, ohne den Einbinde-Code anzufassen.
+
+```html
+<script src="uranus-widget-vue.js" defer></script>
+
+<uranus-widget config-url="./config.json"></uranus-widget>
+```
+
+`config.json` (Beispiel):
+
+```json
+{
+  "limit": 12,
+  "city": "Glücksburg",
+  "tags": "Klimapark,Energie",
+  "start": "2026-07-01",
+  "end": "2026-12-31",
+  "categories": "2,4"
+}
+```
+
+- Der Pfad ist **relativ zur einbindenden Seite**, wird aber auch absolut (`/assets/config.json`) unterstützt.
+- Ist die Datei nicht erreichbar oder ungültig, zeigt das Widget eine Fehlermeldung statt des Event-Bereichs.
+
+### Variante B — Direkt über Attribute
+
+```html
 <uranus-widget
   limit="12"
   city="Glücksburg"
@@ -66,17 +95,19 @@ Ergebnis in `dist/`:
 ></uranus-widget>
 ```
 
-## Konfigurierbare Attribute
+## Konfigurierbare Optionen
 
-| Attribut       | Beschreibung                        | Beispiel            |
-|----------------|-------------------------------------|---------------------|
-| `limit`        | Events pro Seite                    | `12`                |
-| `tags`         | Kommagetrennte Tags                 | `Klimapark,Energie` |
-| `venue`        | Venue-Name                          | `artefact`          |
-| `city`         | Stadt                               | `Glücksburg`        |
-| `start`        | Startdatum (ISO)                    | `2026-07-01`        |
-| `end`          | Enddatum (ISO)                      | `2026-12-31`        |
-| `categories`   | Kommagetrennte Kategorie-IDs        | `2,4`               |
+| Schlüssel    | Typ    | Beschreibung                     | Beispiel            |
+|--------------|--------|----------------------------------|---------------------|
+| `limit`      | number | Events pro Seite                 | `12`                |
+| `tags`       | string | Kommagetrennte Tags              | `Klimapark,Energie` |
+| `venue`      | string | Venue-Name                       | `artefact`          |
+| `city`       | string | Stadt                            | `Glücksburg`        |
+| `start`      | string | Startdatum (ISO)                 | `2026-07-01`        |
+| `end`        | string | Enddatum (ISO)                   | `2026-12-31`        |
+| `categories` | string | Kommagetrennte Kategorie-IDs     | `2,4`               |
+
+Die Optionen sind identisch mit den Widget-Attributen (Variant B). Sie können sowohl in der JSON-Datei als auch direkt als Attribut gesetzt werden. Wird beides angegeben, hat eine **extern geladene JSON-Datei** Vorrang; das `config`-Prop (Programm-Einbindung) überschreibt beide.
 
 ## Funktionen
 
