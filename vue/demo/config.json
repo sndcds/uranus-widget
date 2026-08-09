@@ -1,8 +1,4 @@
 {
   "limit": 12,
-  "city": "Glücksburg",
-  "start": "2026-07-01",
-  "end": "2026-12-31",
-  "categories": "2,4",
-  "styles": ["./theme.css"]
+  "styles": ["/wp-content/widgets/theme.css"]
 }

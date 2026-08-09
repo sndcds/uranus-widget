@@ -17,7 +17,7 @@
 
 .uw-widget {
   font-family: var(--font-family);
-  font-size: 16px;
+  font-size: 1rem;
   line-height: 1.5;
   color: var(--color-text);
   max-width: 900px;
@@ -26,7 +26,7 @@
 }
 
 .uw-widget__header {
-  margin-bottom: 16px;
+  margin-bottom: 2rem;
   display: flex;
   align-items: baseline;
   gap: 12px;
