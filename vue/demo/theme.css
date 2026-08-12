@@ -12,15 +12,15 @@
   --font-family: 'Rubik', sans-serif;
   --color-primary: #1922b6;
   --color-surface: #ffffff;
-  --radius: 12px;
-  --radius-pill: 24px;
+  --radius: 0;
+  --radius-pill: 0;
 }
 
 .uw-widget {
   font-size: 2rem;
   max-width: 1100px;
   padding: 24px;
-  background: #fffdf5;
+  background: #ffcc00;
   border-radius: var(--radius);
 }
 
@@ -41,6 +41,7 @@
 
 /* Beispiel: Karten mit Bild oben statt links */
 .uw-card {
+  border-width: 0;
   background: aquamarine;
 }
 

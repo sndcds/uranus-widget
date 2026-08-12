@@ -11,11 +11,12 @@ import EventDetail from './components/EventDetail.vue'
 
 const props = defineProps({
   limit: { type: Number, default: null },
+  start: { type: String, default: '' },
+  end: { type: String, default: '' },
+  portal: { type: String, default: null },
   tags: { type: String, default: '' },
   venue: { type: String, default: '' },
   city: { type: String, default: '' },
-  start: { type: String, default: '' },
-  end: { type: String, default: '' },
   categories: { type: String, default: '' },
   config: { type: Object, default: null },
   configUrl: { type: String, default: '' }

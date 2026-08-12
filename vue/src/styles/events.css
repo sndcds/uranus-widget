@@ -12,11 +12,11 @@
   overflow: hidden;
   background: var(--color-surface);
   cursor: pointer;
-  transition: box-shadow 0.2s;
+  transition: all 0.2s;
 }
 
 .uw-card:hover {
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  background: lightpink;
 }
 
 .uw-card__image {

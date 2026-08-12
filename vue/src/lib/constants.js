@@ -1,15 +1,22 @@
-export const BASE_URL = 'https://api.kulturbytes.de/api/events'
-export const DETAIL_URL = (uuid) => `https://api.kulturbytes.de/api/event/${uuid}?lang=de`
-
 export const PARAM_MAP = {
   limit: 'limit',
+  start: 'start',
+  end: 'end',
   tags: 'tags',
   venue: 'venue',
   city: 'city',
-  start: 'start',
-  end: 'end',
-  categories: 'categories'
+  categories: 'categories',
+  portal: 'portal',
 }
+
+export const OVERRIDABLE_PARAMS = new Set([
+  'limit',
+  'start',
+  'end',
+  'tags',
+  'venue',
+  'portal'
+])
 
 export const CATEGORIES = [
   { id: 1, label: 'Kultur' },

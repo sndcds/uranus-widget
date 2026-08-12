@@ -1,5 +1,8 @@
 import { ref, computed } from 'vue'
-import { BASE_URL, DETAIL_URL, PARAM_MAP } from '../lib/constants'
+import {
+  PARAM_MAP,
+  OVERRIDABLE_PARAMS,
+} from '../lib/constants'
 
 export default function useEventsApi(config) {
   const events = ref([])
@@ -9,7 +12,9 @@ export default function useEventsApi(config) {
   const loading = ref(false)
   const error = ref('')
   const summary = ref(null)
+
   const selectedCategories = ref([])
+
   const detailUuid = ref(null)
   const detailData = ref(null)
   const detailLoading = ref(false)
@@ -17,119 +22,318 @@ export default function useEventsApi(config) {
 
   const totalPages = computed(() => {
     if (!summary.value) return 0
-    return Math.ceil(summary.value.total_event_count / config.value.limit)
+
+    const limit = Number(config.value.limit)
+    if (!limit || limit <= 0) return 0
+
+    return Math.ceil(summary.value.total_event_count / limit)
   })
+
+
+  /*
+   * --------------------------------------------------------------------------
+   * Url
+   * --------------------------------------------------------------------------
+   */
+
+  function getApiBaseUrl() {
+    return String(config.value.apiBaseUrl || '').replace(/\/$/, '')
+  }
+
+  function getEventsUrl() {
+    return `${getApiBaseUrl()}/events/filter`
+  }
+
+  function getSummaryUrl() {
+    return `${getApiBaseUrl()}/events/type-summary`
+  }
+
+  function getDetailUrl(uuid) {
+    return `${getApiBaseUrl()}/event/${uuid}?lang=de`
+  }
+
+  /*
+   * --------------------------------------------------------------------------
+   * Helpers
+   * --------------------------------------------------------------------------
+   */
 
   function isSafeUrl(url) {
     if (!url || typeof url !== 'string') return false
+
     try {
       const parsed = new URL(url, window.location.href)
-      return parsed.protocol === 'http:' || parsed.protocol === 'https:'
+
+      return (
+          parsed.protocol === 'http:' ||
+          parsed.protocol === 'https:'
+      )
     } catch {
       return false
     }
   }
 
-  const detailLinks = computed(() => {
-    const d = detailData.value
-    if (!d) return []
-    const links = []
-    if (isSafeUrl(d.source_link)) {
-      links.push({ url: d.source_link, label: 'Veranstaltungslink' })
+  function parseUrlValue(key, value) {
+    /*
+     * URL parameters are always strings.
+     * Convert them back to the types expected by the JSON API.
+     */
+
+    // Comma-separated arrays
+    const arrayParameters = new Set([
+      'categories',
+      'genres',
+      'venue',
+    ])
+
+    if (arrayParameters.has(key)) {
+      return value
+          .split(',')
+          .map(v => v.trim())
+          .filter(Boolean)
     }
-    if (isSafeUrl(d.org_web_link)) {
-      links.push({ url: d.org_web_link, label: 'Webseite des Veranstalters' })
+
+    // Integer parameters
+    const integerParameters = new Set([
+      'min_age',
+      'max_age',
+    ])
+
+    if (integerParameters.has(key)) {
+      const parsed = Number.parseInt(value, 10)
+      return Number.isNaN(parsed) ? value : parsed
     }
-    if (d.event_links && Array.isArray(d.event_links)) {
-      for (const l of d.event_links) {
-        if (isSafeUrl(l.url)) links.push({ url: l.url, label: l.label || l.type || l.url })
+
+    // Float parameters
+    const floatParameters = new Set([
+      'latitude',
+      'longitude',
+      'radius_km',
+      'min_price',
+      'max_price',
+    ])
+
+    if (floatParameters.has(key)) {
+      const parsed = Number.parseFloat(value)
+      return Number.isNaN(parsed) ? value : parsed
+    }
+
+    // Boolean parameters
+    const booleanParameters = new Set([
+      'use_current_location',
+    ])
+
+    if (booleanParameters.has(key)) {
+      if (value === 'true') return true
+      if (value === 'false') return false
+    }
+
+    return value
+  }
+
+  /*
+   * --------------------------------------------------------------------------
+   * Filter / request payload
+   * --------------------------------------------------------------------------
+   */
+
+  function buildFilter() {
+    const filter = {
+      ...(config.value.filter || {}),
+    }
+
+    /*
+     * Backwards compatibility:
+     *
+     * If the configuration still contains properties such as start,
+     * end, city, etc. directly on config, PARAM_MAP can translate them
+     * into the API filter.
+     */
+    for (const [key, value] of Object.entries(config.value)) {
+      const apiKey = PARAM_MAP[key]
+
+      if (!apiKey) continue
+      if (key === 'limit') continue
+
+      filter[apiKey] = value
+    }
+
+    /*
+     * Categories selected interactively in the widget take precedence
+     * over the configured categories.
+     */
+    if (selectedCategories.value.length > 0) {
+      filter.categories = selectedCategories.value
+    }
+
+    /*
+     * URL query parameters override the widget configuration.
+     */
+    const urlParams = new URLSearchParams(window.location.search)
+
+    for (const [key, value] of urlParams.entries()) {
+      if (!OVERRIDABLE_PARAMS.has(key)) continue
+
+      filter[key] = parseUrlValue(key, value)
+    }
+
+    return filter
+  }
+
+  function buildPayload(cursor = null) {
+    const payload = buildFilter()
+    payload.limit = Number(config.value.filter.limit)
+    payload.start = config.value.filter.start
+    payload.end = config.value.filter.end
+    payload.portal = config.value.filter.portal
+
+    if (cursor) {
+      payload.last_event_date_uuid = cursor.date_uuid
+      payload.last_event_start_at = cursor.start_at
+    }
+
+    /*
+     * Allow the host page URL to override the pagination limit too.
+     */
+    const urlParams = new URLSearchParams(window.location.search)
+
+    if (urlParams.has('limit')) {
+      const limit = Number.parseInt(
+          urlParams.get('limit'),
+          10
+      )
+
+      if (!Number.isNaN(limit)) {
+        payload.limit = limit
       }
     }
-    return links
-  })
 
-  function buildParams() {
-    const params = new URLSearchParams()
-    if (selectedCategories.value.length > 0) {
-      params.set('categories', selectedCategories.value.join(','))
-    }
-    for (const [key, val] of Object.entries(config.value)) {
-      if (key === 'limit') continue
-      const apiKey = PARAM_MAP[key]
-      if (!apiKey) continue
-      params.set(apiKey, Array.isArray(val) ? val.join(',') : val)
-    }
-    return params
+    return payload
   }
 
-  function buildUrl(cursor) {
-    const params = buildParams()
-    params.set('limit', config.value.limit)
-    if (cursor) {
-      params.set('last_event_date_uuid', cursor.date_uuid)
-      params.set('last_event_start_at', cursor.start_at)
+  function buildFilterRequest(cursor = null) {
+    return {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(buildPayload(cursor)),
     }
-    return `${BASE_URL}?${params.toString()}`
   }
+
+  /*
+   * --------------------------------------------------------------------------
+   * Summary
+   * --------------------------------------------------------------------------
+   */
 
   function buildSummaryUrl() {
-    const params = buildParams()
-    return `${BASE_URL.replace('/events', '/events/type-summary')}?${params.toString()}`
+    const params = new URLSearchParams()
+
+    const filter = buildFilter()
+
+    for (const [key, value] of Object.entries(filter)) {
+      if (Array.isArray(value)) {
+        params.set(key, value.join(','))
+      } else if (value !== null && value !== undefined) {
+        params.set(key, String(value))
+      }
+    }
+
+    return `${config.value.apiBaseUrl}/events/type-summary?${params.toString()}`
   }
 
   async function loadSummary() {
     try {
       const res = await fetch(buildSummaryUrl())
+
       if (!res.ok) return
+
       const json = await res.json()
+
       if (json.status !== 200 || !json.data) return
+
       summary.value = json.data
     } catch {
-      // stille ignorieren – Summary ist optional
+      // Summary is optional.
     }
   }
 
-  function selectCategories(next) {
-    selectedCategories.value = next
-    page.value = 1
-    requestCursors.value = []
-    hasNext.value = true
-    events.value = []
-    summary.value = null
-    loadEvents()
-    loadSummary()
-  }
+  /*
+   * --------------------------------------------------------------------------
+   * Events
+   * --------------------------------------------------------------------------
+   */
 
   async function loadEvents(direction) {
     if (loading.value) return
+
     loading.value = true
     error.value = ''
+
     try {
       let cursor = null
+
       if (direction === 'next') {
-        cursor = requestCursors.value[page.value - 1] || null
+        cursor =
+            requestCursors.value[page.value - 1] ||
+            null
       } else if (direction === 'prev') {
         requestCursors.value.pop()
+
         page.value--
-        cursor = requestCursors.value[page.value - 1] || null
+
+        cursor =
+            requestCursors.value[page.value - 1] ||
+            null
+
         events.value = []
       }
 
-      const res = await fetch(buildUrl(cursor))
-      if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`)
+      const res = await fetch(
+          getEventsUrl(),
+          buildFilterRequest(cursor)
+      )
+
+      if (!res.ok) {
+        throw new Error(
+            `HTTP ${res.status}: ${res.statusText}`
+        )
+      }
+
       const json = await res.json()
-      if (json.status !== 200 || !json.data) throw new Error('Ungültige API-Antwort')
+
+      if (json.status !== 200 || !json.data) {
+        throw new Error('Ungültige API-Antwort')
+      }
 
       const result = json.data.events || []
-      const lastUuid = json.data.last_event_date_uuid
-      const lastStart = json.data.last_event_start_at
+
+      const lastUuid =
+          json.data.last_event_date_uuid
+
+      const lastStart =
+          json.data.last_event_start_at
 
       events.value = result
-      hasNext.value = result.length === config.value.limit && !!lastUuid
+
+      const limit =
+          buildPayload().limit
+
+      hasNext.value =
+          result.length === limit &&
+          !!lastUuid
+
       if (lastUuid) {
-        requestCursors.value.push({ date_uuid: lastUuid, start_at: lastStart })
+        requestCursors.value.push({
+          date_uuid: lastUuid,
+          start_at: lastStart,
+        })
       }
-      if (direction === 'next') page.value++
+
+      if (direction === 'next') {
+        page.value++
+      }
     } catch (err) {
       error.value = err.message
     } finally {
@@ -137,15 +341,94 @@ export default function useEventsApi(config) {
     }
   }
 
+  /*
+   * --------------------------------------------------------------------------
+   * Category selection
+   * --------------------------------------------------------------------------
+   */
+
+  function selectCategories(next) {
+    selectedCategories.value = next
+
+    page.value = 1
+    requestCursors.value = []
+    hasNext.value = true
+
+    events.value = []
+    summary.value = null
+
+    loadEvents()
+    loadSummary()
+  }
+
+  /*
+   * --------------------------------------------------------------------------
+   * Event detail
+   * --------------------------------------------------------------------------
+   */
+
+  const detailLinks = computed(() => {
+    const d = detailData.value
+
+    if (!d) return []
+
+    const links = []
+
+    if (isSafeUrl(d.source_link)) {
+      links.push({
+        url: d.source_link,
+        label: 'Veranstaltungslink',
+      })
+    }
+
+    if (isSafeUrl(d.org_web_link)) {
+      links.push({
+        url: d.org_web_link,
+        label: 'Webseite des Veranstalters',
+      })
+    }
+
+    if (
+        d.event_links &&
+        Array.isArray(d.event_links)
+    ) {
+      for (const l of d.event_links) {
+        if (isSafeUrl(l.url)) {
+          links.push({
+            url: l.url,
+            label:
+                l.label ||
+                l.type ||
+                l.url,
+          })
+        }
+      }
+    }
+
+    return links
+  })
+
   async function loadDetail() {
     if (!detailUuid.value) return
+
     detailLoading.value = true
     detailError.value = ''
+
     try {
-      const res = await fetch(DETAIL_URL(detailUuid.value))
-      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      const res = await fetch(
+          getDetailUrl(detailUuid.value)
+      )
+
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}`)
+      }
+
       const json = await res.json()
-      if (json.status !== 200 || !json.data) throw new Error('Ungültige Antwort')
+
+      if (json.status !== 200 || !json.data) {
+        throw new Error('Ungültige Antwort')
+      }
+
       detailData.value = json.data
     } catch (err) {
       detailError.value = err.message
@@ -154,39 +437,77 @@ export default function useEventsApi(config) {
     }
   }
 
-  function openDetail(e) {
-    detailUuid.value = e.uuid
+  function openDetail(event) {
+    detailUuid.value = event.uuid
     detailData.value = null
+
     if (window.history.pushState) {
-      window.history.pushState({}, '', `?event=${e.uuid}`)
+      window.history.pushState(
+          {},
+          '',
+          `?event=${event.uuid}`
+      )
     }
+
     loadDetail()
   }
 
   function closeDetail() {
     if (window.history.pushState) {
-      window.history.pushState({}, '', window.location.pathname)
+      window.history.pushState(
+          {},
+          '',
+          window.location.pathname
+      )
     }
+
     detailUuid.value = null
     detailData.value = null
+
     loadEvents()
     loadSummary()
   }
 
+  /*
+   * --------------------------------------------------------------------------
+   * Browser URL changes
+   * --------------------------------------------------------------------------
+   */
+
   function onUrlChange() {
-    const params = new URLSearchParams(window.location.search)
+    const params = new URLSearchParams(
+        window.location.search
+    )
+
     const uuid = params.get('event')
+
     if (uuid) {
       detailUuid.value = uuid
       detailData.value = null
+
       loadDetail()
     } else {
       detailUuid.value = null
       detailData.value = null
+
+      /*
+       * URL filter parameters may have changed, so
+       * start pagination from the beginning.
+       */
+      page.value = 1
+      requestCursors.value = []
+      hasNext.value = true
+
       loadEvents()
       loadSummary()
     }
   }
+
+  /*
+   * --------------------------------------------------------------------------
+   * Public API
+   * --------------------------------------------------------------------------
+   */
 
   return {
     events,
@@ -194,20 +515,26 @@ export default function useEventsApi(config) {
     hasNext,
     loading,
     error,
+
     summary,
     totalPages,
+
     selectedCategories,
+
     detailUuid,
     detailData,
     detailLoading,
     detailError,
     detailLinks,
+
     loadEvents,
     loadDetail,
     loadSummary,
+
     selectCategories,
+
     openDetail,
     closeDetail,
-    onUrlChange
+    onUrlChange,
   }
 }

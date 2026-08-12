@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue'
-import { formatDetailDate, renderDescription } from '../lib/format'
+import { formatDetailDate, markdownToHtml } from '../lib/format'
 
 const props = defineProps({
   loading: {
@@ -27,6 +27,8 @@ const dateStr = computed(() => {
   const venue = props.data?.further_dates?.[0]
   return venue ? formatDetailDate(venue) : ''
 })
+
+const descriptionHtml = computed(() => markdownToHtml(data.description))
 
 const venue = computed(() => props.data?.further_dates?.[0])
 
@@ -61,7 +63,7 @@ const venueCity = computed(() => venue.value?.venue_city || '')
         <div
           v-if="data.description"
           class="uw-detail__description"
-          v-html="renderDescription(data.description)"
+          v-html="markdownToHtml(data.description)"
         ></div>
         <div class="uw-detail__links">
           <a

@@ -1,3 +1,12 @@
+import MarkdownIt from 'markdown-it'
+import DOMPurify from 'dompurify'
+
+const md = new MarkdownIt({
+  html: false,
+  breaks: true,
+  linkify: true,
+})
+
 export function formatDateStr(str) {
   try {
     const d = new Date(str + 'T00:00:00')
@@ -33,10 +42,19 @@ export function escapeHtml(str) {
   return div.innerHTML
 }
 
-export function renderDescription(text) {
+export function renderText(text) {
   return text
-    .split('\n')
-    .filter(line => line.trim())
-    .map(line => `<p>${escapeHtml(line)}</p>`)
-    .join('')
+      .split('\n')
+      .filter(line => line.trim())
+      .map(line => `<p>${escapeHtml(line)}</p>`)
+      .join('')
 }
+
+export function markdownToHtml(markdown) {
+  if (!markdown) {
+    return ''
+  }
+
+  return DOMPurify.sanitize(md.render(markdown))
+}
+

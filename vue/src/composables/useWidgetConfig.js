@@ -13,27 +13,41 @@ export default function useWidgetConfig(props) {
   }
 
   function fromProps() {
-    const cfg = {}
-    for (const key of Object.keys(props)) {
-      const val = props[key]
-      if (key === 'config' || key === 'configUrl') continue
-      if (val !== undefined && val !== null && val !== '') {
-        cfg[key] = val
-      }
-    }
-    return cfg
-  }
+    const result = {}
 
-  function applyConfig(value) {
-    styles.value = extractStyles(value)
-    if (value && typeof value === 'object') {
-      config.value = { ...value }
-    } else {
-      config.value = {}
+    if (props.limit != null) {
+      result.limit = props.limit
     }
-    config.value.limit = Number(config.value.limit) || DEFAULT_LIMIT
-    configLoaded.value = true
-    configError.value = ''
+
+    if (props.start) {
+      result.start = props.start
+    }
+
+    if (props.end) {
+      result.end = props.end
+    }
+
+    if (props.portal) {
+      result.portal = props.portal
+    }
+
+    if (props.tags) {
+      result.tags = props.tags
+    }
+
+    if (props.venue) {
+      result.venue = props.venue
+    }
+
+    if (props.city) {
+      result.city = props.city
+    }
+
+    if (props.categories) {
+      result.categories = props.categories
+    }
+
+    return result
   }
 
   async function loadFromUrl(url) {
@@ -46,38 +60,72 @@ export default function useWidgetConfig(props) {
   }
 
   async function init() {
-    config.value = fromProps()
-    config.value.limit = Number(config.value.limit) || DEFAULT_LIMIT
-    configLoaded.value = true
+    configError.value = null
+    configLoaded.value = false
 
-    if (props.config && typeof props.config === 'object') {
-      applyConfig(props.config)
-      return
-    }
+    try {
+      // 1. Defaults — lowest priority
 
-    if (props.configUrl) {
-      configLoaded.value = false
-      try {
-        const json = await loadFromUrl(props.configUrl)
-        applyConfig(json)
-      } catch (err) {
-        configError.value = err.message || 'Konfiguration konnte nicht geladen werden'
-        configLoaded.value = true
+      const defaults = {
+        styles: [],
+        filter: {
+          limit: DEFAULT_LIMIT,
+        },
       }
-      return
-    }
 
-    if (!Object.keys(config.value).length) {
-      config.value = { limit: DEFAULT_LIMIT }
+      // 2. External configuration
+
+      let externalConfig = {}
+
+      if (props.config && typeof props.config === 'object') {
+        externalConfig = props.config
+      } else if (props.configUrl) {
+        externalConfig = await loadFromUrl(props.configUrl)
+      }
+
+      // 3. HTML attributes — highest priority
+
+      const propConfig = fromProps()
+
+      // 4. Merge
+      // HTML attributes > external config > defaults
+
+      config.value = {
+        ...defaults,
+        ...externalConfig,
+        ...propConfig,
+
+        filter: {
+          ...defaults.filter,
+          ...(externalConfig.filter || {}),
+          ...(propConfig.filter || {}),
+        },
+      }
+
+      // 5. Normalize
+
+      // Always ensure a valid limit
+      config.value.filter.limit =
+          Number(config.value.filter.limit) || DEFAULT_LIMIT
+
+      // Former configuration expects styles to be an array
+      if (!Array.isArray(config.value.styles)) {
+        config.value.styles = []
+      }
+
+      styles.value = config.value.styles
+
+      // 6. Configuration is ready
+
+      configLoaded.value = true
+
+    } catch (err) {
+      configError.value =
+          err.message || 'Konfiguration konnte nicht geladen werden'
+
+      configLoaded.value = true
     }
   }
-
-  watch(
-    () => props.config,
-    (val) => {
-      if (val && typeof val === 'object') applyConfig(val)
-    }
-  )
 
   return {
     config,
@@ -85,6 +133,5 @@ export default function useWidgetConfig(props) {
     configError,
     styles,
     init,
-    applyConfig
   }
 }
