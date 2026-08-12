@@ -46,6 +46,7 @@ const {
   detailLinks,
   loadEvents,
   selectCategories,
+  setCategories,
   openDetail,
   closeDetail,
   onUrlChange
@@ -55,6 +56,7 @@ const { host: rootEl, styleError, applyStyles } = useStyles()
 
 async function start() {
   await initConfig()
+  setCategories(config.value.filter?.categories || [])
   applyStyles(styles.value)
   window.addEventListener('popstate', onUrlChange)
   onUrlChange()

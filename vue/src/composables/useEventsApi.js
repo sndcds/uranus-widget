@@ -361,6 +361,12 @@ export default function useEventsApi(config) {
     loadSummary()
   }
 
+  function setCategories(categories) {
+    selectedCategories.value = Array.isArray(categories)
+        ? [...categories]
+        : []
+  }
+
   /*
    * --------------------------------------------------------------------------
    * Event detail
@@ -532,6 +538,7 @@ export default function useEventsApi(config) {
     loadSummary,
 
     selectCategories,
+    setCategories,
 
     openDetail,
     closeDetail,
