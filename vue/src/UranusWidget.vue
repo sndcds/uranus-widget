@@ -39,6 +39,7 @@ const {
   summary,
   totalPages,
   selectedCategories,
+  searchTerm,
   detailUuid,
   detailData,
   detailLoading,
@@ -47,6 +48,7 @@ const {
   loadEvents,
   selectCategories,
   setCategories,
+  setSearch,
   openDetail,
   closeDetail,
   onUrlChange
@@ -96,7 +98,9 @@ onUnmounted(() => {
 
       <FilterBar
         v-model="selectedCategories"
+        :search="searchTerm"
         @change="() => selectCategories(selectedCategories)"
+        @search="setSearch"
       />
 
       <EventsList

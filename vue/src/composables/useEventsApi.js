@@ -15,6 +15,8 @@ export default function useEventsApi(config) {
 
   const selectedCategories = ref([])
 
+  const searchTerm = ref('')
+
   const detailUuid = ref(null)
   const detailData = ref(null)
   const detailLoading = ref(false)
@@ -187,6 +189,10 @@ export default function useEventsApi(config) {
     payload.end = config.value.filter.end
     payload.portal = config.value.filter.portal
 
+    if (searchTerm.value) {
+      payload.search = searchTerm.value
+    }
+
     if (cursor) {
       payload.last_event_date_uuid = cursor.date_uuid
       payload.last_event_start_at = cursor.start_at
@@ -350,12 +356,7 @@ export default function useEventsApi(config) {
   function selectCategories(next) {
     selectedCategories.value = next
 
-    page.value = 1
-    requestCursors.value = []
-    hasNext.value = true
-
-    events.value = []
-    summary.value = null
+    resetPagination()
 
     loadEvents()
     loadSummary()
@@ -365,6 +366,29 @@ export default function useEventsApi(config) {
     selectedCategories.value = Array.isArray(categories)
         ? [...categories]
         : []
+  }
+
+  /*
+   * --------------------------------------------------------------------------
+   * Free text search
+   * --------------------------------------------------------------------------
+   */
+
+  function resetPagination() {
+    page.value = 1
+    requestCursors.value = []
+    hasNext.value = true
+    events.value = []
+    summary.value = null
+  }
+
+  function setSearch(term) {
+    searchTerm.value = (term || '').toString().trim()
+
+    resetPagination()
+
+    loadEvents()
+    loadSummary()
   }
 
   /*
@@ -527,6 +551,8 @@ export default function useEventsApi(config) {
 
     selectedCategories,
 
+    searchTerm,
+
     detailUuid,
     detailData,
     detailLoading,
@@ -539,6 +565,8 @@ export default function useEventsApi(config) {
 
     selectCategories,
     setCategories,
+
+    setSearch,
 
     openDetail,
     closeDetail,
