@@ -44,7 +44,27 @@
 }
 
 .uw-container {
+  position: relative;
   min-height: 100px;
+}
+
+.uw-container__loading {
+  position: absolute;
+  top: 8px;
+  right: 0;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  pointer-events: none;
+}
+
+.uw-fade-enter-active,
+.uw-fade-leave-active {
+  transition: opacity 0.25s ease;
+}
+
+.uw-fade-enter-from,
+.uw-fade-leave-to {
+  opacity: 0;
 }
 
 .uw-is-loading,

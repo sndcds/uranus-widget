@@ -382,7 +382,6 @@ export default function useEventsApi(config) {
     page.value = 1
     requestCursors.value = []
     hasNext.value = true
-    events.value = []
     summary.value = null
   }
 
