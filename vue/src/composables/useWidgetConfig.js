@@ -13,38 +13,40 @@ export default function useWidgetConfig(props) {
   }
 
   function fromProps() {
-    const result = {}
+    const result = {
+      filter: {}
+    }
 
     if (props.limit != null) {
-      result.limit = props.limit
+      result.filter.limit = props.limit
     }
 
     if (props.start) {
-      result.start = props.start
+      result.filter.start = props.start
     }
 
     if (props.end) {
-      result.end = props.end
+      result.filter.end = props.end
     }
 
     if (props.portal) {
-      result.portal = props.portal
+      result.filter.portal = props.portal
     }
 
     if (props.tags) {
-      result.tags = props.tags
+      result.filter.tags = props.tags
     }
 
     if (props.venue) {
-      result.venue = props.venue
+      result.filter.venue = props.venue
     }
 
     if (props.city) {
-      result.city = props.city
+      result.filter.city = props.city
     }
 
     if (props.categories) {
-      result.categories = props.categories
+      result.filter.categories = props.categories
     }
 
     return result

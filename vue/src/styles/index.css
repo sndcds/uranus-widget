@@ -1,4 +1,6 @@
 @import './base.css';
+@import './card.css';
+@import './pagination.css';
 @import './filter.css';
 @import './events.css';
 @import './detail.css';

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "dompurify": "^3.4.13",
+    "lucide-vue-next": "^1.0.0",
     "markdown-it": "^15.0.0",
     "vue": "^3.4.0"
   },

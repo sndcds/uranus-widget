@@ -25,7 +25,7 @@ export default function useEventsApi(config) {
   const totalPages = computed(() => {
     if (!summary.value) return 0
 
-    const limit = Number(config.value.limit)
+    const limit = Number(config.value.filter.limit)
     if (!limit || limit <= 0) return 0
 
     return Math.ceil(summary.value.total_event_count / limit)
@@ -286,12 +286,14 @@ export default function useEventsApi(config) {
             null
       } else if (direction === 'prev') {
         requestCursors.value.pop()
-
         page.value--
-
-        cursor =
-            requestCursors.value[page.value - 1] ||
-            null
+        if (page.value > 1) {
+          cursor =
+              requestCursors.value[page.value - 2] ||
+              null
+        } else {
+          cursor = [];
+        }
 
         events.value = []
       }
@@ -330,7 +332,7 @@ export default function useEventsApi(config) {
           result.length === limit &&
           !!lastUuid
 
-      if (lastUuid) {
+      if (lastUuid && direction !== 'prev') {
         requestCursors.value.push({
           date_uuid: lastUuid,
           start_at: lastStart,
@@ -345,6 +347,8 @@ export default function useEventsApi(config) {
     } finally {
       loading.value = false
     }
+
+    // console.log("requestCursors:", JSON.stringify(requestCursors.value, null, 2))
   }
 
   /*
