@@ -42,6 +42,26 @@
   background: var(--color-primary-hover);
 }
 
+.uw-event-type-select {
+  padding: .4rem .8rem;
+  border: 1px solid var(--color-page-border);
+  border-radius: var(--radius);
+  background: var(--color-page);
+  color: var(--color-text);
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.uw-event-type-select:focus {
+  outline: none;
+  border-color: var(--color-page-border-strong);
+}
+
+.uw-event-type-select:disabled {
+  cursor: wait;
+  opacity: .6;
+}
+
 .uw-filter__chips {
   display: flex;
   flex-wrap: wrap;

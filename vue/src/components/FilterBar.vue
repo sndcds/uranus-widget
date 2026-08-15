@@ -1,6 +1,7 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { CATEGORIES } from '../lib/constants'
+import EventTypeSelect from './EventTypeSelect.vue'
 
 const props = defineProps({
   modelValue: {
@@ -10,10 +11,22 @@ const props = defineProps({
   search: {
     type: String,
     default: ''
+  },
+  summary: {
+    type: Object,
+    default: null
+  },
+  apiBaseUrl: {
+    type: String,
+    default: ''
+  },
+  selectedType: {
+    type: [Number, String],
+    default: null
   }
 })
 
-const emit = defineEmits(['update:modelValue', 'change', 'search'])
+const emit = defineEmits(['update:modelValue', 'change', 'search', 'update:selectedType', 'typeChange'])
 
 const query = ref(props.search)
 
@@ -43,6 +56,11 @@ function toggle(id) {
   emit('update:modelValue', next)
   emit('change')
 }
+
+function onTypeChange(value) {
+  emit('update:selectedType', value)
+  emit('typeChange', value)
+}
 </script>
 
 <template>
@@ -57,6 +75,13 @@ function toggle(id) {
       >
       <button type="submit" class="uw-filter__search-button">Suchen</button>
     </form>
+
+    <EventTypeSelect
+      :model-value="selectedType"
+      :summary="summary"
+      :api-base-url="apiBaseUrl"
+      @update:model-value="onTypeChange"
+    />
 
     <div class="uw-filter__chips">
       <button

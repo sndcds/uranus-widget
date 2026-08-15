@@ -37,6 +37,7 @@ const {
   error,
   summary,
   selectedCategories,
+  selectedType,
   searchTerm,
   detailUuid,
   detailData,
@@ -45,6 +46,7 @@ const {
   detailLinks,
   loadMore,
   selectCategories,
+  selectType,
   setCategories,
   setSearch,
   openDetail,
@@ -105,7 +107,11 @@ onUnmounted(() => {
       <FilterBar
           v-model="selectedCategories"
           :search="searchTerm"
+          :summary="summary"
+          :api-base-url="config.apiBaseUrl"
+          :selected-type="selectedType"
           @change="() => selectCategories(selectedCategories)"
+          @type-change="selectType"
           @search="setSearch"
       />
 

@@ -14,6 +14,8 @@ export default function useEventsApi(config) {
 
   const selectedCategories = ref([])
 
+  const selectedType = ref(null)
+
   const searchTerm = ref('')
 
   const detailUuid = ref(null)
@@ -167,6 +169,13 @@ export default function useEventsApi(config) {
      */
     if (selectedCategories.value.length > 0) {
       filter.categories = selectedCategories.value
+    }
+
+    /*
+     * Event type selected in the filter bar narrows the results.
+     */
+    if (selectedType.value != null) {
+      filter.event_types = [Number(selectedType.value)]
     }
 
     /*
@@ -350,6 +359,17 @@ export default function useEventsApi(config) {
         : []
   }
 
+  function selectType(next) {
+    selectedType.value = next == null || next === ''
+        ? null
+        : Number(next)
+
+    resetPagination()
+
+    loadMore()
+    loadSummary()
+  }
+
   /*
    * --------------------------------------------------------------------------
    * Free text search
@@ -527,6 +547,7 @@ export default function useEventsApi(config) {
 
     summary,
     selectedCategories,
+    selectedType,
     searchTerm,
 
     detailUuid,
@@ -541,6 +562,7 @@ export default function useEventsApi(config) {
     selectCategories,
     setCategories,
     setSearch,
+    selectType,
 
     openDetail,
     closeDetail,
