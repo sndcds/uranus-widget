@@ -1,4 +1,4 @@
-import { ref, computed } from 'vue'
+import { ref, computed, nextTick } from 'vue'
 import {
   PARAM_MAP,
   OVERRIDABLE_PARAMS,
@@ -6,9 +6,8 @@ import {
 
 export default function useEventsApi(config) {
   const events = ref([])
-  const page = ref(1)
-  const requestCursors = ref([])
-  const hasNext = ref(true)
+  const hasMore = ref(true)
+  const cursor = ref(null)
   const loading = ref(false)
   const error = ref('')
   const summary = ref(null)
@@ -21,6 +20,8 @@ export default function useEventsApi(config) {
   const detailData = ref(null)
   const detailLoading = ref(false)
   const detailError = ref('')
+
+  const detailScrollY = ref(0)
 
   const totalPages = computed(() => {
     if (!summary.value) return 0
@@ -271,36 +272,16 @@ export default function useEventsApi(config) {
    * --------------------------------------------------------------------------
    */
 
-  async function loadEvents(direction) {
-    if (loading.value) return
+  async function loadMore() {
+    if (loading.value || !hasMore.value) return
 
     loading.value = true
     error.value = ''
 
     try {
-      let cursor = null
-
-      if (direction === 'next') {
-        cursor =
-            requestCursors.value[page.value - 1] ||
-            null
-      } else if (direction === 'prev') {
-        requestCursors.value.pop()
-        page.value--
-        if (page.value > 1) {
-          cursor =
-              requestCursors.value[page.value - 2] ||
-              null
-        } else {
-          cursor = [];
-        }
-
-        events.value = []
-      }
-
       const res = await fetch(
           getEventsUrl(),
-          buildFilterRequest(cursor)
+          buildFilterRequest(cursor.value)
       )
 
       if (!res.ok) {
@@ -323,32 +304,29 @@ export default function useEventsApi(config) {
       const lastStart =
           json.data.last_event_start_at
 
-      events.value = result
+      // Append instead of replacing
+      events.value.push(...result)
 
-      const limit =
-          buildPayload().limit
+      const limit = buildPayload().limit
 
-      hasNext.value =
+      hasMore.value =
           result.length === limit &&
           !!lastUuid
 
-      if (lastUuid && direction !== 'prev') {
-        requestCursors.value.push({
+      if (lastUuid) {
+        cursor.value = {
           date_uuid: lastUuid,
           start_at: lastStart,
-        })
-      }
-
-      if (direction === 'next') {
-        page.value++
+        }
       }
     } catch (err) {
-      error.value = err.message
+      error.value =
+          err instanceof Error
+              ? err.message
+              : String(err)
     } finally {
       loading.value = false
     }
-
-    // console.log("requestCursors:", JSON.stringify(requestCursors.value, null, 2))
   }
 
   /*
@@ -362,7 +340,7 @@ export default function useEventsApi(config) {
 
     resetPagination()
 
-    loadEvents()
+    loadMore()
     loadSummary()
   }
 
@@ -379,9 +357,9 @@ export default function useEventsApi(config) {
    */
 
   function resetPagination() {
-    page.value = 1
-    requestCursors.value = []
-    hasNext.value = true
+    events.value = []
+    cursor.value = null
+    hasMore.value = true
     summary.value = null
   }
 
@@ -390,7 +368,7 @@ export default function useEventsApi(config) {
 
     resetPagination()
 
-    loadEvents()
+    loadMore()
     loadSummary()
   }
 
@@ -471,6 +449,8 @@ export default function useEventsApi(config) {
   }
 
   function openDetail(event) {
+    detailScrollY.value = window.scrollY
+
     detailUuid.value = event.uuid
     detailData.value = null
 
@@ -485,7 +465,7 @@ export default function useEventsApi(config) {
     loadDetail()
   }
 
-  function closeDetail() {
+  async function closeDetail() {
     if (window.history.pushState) {
       window.history.pushState(
           {},
@@ -497,8 +477,12 @@ export default function useEventsApi(config) {
     detailUuid.value = null
     detailData.value = null
 
-    loadEvents()
-    loadSummary()
+    await nextTick()
+
+    window.scrollTo({
+      top: detailScrollY.value,
+      behavior: 'auto',
+    })
   }
 
   /*
@@ -517,21 +501,14 @@ export default function useEventsApi(config) {
     if (uuid) {
       detailUuid.value = uuid
       detailData.value = null
-
       loadDetail()
     } else {
       detailUuid.value = null
       detailData.value = null
 
-      /*
-       * URL filter parameters may have changed, so
-       * start pagination from the beginning.
-       */
-      page.value = 1
-      requestCursors.value = []
-      hasNext.value = true
+      resetPagination()
 
-      loadEvents()
+      loadMore()
       loadSummary()
     }
   }
@@ -544,16 +521,12 @@ export default function useEventsApi(config) {
 
   return {
     events,
-    page,
-    hasNext,
+    hasMore,
     loading,
     error,
 
     summary,
-    totalPages,
-
     selectedCategories,
-
     searchTerm,
 
     detailUuid,
@@ -562,13 +535,11 @@ export default function useEventsApi(config) {
     detailError,
     detailLinks,
 
-    loadEvents,
-    loadDetail,
+    loadMore,
     loadSummary,
 
     selectCategories,
     setCategories,
-
     setSearch,
 
     openDetail,

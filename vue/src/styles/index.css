@@ -1,7 +1,8 @@
-@import './base.css';
-@import './card.css';
-@import './pagination.css';
-@import './filter.css';
-@import './events.css';
-@import './detail.css';
-@import './media.css';
+@import 'base.css';
+@import 'card.css';
+@import 'button.css';
+@import 'pagination.css';
+@import 'filter.css';
+@import 'event.css';
+@import 'detail.css';
+@import 'media.css';

@@ -28,7 +28,11 @@ const dateStr = computed(() => {
   return venue ? formatDetailDate(venue) : ''
 })
 
-const descriptionHtml = computed(() => markdownToHtml(data.description))
+const descriptionHtml = computed(() => {
+  return props.data?.description
+      ? markdownToHtml(props.data.description)
+      : ''
+})
 
 const venue = computed(() => props.data?.further_dates?.[0])
 
@@ -63,7 +67,7 @@ const venueCity = computed(() => venue.value?.venue_city || '')
         <div
           v-if="data.description"
           class="uw-detail__description"
-          v-html="markdownToHtml(data.description)"
+          v-html="descriptionHtml"
         ></div>
         <div class="uw-detail__links">
           <a

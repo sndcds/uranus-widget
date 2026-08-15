@@ -5,12 +5,12 @@
     justify-content: center;
     gap: 1rem;
     margin: 1rem auto 0;
-    border: 1px solid var(--color-border-strong);
+    border: 1px solid var(--color-page-border);
 }
 
 .uw-pagination__button {
     padding: .25rem .5rem;
-    border: 0 solid var(--color-border-strong);
+    border: 0px solid var(--color-page-border);
     background: transparent;
     font-size: 1rem;
     cursor: pointer;
@@ -18,11 +18,11 @@
 }
 
 .uw-pagination__button:hover:not(:disabled) {
-    background: var(--color-surface-hover);
+    background: var(--color-page-hover);
 }
 
 .uw-pagination__button:disabled {
-    opacity: 0.4;
+    color: var(--color-text-muted);
     cursor: default;
 }
 
@@ -35,7 +35,6 @@
 }
 
 .uw-pagination__info {
-    color: #555;
     font-weight: 500;
     min-width: 140px;
     text-align: center;

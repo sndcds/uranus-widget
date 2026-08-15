@@ -16,23 +16,78 @@ export function formatDateStr(str) {
   }
 }
 
-export function formatDate(e) {
+export function formatDate(e, locale = 'de-DE') {
+  const formatDateLocalized = (date) => {
+    if (!date) return ''
+
+    const [year, month, day] = date.split('-')
+    const weekday = new Intl.DateTimeFormat(locale, {
+      weekday: 'short',
+    }).format(
+        new Date(Number(year), Number(month) - 1, Number(day))
+    )
+    return `${weekday}, ${day}.${month}.${year.slice(-2)}`
+  }
+
   const parts = []
   if (e.start_date) {
-    parts.push(formatDateStr(e.start_date))
-    if (e.start_time) parts[parts.length - 1] += `, ${e.start_time}`
+    let start = formatDateLocalized(e.start_date)
+    if (e.start_time) {
+      start += `, ${e.start_time}`
+    }
+    parts.push(start)
   }
+
   if (e.end_date && e.end_date !== e.start_date) {
-    parts.push(`– ${formatDateStr(e.end_date)}`)
-    if (e.end_time) parts[parts.length - 1] += `, ${e.end_time}`
+    let end = `– ${formatDateLocalized(e.end_date)}`
+    if (e.end_time) {
+      end += `, ${e.end_time}`
+    }
+    parts.push(end)
   } else if (e.end_time && e.end_time !== e.start_time) {
     parts.push(`– ${e.end_time}`)
   }
+
+  return parts.join(' ')
+}
+
+export function formatShortDate(e, locale = 'de-DE') {
+  if (!e.start_date) return ''
+
+  const format = (date) => {
+    const [year, month, day] = date.split('-')
+
+    const dateObj = new Date(
+        Number(year),
+        Number(month) - 1,
+        Number(day)
+    )
+
+    const weekday = new Intl.DateTimeFormat(locale, {
+      weekday: 'short',
+    }).format(dateObj)
+
+    const capitalizedWeekday =
+        weekday.charAt(0).toUpperCase() + weekday.slice(1)
+
+    return `${capitalizedWeekday} ${day}.${month}.${year.slice(-2)}`
+  }
+
+  const parts = []
+
+  parts.push(format(e.start_date))
+
+  if (e.end_date && e.end_date !== e.start_date) {
+    parts.push(`– ${format(e.end_date)}`)
+  } else if (e.end_time && e.end_time !== e.start_time) {
+    parts.push(`– ${e.end_time}`)
+  }
+
   return parts.join(' ')
 }
 
 export function formatDetailDate(venue) {
-  return formatDate(venue || {})
+  return formatShortDate(venue || {})
 }
 
 export function escapeHtml(str) {

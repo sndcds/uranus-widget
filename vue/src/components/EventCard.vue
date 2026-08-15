@@ -1,7 +1,9 @@
 <script setup>
-import { formatDate } from '../lib/format'
+import { computed } from 'vue'
+import { formatDate, formatShortDate, markdownToHtml } from '../lib/format'
 
-defineProps({
+
+const props = defineProps({
   event: {
     type: Object,
     required: true
@@ -9,15 +11,29 @@ defineProps({
 })
 
 defineEmits(['open'])
+
+const summaryHTML = computed(() => {
+  const text = props.event.summary || ''
+  const maxLength = 300
+
+  const shortenedText = text.length > maxLength
+      ? text.substring(0, maxLength) + '…'
+      : text
+
+  return markdownToHtml(shortenedText)
+})
+
 </script>
 
 <template>
-  <div class="uw-card" @click="$emit('open', event)">
+  <div
+      class="uw-card uw-event-card"
+      @click="$emit('open', event)">
 
-    <div class="uw-card__image">
+    <div class="uw-event-card__image">
       <img
         v-if="event.image_path"
-        :src="`${event.image_path}/?ratio=1:1&width=480`"
+        :src="`${event.image_path}/?ratio=16:9&width=480`"
         :alt="event.title"
         loading="lazy"
       >
@@ -25,12 +41,34 @@ defineEmits(['open'])
     </div>
 
     <div class="uw-card__content">
-      <h3 class="uw-card__title">{{ event.title }}</h3>
-      <p v-if="event.subtitle" class="uw-events-card__subtitle">{{ event.subtitle }}</p>
-      <p class="uw-events-card__meta">
-        {{ formatDate(event) }}<template v-if="event.venue_name">&middot; {{ event.venue_name }}</template><template v-if="event.venue_city">, {{ event.venue_city }}</template>
-      </p>
-      <p v-if="event.summary" class="uw-events-card__summary">{{ event.summary.length > 300 ? event.summary.substring(0, 300) + '…' : event.summary }}</p>
+      <div class="uw-event-card__content">
+
+        <!-- Date -->
+        <span class="uw-event-card__date">{{ formatShortDate(event) }}</span>
+
+        <!-- Title -->
+        <span class="uw-event-card__title">{{ event.title }}</span>
+
+        <!-- Subtitle -->
+        <p v-if="event.subtitle" class="uw-event-card__subtitle">{{ event.subtitle }}</p>
+
+        <!-- Venue and City -->
+        <p class="uw-event-card__meta">
+          <template v-if="event.venue_name">
+            {{ event.venue_name }}
+          </template>
+          <template v-if="event.venue_city">
+            , {{ event.venue_city }}
+          </template>
+        </p>
+
+        <!-- Summary -->
+        <div
+            v-if="event.summary"
+            class="uw-event-card__summary"
+            v-html="summaryHTML"
+        />
+      </div>
     </div>
 
   </div>

@@ -2,8 +2,8 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 16px;
+  gap: 1rem;
+  margin-bottom: 1rem;
 }
 
 .uw-filter__search {
@@ -15,17 +15,16 @@
 .uw-filter__search-input {
   flex: 1;
   min-width: 0;
-  padding: 8px 12px;
-  border: 1px solid var(--color-border-strong);
+  padding: .4rem .8rem;
+  border: 1px solid var(--color-page-border);
   border-radius: var(--radius);
-  background: var(--color-surface);
-  font-size: 0.9rem;
-  color: var(--color-text);
+  background: var(--color-page);
+  font-size: 1rem;
 }
 
 .uw-filter__search-input:focus {
   outline: none;
-  border-color: var(--color-primary);
+  border-color: var(--color-page-border-strong);
 }
 
 .uw-filter__search-button {
@@ -51,9 +50,9 @@
 
 .uw-filter__chip {
     padding: 6px 16px;
-    border: 1px solid var(--color-border-strong);
+    border: 1px solid var(--color-page-border);
     border-radius: var(--radius-pill);
-    background: var(--color-surface);
+    background: var(--color-page);
     color: var(--color-text);
     font-size: 0.875rem;
     cursor: pointer;
@@ -65,7 +64,8 @@
 
 /* Normal hover */
 .uw-filter__chip:hover {
-    background: var(--color-surface-hover);
+    background: var(--color-page-hover);
+    border-color: var(--color-page-hover);
 }
 
 /* Active */

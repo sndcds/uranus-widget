@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, onUnmounted } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import useEventsApi from './composables/useEventsApi'
 import useWidgetConfig from './composables/useWidgetConfig'
 import useStyles from './composables/useStyles'
@@ -32,12 +32,10 @@ const {
 
 const {
   events,
-  page,
-  hasNext,
+  hasMore,
   loading,
   error,
   summary,
-  totalPages,
   selectedCategories,
   searchTerm,
   detailUuid,
@@ -45,7 +43,7 @@ const {
   detailLoading,
   detailError,
   detailLinks,
-  loadEvents,
+  loadMore,
   selectCategories,
   setCategories,
   setSearch,
@@ -55,6 +53,8 @@ const {
 } = useEventsApi(config)
 
 const { host: rootEl, styleError, applyStyles } = useStyles()
+
+const eventsList = ref(null)
 
 async function start() {
   await initConfig()
@@ -84,12 +84,18 @@ onUnmounted(() => {
     </template>
 
     <template v-else-if="detailUuid">
-      <button class="uw-btn-back" @click="closeDetail">← Zurück zur Übersicht</button>
+      <button
+          class="uw-button uw-big"
+          @click="closeDetail"
+      >
+        Zurück
+      </button>
+
       <EventDetail
-        :loading="detailLoading"
-        :error="detailError"
-        :data="detailData"
-        :links="detailLinks"
+          :loading="detailLoading"
+          :error="detailError"
+          :data="detailData"
+          :links="detailLinks"
       />
     </template>
 
@@ -97,30 +103,39 @@ onUnmounted(() => {
       <WidgetHeader :summary="summary" />
 
       <FilterBar
-        v-model="selectedCategories"
-        :search="searchTerm"
-        @change="() => selectCategories(selectedCategories)"
-        @search="setSearch"
+          v-model="selectedCategories"
+          :search="searchTerm"
+          @change="() => selectCategories(selectedCategories)"
+          @search="setSearch"
       />
 
       <EventsList
-        :loading="loading"
-        :error="error"
-        :events="events"
-        @open="openDetail"
+          ref="eventsList"
+          :events="events"
+          :loading="loading"
+          :error="error"
+          @open="openDetail"
       />
 
-      <Pagination
-        v-if="!loading && !error && totalPages > 1"
-        :page="page"
-        :total-pages="totalPages"
-        :has-next="hasNext"
-        @prev="loadEvents('prev')"
-        @next="loadEvents('next')"
-      />
+      <div
+          v-if="!loading && hasMore"
+          class="uw-load-more"
+      >
+        <button
+            class="uw-button uw-big"
+            type="button"
+            @click="loadMore"
+        >
+          Mehr laden
+        </button>
+      </div>
+
     </template>
 
-    <div v-if="styleError" class="uw-is-error">Styles konnten nicht geladen werden: {{ styleError }}</div>
+    <div v-if="styleError" class="uw-is-error">
+      Styles konnten nicht geladen werden: {{ styleError }}
+    </div>
+
   </div>
 </template>
 
