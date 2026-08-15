@@ -1,5 +1,8 @@
 <script setup>
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, inject, onMounted, ref, watch } from 'vue'
+
+const t = inject('t', (k) => k)
+const lang = inject('lang', { value: 'de' })
 
 const props = defineProps({
   modelValue: {
@@ -47,7 +50,11 @@ async function loadTypeLookup() {
     const json = await res.json()
 
     const data = json.data || {}
-    const types = (data.de || data.en || data.da || {}).types || {}
+
+    // The lookup API knows de, en, da. Prefer the current language,
+    // otherwise fall back to the available ones.
+    const active = data[lang.value] || data.de || data.en || data.da || {}
+    const types = active.types || {}
 
     const labels = {}
     for (const [id, entry] of Object.entries(types)) {
@@ -81,7 +88,7 @@ const options = computed(() => {
         count
       }))
       .sort((a, b) =>
-          a.label.localeCompare(b.label, 'de')
+          a.label.localeCompare(b.label, lang.value || 'de')
       )
 })
 
@@ -100,10 +107,10 @@ function onChange(event) {
     class="uw-select"
     :value="modelValue ?? ''"
     :disabled="lookupLoading"
-    aria-label="Nach Event-Typ filtern"
+    :aria-label="t('eventType.ariaLabel')"
     @change="onChange"
   >
-    <option value="">Alle Event-Typen</option>
+    <option value="">{{ t('eventType.all') }}</option>
     <option
       v-for="opt in options"
       :key="opt.value"

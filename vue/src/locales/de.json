@@ -1,0 +1,66 @@
+{
+  "loadingConfig": "Lade Konfiguration...",
+  "configError": "Konfiguration konnte nicht geladen werden: {error}",
+  "styleError": "Styles konnten nicht geladen werden: {error}",
+  "back": "Zurück",
+  "loadMore": "Mehr laden",
+
+  "header": {
+    "title": "Events",
+    "count": "{count} Events"
+  },
+
+  "search": {
+    "placeholder": "Freitextsuche…",
+    "submit": "Suchen"
+  },
+
+  "dateRange": {
+    "ariaLabel": "Nach Zeitraum filtern",
+    "all": "Alle",
+    "today": "Heute",
+    "tomorrow": "Morgen",
+    "weekend": "Wochenende",
+    "nextWeek": "Kommende Woche",
+    "weekendAfter": "Wochenende danach",
+    "sixMonths": "Kommende 6 Monate"
+  },
+
+  "eventType": {
+    "ariaLabel": "Nach Event-Typ filtern",
+    "all": "Alle Event-Typen"
+  },
+
+  "noImage": "Kein Bild",
+
+  "list": {
+    "loading": "Lade Events...",
+    "empty": "Keine Events gefunden.",
+    "loadingMore": "Lädt…"
+  },
+
+  "detail": {
+    "loading": "Lade Details...",
+    "error": "Fehler beim Laden: {error}",
+    "date": "Datum & Uhrzeit:",
+    "venue": "Ort:"
+  },
+
+  "pagination": {
+    "of": "von"
+  },
+
+  "links": {
+    "eventLink": "Veranstaltungslink",
+    "organizerWebsite": "Webseite des Veranstalters"
+  },
+
+  "categories": {
+    "1": "Kultur",
+    "2": "Bildung",
+    "3": "Sport",
+    "4": "Freizeit",
+    "5": "Familie",
+    "6": "Gesellschaft"
+  }
+}

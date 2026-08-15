@@ -1,0 +1,66 @@
+{
+  "loadingConfig": "Loading configuration...",
+  "configError": "Configuration could not be loaded: {error}",
+  "styleError": "Styles could not be loaded: {error}",
+  "back": "Back",
+  "loadMore": "Load more",
+
+  "header": {
+    "title": "Events",
+    "count": "{count} events"
+  },
+
+  "search": {
+    "placeholder": "Free text search…",
+    "submit": "Search"
+  },
+
+  "dateRange": {
+    "ariaLabel": "Filter by time range",
+    "all": "All",
+    "today": "Today",
+    "tomorrow": "Tomorrow",
+    "weekend": "Weekend",
+    "nextWeek": "Next week",
+    "weekendAfter": "Weekend after",
+    "sixMonths": "Next 6 months"
+  },
+
+  "eventType": {
+    "ariaLabel": "Filter by event type",
+    "all": "All event types"
+  },
+
+  "noImage": "No image",
+
+  "list": {
+    "loading": "Loading events...",
+    "empty": "No events found.",
+    "loadingMore": "Loading…"
+  },
+
+  "detail": {
+    "loading": "Loading details...",
+    "error": "Error while loading: {error}",
+    "date": "Date & time:",
+    "venue": "Venue:"
+  },
+
+  "pagination": {
+    "of": "of"
+  },
+
+  "links": {
+    "eventLink": "Event link",
+    "organizerWebsite": "Organizer's website"
+  },
+
+  "categories": {
+    "1": "Culture",
+    "2": "Education",
+    "3": "Sports",
+    "4": "Leisure",
+    "5": "Family",
+    "6": "Society"
+  }
+}

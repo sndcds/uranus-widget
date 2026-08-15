@@ -86,8 +86,8 @@ export function formatShortDate(e, locale = 'de-DE') {
   return parts.join(' ')
 }
 
-export function formatDetailDate(venue) {
-  return formatShortDate(venue || {})
+export function formatDetailDate(venue, locale = 'de-DE') {
+  return formatShortDate(venue || {}, locale)
 }
 
 export function escapeHtml(str) {

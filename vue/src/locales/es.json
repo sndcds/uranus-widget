@@ -1,0 +1,66 @@
+{
+  "loadingConfig": "Cargando configuración...",
+  "configError": "No se pudo cargar la configuración: {error}",
+  "styleError": "No se pudieron cargar los estilos: {error}",
+  "back": "Volver",
+  "loadMore": "Cargar más",
+
+  "header": {
+    "title": "Eventos",
+    "count": "{count} eventos"
+  },
+
+  "search": {
+    "placeholder": "Búsqueda de texto libre…",
+    "submit": "Buscar"
+  },
+
+  "dateRange": {
+    "ariaLabel": "Filtrar por rango de tiempo",
+    "all": "Todos",
+    "today": "Hoy",
+    "tomorrow": "Mañana",
+    "weekend": "Fin de semana",
+    "nextWeek": "Próxima semana",
+    "weekendAfter": "Fin de semana siguiente",
+    "sixMonths": "Próximos 6 meses"
+  },
+
+  "eventType": {
+    "ariaLabel": "Filtrar por tipo de evento",
+    "all": "Todos los tipos de evento"
+  },
+
+  "noImage": "Sin imagen",
+
+  "list": {
+    "loading": "Cargando eventos...",
+    "empty": "No se encontraron eventos.",
+    "loadingMore": "Cargando…"
+  },
+
+  "detail": {
+    "loading": "Cargando detalles...",
+    "error": "Error al cargar: {error}",
+    "date": "Fecha y hora:",
+    "venue": "Lugar:"
+  },
+
+  "pagination": {
+    "of": "de"
+  },
+
+  "links": {
+    "eventLink": "Enlace del evento",
+    "organizerWebsite": "Sitio web del organizador"
+  },
+
+  "categories": {
+    "1": "Cultura",
+    "2": "Educación",
+    "3": "Deportes",
+    "4": "Ocio",
+    "5": "Familia",
+    "6": "Sociedad"
+  }
+}

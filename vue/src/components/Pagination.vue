@@ -1,5 +1,8 @@
 <script setup>
+import { inject } from 'vue'
 import { ArrowLeft, ArrowRight } from 'lucide-vue-next'
+
+const t = inject('t', (k) => k)
 
 defineProps({
   page: {
@@ -28,7 +31,7 @@ defineEmits(['prev', 'next'])
     >
       <ArrowLeft />
     </button>
-    <span class="uw-pagination__info">{{ page }} von {{ totalPages }}</span>
+    <span class="uw-pagination__info">{{ page }} {{ t('pagination.of') }} {{ totalPages }}</span>
     <button
         class="uw-pagination__button uw-pagination__button--next"
         :disabled="!hasNext"

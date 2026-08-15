@@ -1,0 +1,66 @@
+{
+  "loadingConfig": "Indlæser konfiguration...",
+  "configError": "Konfigurationen kunne ikke indlæses: {error}",
+  "styleError": "Styles kunne ikke indlæses: {error}",
+  "back": "Tilbage",
+  "loadMore": "Indlæs mere",
+
+  "header": {
+    "title": "Begivenheder",
+    "count": "{count} begivenheder"
+  },
+
+  "search": {
+    "placeholder": "Fritekstsøgning…",
+    "submit": "Søg"
+  },
+
+  "dateRange": {
+    "ariaLabel": "Filtrer efter tidsrum",
+    "all": "Alle",
+    "today": "I dag",
+    "tomorrow": "I morgen",
+    "weekend": "Weekend",
+    "nextWeek": "Næste uge",
+    "weekendAfter": "Weekenden efter",
+    "sixMonths": "Kommende 6 måneder"
+  },
+
+  "eventType": {
+    "ariaLabel": "Filtrer efter begivenhedstype",
+    "all": "Alle begivenhedstyper"
+  },
+
+  "noImage": "Intet billede",
+
+  "list": {
+    "loading": "Indlæser begivenheder...",
+    "empty": "Ingen begivenheder fundet.",
+    "loadingMore": "Indlæser…"
+  },
+
+  "detail": {
+    "loading": "Indlæser detaljer...",
+    "error": "Fejl under indlæsning: {error}",
+    "date": "Dato & tid:",
+    "venue": "Sted:"
+  },
+
+  "pagination": {
+    "of": "af"
+  },
+
+  "links": {
+    "eventLink": "Begivenhedslink",
+    "organizerWebsite": "Arrangørens hjemmeside"
+  },
+
+  "categories": {
+    "1": "Kultur",
+    "2": "Uddannelse",
+    "3": "Sport",
+    "4": "Fritid",
+    "5": "Familie",
+    "6": "Samfund"
+  }
+}

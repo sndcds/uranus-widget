@@ -1,10 +1,12 @@
-import { ref, computed, nextTick } from 'vue'
+import { ref, computed, nextTick, inject } from 'vue'
 import {
   PARAM_MAP,
   OVERRIDABLE_PARAMS,
 } from '../lib/constants'
 
 export default function useEventsApi(config) {
+  const t = inject('t', (k) => k)
+
   const events = ref([])
   const hasMore = ref(true)
   const cursor = ref(null)
@@ -441,14 +443,14 @@ export default function useEventsApi(config) {
     if (isSafeUrl(d.source_link)) {
       links.push({
         url: d.source_link,
-        label: 'Veranstaltungslink',
+        label: t('links.eventLink'),
       })
     }
 
     if (isSafeUrl(d.org_web_link)) {
       links.push({
         url: d.org_web_link,
-        label: 'Webseite des Veranstalters',
+        label: t('links.organizerWebsite'),
       })
     }
 

@@ -70,6 +70,7 @@ export default function useWidgetConfig(props) {
 
       const defaults = {
         styles: [],
+        language: 'de',
         filter: {
           limit: DEFAULT_LIMIT,
         },

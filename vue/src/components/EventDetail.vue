@@ -1,6 +1,9 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, inject } from 'vue'
 import { formatDetailDate, markdownToHtml } from '../lib/format'
+
+const t = inject('t', (k) => k)
+const locale = inject('locale', 'de-DE')
 
 const props = defineProps({
   loading: {
@@ -25,7 +28,7 @@ defineEmits(['close'])
 
 const dateStr = computed(() => {
   const venue = props.data?.further_dates?.[0]
-  return venue ? formatDetailDate(venue) : ''
+  return venue ? formatDetailDate(venue, locale.value) : ''
 })
 
 const descriptionHtml = computed(() => {
@@ -47,8 +50,8 @@ const venueCity = computed(() => venue.value?.venue_city || '')
 
 <template>
   <div class="uw-detail__container">
-    <div v-if="loading" class="uw-is-loading">Lade Details...</div>
-    <div v-else-if="error" class="uw-is-error">Fehler beim Laden: {{ error }}</div>
+    <div v-if="loading" class="uw-is-loading">{{ t('detail.loading') }}</div>
+    <div v-else-if="error" class="uw-is-error">{{ t('detail.error', { error }) }}</div>
     <div v-else-if="data" class="uw-detail">
       <div v-if="data.images?.main?.url" class="uw-detail__image">
         <img :src="`${data.images.main.url}/?ratio=16:9&width=900`" :alt="data.title">
@@ -58,10 +61,10 @@ const venueCity = computed(() => venue.value?.venue_city || '')
         <p v-if="data.subtitle" class="uw-detail__subtitle">{{ data.subtitle }}</p>
         <div class="uw-detail__meta">
           <p v-if="dateStr">
-            <strong>Datum &amp; Uhrzeit:</strong> {{ dateStr }}
+            <strong>{{ t('detail.date') }}</strong> {{ dateStr }}
           </p>
           <p v-if="venueName">
-            <strong>Ort:</strong> {{ venueName }}{{ venueCity ? `, ${venueCity}` : '' }}
+            <strong>{{ t('detail.venue') }}</strong> {{ venueName }}{{ venueCity ? `, ${venueCity}` : '' }}
           </p>
         </div>
         <div

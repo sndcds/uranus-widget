@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, inject } from 'vue'
 import { formatDate, formatShortDate, markdownToHtml } from '../lib/format'
 
 
@@ -9,6 +9,9 @@ const props = defineProps({
     required: true
   }
 })
+
+const t = inject('t', (k) => k)
+const locale = inject('locale', 'de-DE')
 
 defineEmits(['open'])
 
@@ -37,14 +40,14 @@ const summaryHTML = computed(() => {
         :alt="event.title"
         loading="lazy"
       >
-      <div v-else class="uw-card__placeholder">Kein Bild</div>
+      <div v-else class="uw-card__placeholder">{{ t('noImage') }}</div>
     </div>
 
     <div class="uw-card__content">
       <div class="uw-event-card__content">
 
         <!-- Date -->
-        <span class="uw-event-card__date">{{ formatShortDate(event) }}</span>
+        <span class="uw-event-card__date">{{ formatShortDate(event, locale) }}</span>
 
         <!-- Title -->
         <span class="uw-event-card__title">{{ event.title }}</span>

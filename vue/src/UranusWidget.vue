@@ -1,8 +1,9 @@
 <script setup>
-import { onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref, provide } from 'vue'
 import useEventsApi from './composables/useEventsApi'
 import useWidgetConfig from './composables/useWidgetConfig'
 import useStyles from './composables/useStyles'
+import { useI18n } from './composables/useI18n'
 import WidgetHeader from './components/WidgetHeader.vue'
 import FilterBar from './components/FilterBar.vue'
 import EventsList from './components/EventsList.vue'
@@ -29,6 +30,13 @@ const {
   styles,
   init: initConfig
 } = useWidgetConfig(props)
+
+const lang = computed(() => config.value.language || 'de')
+const { t, locale } = useI18n(lang)
+
+provide('lang', lang)
+provide('locale', locale)
+provide('t', t)
 
 const {
   events,
@@ -79,11 +87,11 @@ onUnmounted(() => {
 <template>
   <div ref="rootEl" class="uw-widget">
     <template v-if="configError">
-      <div class="uw-is-error">Konfiguration konnte nicht geladen werden: {{ configError }}</div>
+      <div class="uw-is-error">{{ t('configError', { error: configError }) }}</div>
     </template>
 
     <template v-else-if="!configLoaded">
-      <div class="uw-is-loading">Lade Konfiguration...</div>
+      <div class="uw-is-loading">{{ t('loadingConfig') }}</div>
     </template>
 
     <template v-else-if="detailUuid">
@@ -91,7 +99,7 @@ onUnmounted(() => {
           class="uw-button uw-big"
           @click="closeDetail"
       >
-        Zurück
+        {{ t('back') }}
       </button>
 
       <EventDetail
@@ -134,14 +142,14 @@ onUnmounted(() => {
             type="button"
             @click="loadMore"
         >
-          Mehr laden
+          {{ t('loadMore') }}
         </button>
       </div>
 
     </template>
 
     <div v-if="styleError" class="uw-is-error">
-      Styles konnten nicht geladen werden: {{ styleError }}
+      {{ t('styleError', { error: styleError }) }}
     </div>
 
   </div>

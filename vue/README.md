@@ -80,6 +80,7 @@ Das Widget lädt seine Konfiguration aus einer externen JSON-Datei. Im Tag steht
   "start": "2026-07-01",
   "end": "2026-12-31",
   "categories": "2,4",
+  "language": "de",
   "styles": ["./theme.css"]
 }
 ```
@@ -109,6 +110,7 @@ Das Widget lädt seine Konfiguration aus einer externen JSON-Datei. Im Tag steht
 | `start`      | string       | Startdatum (ISO)                 | `2026-07-01`        |
 | `end`        | string       | Enddatum (ISO)                   | `2026-12-31`        |
 | `categories` | string       | Kommagetrennte Kategorie-IDs     | `2,4`               |
+| `language`   | string       | Sprache der Oberfläche (de, da, en, es) | `de`         |
 | `styles`     | string/array | Externe CSS-Dateien zum Überschreiben | `"./theme.css"` oder `["./a.css","./b.css"]` |
 
 Die Optionen sind identisch mit den Widget-Attributen (Variant B). Sie können sowohl in der JSON-Datei als auch direkt als Attribut gesetzt werden. Wird beides angegeben, hat eine **extern geladene JSON-Datei** Vorrang; das `config`-Prop (Programm-Einbindung) überschreibt beide.

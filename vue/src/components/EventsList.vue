@@ -1,6 +1,8 @@
 <script setup>
-import { ref } from 'vue'
+import { inject, ref } from 'vue'
 import EventCard from './EventCard.vue'
+
+const t = inject('t', (k) => k)
 
 const props = defineProps({
   loading: {
@@ -32,7 +34,7 @@ defineEmits(['open'])
           key="loading"
           class="uw-is-loading"
       >
-        Lade Events...
+        {{ t('list.loading') }}
       </div>
 
       <!-- Error -->
@@ -50,7 +52,7 @@ defineEmits(['open'])
           key="empty"
           class="uw-is-empty"
       >
-        Keine Events gefunden.
+        {{ t('list.empty') }}
       </div>
 
       <!-- Events -->
@@ -74,7 +76,7 @@ defineEmits(['open'])
         v-if="loading && events.length > 0"
         class="uw-container__loading"
     >
-      Lädt…
+      {{ t('list.loadingMore') }}
     </div>
 
   </div>

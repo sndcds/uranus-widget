@@ -1,7 +1,9 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { inject, ref, watch } from 'vue'
 import { CATEGORIES } from '../lib/constants'
 import EventTypeSelect from './EventTypeSelect.vue'
+
+const t = inject('t', (k) => k)
 
 const props = defineProps({
   modelValue: {
@@ -33,13 +35,13 @@ const query = ref(props.search)
 const dateRangeKey = ref('all')
 
 const DATE_RANGE_OPTIONS = [
-  { value: 'all', label: 'Alle' },
-  { value: 'today', label: 'Heute' },
-  { value: 'tomorrow', label: 'Morgen' },
-  { value: 'weekend', label: 'Wochenende' },
-  { value: 'next_week', label: 'Kommende Woche' },
-  { value: 'weekend_after', label: 'Wochenende danach' },
-  { value: 'six_months', label: 'Kommende 6 Monate' }
+  { value: 'all', labelKey: 'dateRange.all' },
+  { value: 'today', labelKey: 'dateRange.today' },
+  { value: 'tomorrow', labelKey: 'dateRange.tomorrow' },
+  { value: 'weekend', labelKey: 'dateRange.weekend' },
+  { value: 'next_week', labelKey: 'dateRange.nextWeek' },
+  { value: 'weekend_after', labelKey: 'dateRange.weekendAfter' },
+  { value: 'six_months', labelKey: 'dateRange.sixMonths' }
 ]
 
 function pad(n) {
@@ -141,11 +143,11 @@ function onTypeChange(value) {
         v-model="query"
         class="uw-filter__search-input"
         type="search"
-        placeholder="Freitextsuche…"
+        :placeholder="t('search.placeholder')"
         @input="onClearSearch"
         @keydown.enter.prevent="onKeydownEnter"
       >
-      <button type="submit" class="uw-filter__search-button">Suchen</button>
+      <button type="submit" class="uw-filter__search-button">{{ t('search.submit') }}</button>
     </form>
 
     <EventTypeSelect
@@ -158,14 +160,14 @@ function onTypeChange(value) {
     <select
       v-model="dateRangeKey"
       class="uw-select"
-      aria-label="Nach Zeitraum filtern"
+      :aria-label="t('dateRange.ariaLabel')"
       @change="onDateRangeChange"
     >
       <option
         v-for="opt in DATE_RANGE_OPTIONS"
         :key="opt.value"
         :value="opt.value"
-      >{{ opt.label }}</option>
+      >{{ t(opt.labelKey) }}</option>
     </select>
 
     <div class="uw-filter__chips">
@@ -175,7 +177,7 @@ function onTypeChange(value) {
         class="uw-filter__chip"
         :class="{ 'uw-filter__chip--active': modelValue.includes(c.id) }"
         @click="toggle(c.id)"
-      >{{ c.label }}</button>
+      >{{ t(`categories.${c.id}`) }}</button>
     </div>
   </div>
 </template>
