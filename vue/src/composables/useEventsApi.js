@@ -16,6 +16,8 @@ export default function useEventsApi(config) {
 
   const selectedType = ref(null)
 
+  const selectedRange = ref(null)
+
   const searchTerm = ref('')
 
   const detailUuid = ref(null)
@@ -179,6 +181,24 @@ export default function useEventsApi(config) {
     }
 
     /*
+     * Date range selected in the filter bar overrides the configured
+     * start/end window.
+     */
+    if (selectedRange.value) {
+      if (selectedRange.value.start) {
+        filter.start = selectedRange.value.start
+      } else {
+        delete filter.start
+      }
+
+      if (selectedRange.value.end) {
+        filter.end = selectedRange.value.end
+      } else {
+        delete filter.end
+      }
+    }
+
+    /*
      * URL query parameters override the widget configuration.
      */
     const urlParams = new URLSearchParams(window.location.search)
@@ -195,8 +215,6 @@ export default function useEventsApi(config) {
   function buildPayload(cursor = null) {
     const payload = buildFilter()
     payload.limit = Number(config.value.filter.limit)
-    payload.start = config.value.filter.start
-    payload.end = config.value.filter.end
     payload.portal = config.value.filter.portal
 
     if (searchTerm.value) {
@@ -367,6 +385,17 @@ export default function useEventsApi(config) {
     selectedType.value = next == null || next === ''
         ? null
         : Number(next)
+
+    resetPagination()
+
+    loadMore()
+    loadSummary()
+  }
+
+  function selectRange(range) {
+    selectedRange.value = range && (range.start || range.end)
+        ? { ...range }
+        : null
 
     resetPagination()
 
@@ -552,6 +581,7 @@ export default function useEventsApi(config) {
     summary,
     selectedCategories,
     selectedType,
+    selectedRange,
     searchTerm,
 
     detailUuid,
@@ -567,6 +597,7 @@ export default function useEventsApi(config) {
     setCategories,
     setSearch,
     selectType,
+    selectRange,
 
     openDetail,
     closeDetail,

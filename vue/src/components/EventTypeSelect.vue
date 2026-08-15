@@ -97,7 +97,7 @@ function onChange(event) {
 
 <template>
   <select
-    class="uw-event-type-select"
+    class="uw-select"
     :value="modelValue ?? ''"
     :disabled="lookupLoading"
     aria-label="Nach Event-Typ filtern"

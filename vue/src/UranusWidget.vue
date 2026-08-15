@@ -47,6 +47,7 @@ const {
   loadMore,
   selectCategories,
   selectType,
+  selectRange,
   setCategories,
   setSearch,
   openDetail,
@@ -112,6 +113,7 @@ onUnmounted(() => {
           :selected-type="selectedType"
           @change="() => selectCategories(selectedCategories)"
           @type-change="selectType"
+          @range-change="selectRange"
           @search="setSearch"
       />
 
