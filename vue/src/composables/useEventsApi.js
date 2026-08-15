@@ -256,6 +256,10 @@ export default function useEventsApi(config) {
       }
     }
 
+    if (searchTerm.value) {
+      params.set('search', searchTerm.value)
+    }
+
     return `${config.value.apiBaseUrl}/events/type-summary?${params.toString()}`
   }
 
