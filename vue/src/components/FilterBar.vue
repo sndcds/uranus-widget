@@ -41,6 +41,13 @@ function submitSearch() {
   emit('search', query.value.trim())
 }
 
+function onClearSearch() {
+  if (!query.value || query.value.trim() === '') {
+    query.value = ''
+    emit('search', '')
+  }
+}
+
 function onKeydownEnter() {
   submitSearch()
 }
@@ -71,6 +78,7 @@ function onTypeChange(value) {
         class="uw-filter__search-input"
         type="search"
         placeholder="Freitextsuche…"
+        @input="onClearSearch"
         @keydown.enter.prevent="onKeydownEnter"
       >
       <button type="submit" class="uw-filter__search-button">Suchen</button>
