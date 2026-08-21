@@ -9,4 +9,19 @@
    ============================================================ */
 
 :host {
+    --color-text: #4A5056;
+
+    --color-primary: #1C4780;
+    --color-primary-hover: #0F2C4F;
+    --color-danger: #D02C29;
+
+    --color-button-bg: #1C4780;
+    --color-button-text: #D9E5F0;
+    --color-button-bg-hover: #0F2C4F;
+    --color-button-text-hover: #D9E5F0;
+
+    --color-card: transparent;
+    --color-card-hover: transparent;
+    --color-card-text: #4A5056;
+    --color-card-text-hover: #264361;
 }

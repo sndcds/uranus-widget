@@ -5,13 +5,14 @@
     border-radius: var(--radius);
     overflow: hidden;
     background: var(--color-card);
+    color: var(--color-card-text);
     cursor: pointer;
     transition: all 0.2s;
 }
 
 .uw-card:hover {
     background: var(--color-card-hover);
-    color: #2314f4;
+    color: var(--color-card-text-hover);
 }
 
 .uw-card__placeholder {

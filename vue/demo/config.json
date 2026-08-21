@@ -1,11 +1,13 @@
 {
-  "styles": ["/wp-content/widgets/theme.css"],
+  "styles1": ["/wp-content/widgets/theme.css"],
+  "styles": ["/fileadmin/widget/kulturbytes/theme.css"],
+  "language": "de",
 
   "apiBaseUrl": "https://api.kulturbytes.de/api",
 
   "filter": {
-    "portal": "019d78bb-3eb2-7a7c-abdd-fb000d5c2d4b",
-    "categories": [1,2],
+    "portal": "b6f497e5-89bf-4869-86a8-b22af396daa3",
+    "categories": [],
     "limit": 16
   }
 }
