@@ -33,6 +33,14 @@
 
   "noImage": "No image",
 
+  "eventCard": {
+    "priceFree": "Free",
+    "priceDonation": "Donation",
+    "statusCancelled": "Cancelled",
+    "statusPostponed": "Postponed",
+    "statusMoved": "Moved"
+  },
+
   "list": {
     "loading": "Loading events...",
     "empty": "No events found.",

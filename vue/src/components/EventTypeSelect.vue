@@ -1,5 +1,6 @@
 <script setup>
-import { computed, inject, onMounted, ref, watch } from 'vue'
+import { computed, inject } from 'vue'
+import { useEventTypes } from '../composables/useEventTypes'
 
 const t = inject('t', (k) => k)
 const lang = inject('lang', { value: 'de' })
@@ -21,53 +22,10 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue', 'change'])
 
-const typeLabels = ref({})
-const lookupLoading = ref(false)
-
-watch(
-  () => props.apiBaseUrl,
-  (url) => {
-    if (url) loadTypeLookup()
-  }
+const { isLoading, label } = useEventTypes(
+    () => props.apiBaseUrl,
+    () => lang.value || 'de'
 )
-
-onMounted(() => {
-  if (props.apiBaseUrl) loadTypeLookup()
-})
-
-async function loadTypeLookup() {
-  const base = String(props.apiBaseUrl || '').replace(/\/$/, '')
-
-  if (!base) return
-
-  lookupLoading.value = true
-
-  try {
-    const res = await fetch(`${base}/event/type-genre-lookup`)
-
-    if (!res.ok) return
-
-    const json = await res.json()
-
-    const data = json.data || {}
-
-    // The lookup API knows de, en, da. Prefer the current language,
-    // otherwise fall back to the available ones.
-    const active = data[lang.value] || data.de || data.en || data.da || {}
-    const types = active.types || {}
-
-    const labels = {}
-    for (const [id, entry] of Object.entries(types)) {
-      labels[id] = entry?.name || id
-    }
-
-    typeLabels.value = labels
-  } catch {
-    // Lookup is optional.
-  } finally {
-    lookupLoading.value = false
-  }
-}
 
 const options = computed(() => {
   const typeSummary = props.summary?.type_summary
@@ -81,12 +39,17 @@ const options = computed(() => {
     }
   }
 
+  const unknownFallback = (id) => `Typ ${id}`
+
   return [...counts.entries()]
-      .map(([id, count]) => ({
-        value: Number(id),
-        label: typeLabels.value[id] || id,
-        count
-      }))
+      .map(([id, count]) => {
+        const lbl = label(id) || unknownFallback(id)
+        return {
+          value: Number(id),
+          label: lbl,
+          count
+        }
+      })
       .sort((a, b) =>
           a.label.localeCompare(b.label, lang.value || 'de')
       )
@@ -106,7 +69,7 @@ function onChange(event) {
   <select
     class="uw-select"
     :value="modelValue ?? ''"
-    :disabled="lookupLoading"
+    :disabled="isLoading"
     :aria-label="t('eventType.ariaLabel')"
     @change="onChange"
   >

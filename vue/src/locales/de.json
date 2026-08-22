@@ -33,6 +33,14 @@
 
   "noImage": "Kein Bild",
 
+  "eventCard": {
+    "priceFree": "Kostenlos",
+    "priceDonation": "Spende",
+    "statusCancelled": "Abgesagt",
+    "statusPostponed": "Verschoben",
+    "statusMoved": "Verlegt"
+  },
+
   "list": {
     "loading": "Lade Events...",
     "empty": "Keine Events gefunden.",

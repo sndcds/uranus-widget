@@ -1,6 +1,6 @@
 <script setup>
-import { inject, ref } from 'vue'
-import EventCard from './EventCard.vue'
+import { inject } from 'vue'
+import EventCard from './event-card/EventCard.vue'
 
 const t = inject('t', (k) => k)
 
@@ -16,6 +16,14 @@ const props = defineProps({
   events: {
     type: Array,
     default: () => []
+  },
+  eventCardConfig: {
+    type: Object,
+    default: () => ({ variant: 'standard', image: {} })
+  },
+  apiBaseUrl: {
+    type: String,
+    default: ''
   }
 })
 
@@ -65,6 +73,8 @@ defineEmits(['open'])
             v-for="e in events"
             :key="`${e.uuid}-${e.date_slug}`"
             :event="e"
+            :event-card-config="eventCardConfig"
+            :api-base-url="apiBaseUrl"
             @open="$emit('open', $event)"
         />
       </div>

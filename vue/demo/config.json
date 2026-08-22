@@ -5,6 +5,16 @@
 
   "apiBaseUrl": "https://api.kulturbytes.de/api",
 
+  "event_card": {
+    "variant": "standard",
+    "image": {
+      "ratio": "4/3",
+      "width": 480,
+      "quality": 80,
+      "type": "webp"
+    }
+  },
+
   "filter": {
     "portal": "b6f497e5-89bf-4869-86a8-b22af396daa3",
     "categories": [],

@@ -33,6 +33,14 @@
 
   "noImage": "Intet billede",
 
+  "eventCard": {
+    "priceFree": "Gratis",
+    "priceDonation": "Donation",
+    "statusCancelled": "Aflyst",
+    "statusPostponed": "Udsat",
+    "statusMoved": "Flyttet"
+  },
+
   "list": {
     "loading": "Indlæser begivenheder...",
     "empty": "Ingen begivenheder fundet.",

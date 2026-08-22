@@ -1,4 +1,5 @@
 import { ref, watch } from 'vue'
+import { DEFAULT_EVENT_CARD_CONFIG, normalizeEventCardConfig } from '../types/event-card'
 
 const DEFAULT_LIMIT = 12
 
@@ -71,6 +72,7 @@ export default function useWidgetConfig(props) {
       const defaults = {
         styles: [],
         language: 'de',
+        event_card: DEFAULT_EVENT_CARD_CONFIG,
         filter: {
           limit: DEFAULT_LIMIT,
         },
@@ -115,6 +117,9 @@ export default function useWidgetConfig(props) {
       if (!Array.isArray(config.value.styles)) {
         config.value.styles = []
       }
+
+      // Always ensure a valid event_card config (variant + image params)
+      config.value.event_card = normalizeEventCardConfig(config.value.event_card)
 
       styles.value = config.value.styles
 

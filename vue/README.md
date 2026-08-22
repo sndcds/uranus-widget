@@ -112,6 +112,38 @@ Das Widget lädt seine Konfiguration aus einer externen JSON-Datei. Im Tag steht
 | `categories` | string       | Kommagetrennte Kategorie-IDs     | `2,4`               |
 | `language`   | string       | Sprache der Oberfläche (de, da, en, es) | `de`         |
 | `styles`     | string/array | Externe CSS-Dateien zum Überschreiben | `"./theme.css"` oder `["./a.css","./b.css"]` |
+| `event_card` | object       | Card-Variante + Bildparameter (siehe unten) | siehe unten |
+
+### `event_card` (Event-Card-Varianten)
+
+Steuert, welche Event-Card-Variante gerendert wird und wie das Bild generiert wird.
+Bekannte Varianten: `standard`, `compact`, `minimal`. Unbekannte oder fehlende Varianten
+fallen automatisch auf `standard` zurück.
+
+```json
+{
+  "event_card": {
+    "variant": "standard",
+    "image": {
+      "ratio": "4/3",
+      "width": 480,
+      "quality": 80,
+      "type": "webp"
+    }
+  }
+}
+```
+
+| Schlüssel                | Typ      | Beschreibung                                  | Default |
+|--------------------------|----------|-----------------------------------------------|---------|
+| `event_card.variant`     | string   | Card-Variante (`standard`/`compact`/`minimal`) | `standard` |
+| `event_card.image.ratio` | string   | Seitenverhältnis der Bild-Query               | `16:9` |
+| `event_card.image.width` | number   | Zielbreite der Bild-Query                     | `480` |
+| `event_card.image.quality` | number | Bildqualität der Bild-Query (0-100)          | `80` |
+| `event_card.image.type`  | string   | Bildformat der Bild-Query                     | `webp` |
+
+Neue Varianten werden als eigenes Modul unter `components/event-card/variants/` ergänzt
+und im Wrapper `components/event-card/EventCard.vue` registriert.
 
 Die Optionen sind identisch mit den Widget-Attributen (Variant B). Sie können sowohl in der JSON-Datei als auch direkt als Attribut gesetzt werden. Wird beides angegeben, hat eine **extern geladene JSON-Datei** Vorrang; das `config`-Prop (Programm-Einbindung) überschreibt beide.
 
