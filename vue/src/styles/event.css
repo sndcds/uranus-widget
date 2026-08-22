@@ -1,5 +1,5 @@
 .uw-event-card {
-  background-color: var(--color-card);
+  background-color: var(--uw-color-card);
 }
 
 .uw-event-card__content {
@@ -9,7 +9,7 @@
 }
 
 .uw-event-card:hover {
-  background-color: var(--color-card-hover);
+  background-color: var(--uw-color-card-hover);
 }
 
 .uw-event-card__image {

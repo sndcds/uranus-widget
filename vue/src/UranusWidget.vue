@@ -96,7 +96,7 @@ onUnmounted(() => {
 
     <template v-else-if="detailUuid">
       <button
-          class="uw-button uw-big"
+          class="uw-button uw-button--big"
           @click="closeDetail"
       >
         {{ t('back') }}
@@ -138,7 +138,7 @@ onUnmounted(() => {
           class="uw-load-more"
       >
         <button
-            class="uw-button uw-big"
+            class="uw-button uw-button--big"
             type="button"
             @click="loadMore"
         >

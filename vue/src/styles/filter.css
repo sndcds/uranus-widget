@@ -16,22 +16,22 @@
   flex: 1;
   min-width: 0;
   padding: .4rem .8rem;
-  border: 1px solid var(--color-page-border);
-  border-radius: var(--radius);
-  background: var(--color-page);
+  border: 1px solid var(--uw-color-page-border);
+  border-radius: var(--uw-radius);
+  background: var(--uw-color-page);
   font-size: 1rem;
 }
 
 .uw-filter__search-input:focus {
   outline: none;
-  border-color: var(--color-page-border-strong);
+  border-color: var(--uw-color-page-border-strong);
 }
 
 .uw-filter__search-button {
   padding: 8px 16px;
-  border: 1px solid var(--color-primary);
-  border-radius: var(--radius);
-  background: var(--color-primary);
+  border: 1px solid var(--uw-color-primary);
+  border-radius: var(--uw-radius);
+  background: var(--uw-color-primary);
   color: #fff;
   font-size: 0.9rem;
   cursor: pointer;
@@ -39,22 +39,22 @@
 }
 
 .uw-filter__search-button:hover {
-  background: var(--color-primary-hover);
+  background: var(--uw-color-primary-hover);
 }
 
 .uw-select {
   padding: .4rem .8rem;
-  border: 1px solid var(--color-page-border);
-  border-radius: var(--radius);
-  background: var(--color-page);
-  color: var(--color-text);
+  border: 1px solid var(--uw-color-page-border);
+  border-radius: var(--uw-radius);
+  background: var(--uw-color-page);
+  color: var(--uw-color-text);
   font-size: 0.875rem;
   cursor: pointer;
 }
 
 .uw-select:focus {
   outline: none;
-  border-color: var(--color-page-border-strong);
+  border-color: var(--uw-color-page-border-strong);
 }
 
 .uw-select:disabled {
@@ -70,10 +70,10 @@
 
 .uw-filter__chip {
     padding: 6px 16px;
-    border: 1px solid var(--color-page-border);
-    border-radius: var(--radius-pill);
-    background: var(--color-page);
-    color: var(--color-text);
+    border: 1px solid var(--uw-color-page-border);
+    border-radius: var(--uw-radius-pill);
+    background: var(--uw-color-page);
+    color: var(--uw-color-text);
     font-size: 0.875rem;
     cursor: pointer;
     transition:
@@ -84,19 +84,19 @@
 
 /* Normal hover */
 .uw-filter__chip:hover {
-    background: var(--color-page-hover);
-    border-color: var(--color-page-hover);
+    background: var(--uw-color-page-hover);
+    border-color: var(--uw-color-page-hover);
 }
 
 /* Active */
 .uw-filter__chip--active {
-    background: var(--color-primary);
-    color: transparent;
-    border-color: var(--color-primary);
+    background: var(--uw-color-primary);
+    color: var(--uw-color-button-text);
+    border-color: var(--uw-color-primary);
 }
 
 /* Active + hover */
 .uw-filter__chip--active:hover {
-    background: var(--color-primary-hover);
-    border-color: var(--color-primary-hover);
+    background: var(--uw-color-primary-hover);
+    border-color: var(--uw-color-primary-hover);
 }

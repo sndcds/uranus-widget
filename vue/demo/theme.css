@@ -4,24 +4,25 @@
    Sie wird NACH dem internen Standard-CSS in den Shadow Root
    eingebunden und überschreibt daher gleiche Selektoren.
 
-   Tipp: Die CSS-Variablen auf :host ersetzen das Standard-Theme
-   zentral. Konkrete Klassen (Siehe README) erlauben Layout-Feinheiten.
+   Tipp: Die CSS-Variablen auf :host (Präfix --uw-) ersetzen das
+   Standard-Theme zentral. Konkrete Klassen (siehe template.md)
+   erlauben Layout-Feinheiten.
    ============================================================ */
 
 :host {
-    --color-text: #4A5056;
+    --uw-color-text: #4A5056;
 
-    --color-primary: #1C4780;
-    --color-primary-hover: #0F2C4F;
-    --color-danger: #D02C29;
+    --uw-color-primary: #1C4780;
+    --uw-color-primary-hover: #0F2C4F;
+    --uw-color-danger: #D02C29;
 
-    --color-button-bg: #1C4780;
-    --color-button-text: #D9E5F0;
-    --color-button-bg-hover: #0F2C4F;
-    --color-button-text-hover: #D9E5F0;
+    --uw-color-button-bg: #1C4780;
+    --uw-color-button-text: #D9E5F0;
+    --uw-color-button-bg-hover: #0F2C4F;
+    --uw-color-button-text-hover: #D9E5F0;
 
-    --color-card: transparent;
-    --color-card-hover: transparent;
-    --color-card-text: #4A5056;
-    --color-card-text-hover: #264361;
+    --uw-color-card: transparent;
+    --uw-color-card-hover: transparent;
+    --uw-color-card-text: #4A5056;
+    --uw-color-card-text-hover: #264361;
 }

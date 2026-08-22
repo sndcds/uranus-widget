@@ -5,12 +5,12 @@
     justify-content: center;
     gap: 1rem;
     margin: 1rem auto 0;
-    border: 1px solid var(--color-page-border);
+    border: 1px solid var(--uw-color-page-border);
 }
 
 .uw-pagination__button {
     padding: .25rem .5rem;
-    border: 0px solid var(--color-page-border);
+    border: 0px solid var(--uw-color-page-border);
     background: transparent;
     font-size: 1rem;
     cursor: pointer;
@@ -18,11 +18,11 @@
 }
 
 .uw-pagination__button:hover:not(:disabled) {
-    background: var(--color-page-hover);
+    background: var(--uw-color-page-hover);
 }
 
 .uw-pagination__button:disabled {
-    color: var(--color-text-muted);
+    color: var(--uw-color-text-muted);
     cursor: default;
 }
 

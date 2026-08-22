@@ -1,47 +1,41 @@
 :host {
-  --font-family: inherit;
-  --color-page: #fff;
-  --color-page-hover: #eaeaea;
-  --color-page-border: #eaeaea;
-  --color-page-border-strong: #d5d5d5;
+  --uw-font-family: inherit;
 
-  --color-card: #f1f1f1;
-  --color-card-hover: #e4e4e4;
-  --color-card-text: #1a1a1a;
-  --color-card-text-hover: #1a73e8;
-  --color-card-pladeholder: #dddddd;
+  --uw-color-page: #fff;
+  --uw-color-page-hover: #eaeaea;
+  --uw-color-page-border: #eaeaea;
+  --uw-color-page-border-strong: #d5d5d5;
 
-  --color-text: #1a1a1a;
-  --color-text-muted: #777;
-  --color-text-subtle: #888;
+  --uw-color-card: #f1f1f1;
+  --uw-color-card-hover: #e4e4e4;
+  --uw-color-card-text: #1a1a1a;
+  --uw-color-card-text-hover: #1a73e8;
+  --uw-color-card-placeholder: #dddddd;
 
-  --color-border: #e0e0e0;
-  --color-border-strong: #ccc;
+  --uw-color-text: #1a1a1a;
+  --uw-color-text-muted: #777;
+  --uw-color-text-subtle: #888;
 
-  --color-surface: #fff;
-  --color-surface-hover: #f0f0f0;
-  --color-surface-alt: #fafafa;
+  --uw-color-primary: #1a73e8;
+  --uw-color-primary-hover: #1558b0;
+  --uw-color-danger: #d32f2f;
 
-  --color-primary: #1a73e8;
-  --color-primary-hover: #1558b0;
-  --color-danger: #d32f2f;
+  --uw-color-button-bg: #101010;
+  --uw-color-button-bg-hover: #434343;
+  --uw-color-button-text: #ffffff;
+  --uw-color-button-text-hover: #ffffff;
 
-  --color-button-bg: #101010;
-  --color-button-bg-hover: #434343;
-  --color-button-text: #ffffff;
-  --color-button-text-hover: #ffffff;
+  --uw-radius: 0;
+  --uw-radius-pill: 999px;
 
-
-  --radius: 0;
-  --radius-pill: 999px;
   display: block;
 }
 
 .uw-widget {
-  font-family: var(--font-family);
+  font-family: var(--uw-font-family);
   font-size: 1rem;
   line-height: 1.5;
-  color: var(--color-text);
+  color: var(--uw-color-text);
   max-width: 1280px;
   margin: 0 auto;
 }
@@ -61,7 +55,7 @@
 
 .uw-widget__count {
   font-size: 0.9rem;
-  color: var(--color-text-muted);
+  color: var(--uw-color-text-muted);
 }
 
 .uw-container {
@@ -74,7 +68,7 @@
   top: 8px;
   right: 0;
   font-size: 0.85rem;
-  color: var(--color-text-muted);
+  color: var(--uw-color-text-muted);
   pointer-events: none;
 }
 
@@ -93,11 +87,11 @@
 .uw-is-empty {
   padding: 40px 0;
   text-align: center;
-  color: var(--color-text-subtle);
+  color: var(--uw-color-text-subtle);
 }
 
 .uw-is-error {
-  color: var(--color-danger);
+  color: var(--uw-color-danger);
 }
 
 .uw-list {

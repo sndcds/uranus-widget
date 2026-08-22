@@ -130,39 +130,37 @@ Der Pfad bezieht sich — wie bei `config-url` — auf die einbindende Seite. `s
 
 ### Klassen-Referenz (BEM, `uw-`-Präfix)
 
-Diese Klassen sind die stabile, öffentliche Schnittstelle zum Styling. Das schnellste Theming passiert über die **CSS-Variablen auf `:host`** (Farbe, Radii, Schrift):
+Diese Klassen sind die stabile, öffentliche Schnittstelle zum Styling. Die **detaillierte Übersicht** findest du in [`template.md`](./template.md). Das schnellste Theming passiert über die **CSS-Variablen auf `:host`** (Präfix `--uw-`):
 
 | Variable (auf `:host`) | Beschreibung |
 |------------------------|--------------|
-| `--font-family` | Schriftfamilie |
-| `--color-text` / `--color-text-muted` / `--color-text-subtle` | Textfarben |
-| `--color-border` / `--color-border-strong` | Rahmenfarben |
-| `--color-surface` / `--color-surface-hover` / `--color-surface-alt` | Flächen |
-| `--color-primary` | Akzentfarbe (Chips, Links) |
-| `--color-danger` | Fehlerfarbe |
-| `--radius` / `--radius-pill` | Eckenrundung |
+| `--uw-font-family` | Schriftfamilie |
+| `--uw-color-text` / `--uw-color-text-muted` / `--uw-color-text-subtle` | Textfarben |
+| `--uw-color-page` / `--uw-color-page-hover` / `--uw-color-page-border` / `--uw-color-page-border-strong` | Seiten/Feld-Flächen & Rahmen |
+| `--uw-color-card` / `--uw-color-card-hover` / `--uw-color-card-text` / `--uw-color-card-text-hover` / `--uw-color-card-placeholder` | Karten-Flächen, -Text und Platzhalter |
+| `--uw-color-primary` / `--uw-color-primary-hover` | Akzentfarbe (Chips, Links, Buttons) |
+| `--uw-color-danger` | Fehlerfarbe |
+| `--uw-color-button-bg` / `--uw-color-button-text` / `--uw-color-button-bg-hover` / `--uw-color-button-text-hover` | Buttons |
+| `--uw-radius` / `--uw-radius-pill` | Eckenrundung |
 
 Konkrete Layout-Klassen:
 
 | Klasse | Element |
 |--------|---------|
-| `.uw-widget` | Root-Container |
-| `.uw-widget__header` / `__title` / `__count` | Kopfbereich (Titel + Zähler) |
-| `.uw-filter` / `.uw-filter__chip` / `.uw-filter__chip--active` | Filterleiste / Chip / aktiver Chip |
-| `.uw-container` | Behälter der Listenansicht |
-| `.uw-list` | Liste der Karten |
-| `.uw-card` / `__image` / `__placeholder` / `__content` / `__title` / `__subtitle` / `__meta` / `__summary` | Event-Karte und ihre Teile |
-| `.uw-pagination` / `__button` / `__button--prev` / `__button--next` / `__info` | Seitensteuerung |
-| `.uw-btn-back` | Zurück-Button in der Detailansicht |
-| `.uw-detail` / `__container` / `__image` / `__body` / `__title` / `__subtitle` / `__meta` / `__description` / `__links` | Detailansicht |
+| `.uw-widget` / `.uw-widget__header` / `.uw-widget__title` / `.uw-widget__count` | Rahmen & Kopfbereich |
+| `.uw-filter` / `.uw-filter__search` / `.uw-filter__search-input` / `.uw-filter__search-button` / `.uw-filter__chips` / `.uw-filter__chip` / `.uw-filter__chip--active` / `.uw-select` | Filterleiste |
+| `.uw-container` / `.uw-container__loading` / `.uw-list` | Listenansicht & Zustände |
+| `.uw-card` / `.uw-card__content` / `.uw-card__placeholder` / `.uw-event-card` / `__image` / `__title` / `__subtitle` / `__date` / `__meta` / `__summary` | Event-Karte |
+| `.uw-button` / `.uw-button--big` | Buttons |
+| `.uw-detail__image` / `__body` / `__title` / `__subtitle` / `__meta` / `__description` / `__links` | Detailansicht |
 | `.uw-is-loading` / `.uw-is-error` / `.uw-is-empty` | Zustände (Laden, Fehler, leer) |
 
 **Beispiel** — `theme.css`:
 
 ```css
 :host {
-  --color-primary: #2e7d32;
-  --radius: 12px;
+  --uw-color-primary: #2e7d32;
+  --uw-radius: 12px;
 }
 
 .uw-widget {
@@ -170,8 +168,8 @@ Konkrete Layout-Klassen:
   background: #fffdf5;
 }
 
-.uw-card { flex-direction: column; }
-.uw-card__image { width: 100%; height: 180px; }
+.uw-event-card { flex-direction: column; }
+.uw-event-card__image { width: 100%; height: 180px; }
 ```
 
 
