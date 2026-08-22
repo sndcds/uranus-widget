@@ -91,7 +91,7 @@
 /* Active */
 .uw-filter__chip--active {
     background: var(--color-primary);
-    color: #fff;
+    color: transparent;
     border-color: var(--color-primary);
 }
 

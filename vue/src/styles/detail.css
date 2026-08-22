@@ -22,13 +22,11 @@
 .uw-detail__subtitle {
   margin: 0 0 12px;
   font-size: 1rem;
-  color: #555;
 }
 
 .uw-detail__meta {
   margin-bottom: 16px;
   font-size: 0.9rem;
-  color: #444;
 }
 
 .uw-detail__meta p {
@@ -39,7 +37,6 @@
   margin-bottom: 20px;
   font-size: 0.95rem;
   line-height: 1.6;
-  color: #333;
 }
 
 .uw-detail__description p {
