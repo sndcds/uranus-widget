@@ -143,6 +143,10 @@ Diese Klassen sind die stabile, öffentliche Schnittstelle zum Styling. Die **de
 | `--uw-color-button-bg` / `--uw-color-button-text` / `--uw-color-button-bg-hover` / `--uw-color-button-text-hover` | Buttons |
 | `--uw-radius` / `--uw-radius-pill` | Eckenrundung |
 
+Optionale Auszeichnungs-Tokens (gesetzt von mitgelieferten Themes, nicht vom Basis-CSS):
+`--uw-font-heading` (Display-Serif für Überschriften), `--uw-font-accent` (Labels/Meta),
+`--uw-accent-soft` (helle Akzentfläche), `--uw-accent-line` (dezente Akzentlinie).
+
 Konkrete Layout-Klassen:
 
 | Klasse | Element |

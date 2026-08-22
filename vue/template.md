@@ -49,7 +49,7 @@ nicht mit dem Host-Seiten-Design kollidieren.
 
 | Variable | Beschreibung | Default |
 |----------|--------------|---------|
-| `--uw-font-family` | Schriftfamilie | `inherit` |
+| `--uw-font-family` | Text-Schriftfamilie | `inherit` |
 | `--uw-radius` | Standard-Eckenrundung | `0` |
 | `--uw-radius-pill` | Pill-Eckenrundung (Chips) | `999px` |
 | `--uw-color-page` | Feld-/Kartenhintergrund hell | `#ffffff` |
@@ -71,6 +71,17 @@ nicht mit dem Host-Seiten-Design kollidieren.
 | `--uw-color-button-bg-hover` | Button-Hover | `#434343` |
 | `--uw-color-button-text` | Button-Text | `#ffffff` |
 | `--uw-color-button-text-hover` | Button-Text-Hover | `#ffffff` |
+
+Zusätzlich gibt es **optionale Auszeichnungs-Tokens**, die vom Basis-CSS nicht gesetzt,
+aber von den mitgelieferten Themes (z. B. `theme-blaupause.css`) auf `:host` definiert
+werden. Eigene Themes können sie frei setzen oder neue benannte Tokens ergänzen:
+
+| Variable | Beschreibung | Beispiel-Default (Theme) |
+|----------|--------------|---------------------------|
+| `--uw-font-heading` | Serif-/Display-Schrift für Überschriften | `"Playfair Display", Georgia, "Times New Roman", serif` |
+| `--uw-font-accent` | Schrift für Labels/Meta/Aktionen | `"Epilogue", system-ui, sans-serif` |
+| `--uw-accent-soft` | Helle Akzent-/Flächenfarbe (Banner, Meta) | `#eaf2fe` |
+| `--uw-accent-line` | Dezente Akzent-Linie/Umrandung | `#c9dcf9` |
 
 Die internen Klassendateien **verwenden ausschließlich diese Variablen** — es gibt keine
 hartkodierten Farben mehr. Möchtest du nur Farbe/Radius ändern, brauchst du keine einzige

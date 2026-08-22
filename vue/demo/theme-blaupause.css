@@ -1,0 +1,385 @@
+/* ============================================================
+   Uranus Widget — Theme "blau:pause"
+   Harmonisiert mit https://blaupause-flensburg.de/
+
+   Design-Language der Website:
+   - Editorialer, heller Look (weiße/helle Flächen, wenige dunkle
+     Kontrast-Bänder) — soziokulturelles Zentrum, Marke "blau".
+   - Akzentfarbe Blau ("blau:pause"), hellblau als Flächen-Füllung
+     (Header/Sections), Dunkelblau/Navy als Akzent auf Weiß.
+   - Überschriften: Playfair Display (Serif) · Text: Outfit (Sans) ·
+     Labels/Akzente: Epilogue.
+   - Abgerundete Karten (~20px), Pill-Buttons, dezente Ränder.
+
+   Einbindung über config.styles (nach dem internen CSS):
+     "styles": ["./theme-blaupause.css"]
+
+   Voraussetzung: Die genannten Fonts werden auf der Host-Seite
+   geladen (die Website nutzt sie bereits) — das Widget greift über
+   den Font-Stack darauf zu und fällt auf System-Serif/Sans zurück.
+
+   Konzept & Klassen-Referenz: siehe template.md
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   1) Variablen: blaupause-Palette
+   ------------------------------------------------------------ */
+:host {
+  /* Marke "blau:pause" */
+  --uw-color-primary: #1b62d8;
+  --uw-color-primary-hover: #12499f;
+
+  /* Flächen */
+  --uw-color-page: #ffffff;
+  --uw-color-page-hover: #f2f6fd;
+  --uw-color-page-border: #e3eaf5;
+  --uw-color-page-border-strong: #c8d6ea;
+
+  /* Karten */
+  --uw-color-card: #ffffff;
+  --uw-color-card-hover: #f2f6fd;
+  --uw-color-card-text: #16233b;
+  --uw-color-card-text-hover: var(--uw-color-primary);
+  --uw-color-card-placeholder: #b6c6dd;
+
+  /* Text */
+  --uw-color-text: #16233b;
+  --uw-color-text-muted: #5a6a85;
+  --uw-color-text-subtle: #8a97ac;
+
+  /* Status */
+  --uw-color-danger: #c8342f;
+
+  /* Buttons */
+  --uw-color-button-bg: #16233b;
+  --uw-color-button-text: #ffffff;
+  --uw-color-button-bg-hover: #1b62d8;
+  --uw-color-button-text-hover: #ffffff;
+
+  /* Formen */
+  --uw-radius: 16px;
+  --uw-radius-pill: 999px;
+
+  /* Schrift: Playfair (Überschriften) + Outfit (Text), Epilogue (Labels) */
+  --uw-font-family: "Outfit", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --uw-font-heading: "Playfair Display", Georgia, "Times New Roman", serif;
+  --uw-font-accent: "Epilogue", "Outfit", system-ui, sans-serif;
+
+  /* Auszeichnung */
+  --uw-accent-soft: #eaf2fe;
+  --uw-accent-line: #c9dcf9;
+
+  display: block;
+}
+
+/* ------------------------------------------------------------
+   2) Rahmen: ruhiger, heller Kasten ohne Schatten-Bombast
+   ------------------------------------------------------------ */
+.uw-widget {
+  max-width: 1080px;
+  margin: 0 auto;
+  font-family: var(--uw-font-family);
+  letter-spacing: 0.1px;
+  color: var(--uw-color-text);
+}
+
+/* Kopfbereich: "lightAccent"-Banner wie das Site-Header */
+.uw-widget__header {
+  display: flex;
+  align-items: baseline;
+  gap: .75rem;
+  margin-bottom: 1.5rem;
+  padding: .8rem 1.1rem;
+  background: var(--uw-accent-soft);
+  border-radius: var(--uw-radius);
+  border-left: 5px solid var(--uw-color-primary);
+}
+
+.uw-widget__title {
+  font-family: var(--uw-font-heading);
+  font-size: 2rem;
+  font-weight: 700;
+  color: #0f1c33;
+  margin: 0;
+}
+
+.uw-widget__count {
+  font-family: var(--uw-font-accent);
+  font-size: .9rem;
+  font-weight: 500;
+  color: var(--uw-color-text-muted);
+}
+
+/* ------------------------------------------------------------
+   3) Filterleiste: ruhige, klare Formulare
+   ------------------------------------------------------------ */
+.uw-filter {
+  gap: .75rem;
+  margin-bottom: 1.5rem;
+  padding: .9rem 1rem;
+  background: var(--uw-accent-soft);
+  border: 1px solid var(--uw-color-page-border);
+  border-radius: var(--uw-radius);
+}
+
+.uw-filter__search-input,
+.uw-select {
+  border: 1px solid var(--uw-color-page-border-strong);
+  border-radius: var(--uw-radius-pill);
+  background: #ffffff;
+  color: var(--uw-color-text);
+  font-family: var(--uw-font-family);
+  font-weight: 500;
+  transition: border-color .15s, box-shadow .15s;
+}
+
+.uw-filter__search-input:focus,
+.uw-select:focus {
+  outline: none;
+  border-color: var(--uw-color-primary);
+  box-shadow: 0 0 0 3px rgba(27, 98, 216, .14);
+}
+
+.uw-filter__search-button {
+  border: 1px solid var(--uw-color-primary);
+  border-radius: var(--uw-radius-pill);
+  background: var(--uw-color-primary);
+  color: #ffffff;
+  font-family: var(--uw-font-accent);
+  font-weight: 600;
+  letter-spacing: .3px;
+  cursor: pointer;
+  transition: background .15s;
+}
+
+.uw-filter__search-button:hover {
+  background: var(--uw-color-primary-hover);
+}
+
+/* Chips: dezent, aktiver Zustand in Blau */
+.uw-filter__chip {
+  padding: 6px 16px;
+  border: 1px solid var(--uw-color-page-border-strong);
+  border-radius: var(--uw-radius-pill);
+  background: #ffffff;
+  color: var(--uw-color-text);
+  font-family: var(--uw-font-family);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .15s;
+}
+
+.uw-filter__chip:hover {
+  background: var(--uw-color-page-hover);
+  border-color: var(--uw-color-primary);
+}
+
+.uw-filter__chip--active {
+  background: var(--uw-color-primary);
+  color: #ffffff;
+  border-color: var(--uw-color-primary);
+}
+
+.uw-filter__chip--active:hover {
+  background: var(--uw-color-primary-hover);
+  border-color: var(--uw-color-primary-hover);
+}
+
+/* ------------------------------------------------------------
+   4) Event-Karten: editorial, hell, dezente Kante
+   ------------------------------------------------------------ */
+.uw-list {
+  gap: 1.75rem;
+}
+
+.uw-card,
+.uw-event-card {
+  display: flex;
+  gap: 1.25rem;
+  background: var(--uw-color-card);
+  border: 1px solid var(--uw-color-page-border);
+  border-radius: var(--uw-radius);
+  box-shadow: 0 1px 3px rgba(22, 35, 59, .06), 0 8px 24px rgba(22, 35, 59, .05);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform .18s, box-shadow .18s, border-color .18s;
+}
+
+.uw-event-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--uw-accent-line);
+  box-shadow: 0 10px 28px rgba(27, 98, 216, .10);
+  background: var(--uw-color-card-hover);
+}
+
+.uw-event-card__image img {
+  object-fit: cover;
+}
+
+.uw-card__placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  font-family: var(--uw-font-accent);
+  font-size: .95rem;
+  font-weight: 500;
+  color: var(--uw-color-card-placeholder);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Datum als dezente, unterstrichene Akzentzeile */
+.uw-event-card__date {
+  font-family: var(--uw-font-accent);
+  font-size: .8rem;
+  font-weight: 600;
+  color: var(--uw-color-primary);
+  text-transform: uppercase;
+  letter-spacing: .8px;
+}
+
+/* Titel serif — wie Site-Überschriften */
+.uw-event-card__title {
+  font-family: var(--uw-font-heading);
+  font-size: 1.55rem;
+  font-weight: 700;
+  color: var(--uw-color-text);
+  line-height: 1.15;
+}
+
+.uw-event-card__subtitle {
+  font-family: var(--uw-font-family);
+  font-size: 1.05rem;
+  color: var(--uw-color-text-muted);
+}
+
+.uw-event-card__meta {
+  font-size: .9rem;
+  font-weight: 500;
+  color: var(--uw-color-text-muted);
+}
+
+.uw-event-card__summary {
+  font-size: .95rem;
+  line-height: 1.6;
+  color: var(--uw-color-text-muted);
+}
+
+/* ------------------------------------------------------------
+   5) Buttons ("Mehr laden", "Zurück"): navy Pill / Blau bei Hover
+   ------------------------------------------------------------ */
+.uw-button {
+  border-radius: var(--uw-radius-pill);
+  background: var(--uw-color-button-bg);
+  border: 1px solid transparent;
+  color: var(--uw-color-button-text);
+  font-family: var(--uw-font-accent);
+  font-weight: 600;
+  letter-spacing: .3px;
+  cursor: pointer;
+  transition: background .15s;
+}
+
+.uw-button:hover {
+  background: var(--uw-color-button-bg-hover);
+  color: var(--uw-color-button-text-hover);
+}
+
+.uw-button--big {
+  font-size: 1.05rem;
+  padding: .55rem 1.6rem;
+}
+
+.uw-load-more {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+/* ------------------------------------------------------------
+   6) Zustände
+   ------------------------------------------------------------ */
+.uw-is-loading,
+.uw-is-error,
+.uw-is-empty {
+  padding: 48px 0;
+  text-align: center;
+  font-family: var(--uw-font-family);
+  color: var(--uw-color-text-subtle);
+}
+
+.uw-is-error {
+  color: var(--uw-color-danger);
+}
+
+/* ------------------------------------------------------------
+   7) Detail-Seite: editorial, klare Hierarchie
+   ------------------------------------------------------------ */
+.uw-detail__container {
+  padding-top: .25rem;
+}
+
+.uw-detail__image {
+  border-radius: var(--uw-radius);
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 8px 28px rgba(22, 35, 59, .10);
+}
+
+.uw-detail__image img {
+  width: 100%;
+  display: block;
+}
+
+.uw-detail__title {
+  font-family: var(--uw-font-heading);
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--uw-color-text);
+  line-height: 1.1;
+}
+
+.uw-detail__subtitle {
+  font-size: 1.15rem;
+  color: var(--uw-color-text-muted);
+}
+
+/* Metazeile mit linker Akzentlinie */
+.uw-detail__meta {
+  padding: .9rem 1.1rem;
+  border-left: 4px solid var(--uw-color-primary);
+  background: var(--uw-accent-soft);
+  border-radius: 0 var(--uw-radius) var(--uw-radius) 0;
+  color: var(--uw-color-text);
+  font-weight: 500;
+}
+
+.uw-detail__meta strong {
+  color: var(--uw-color-primary-hover);
+}
+
+.uw-detail__description {
+  font-size: 1rem;
+  line-height: 1.75;
+  color: var(--uw-color-text);
+}
+
+/* Links: klare, blau unterstrichene Aktionen */
+.uw-detail__links {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  margin-top: 1.25rem;
+}
+
+.uw-detail__links a {
+  color: var(--uw-color-primary);
+  text-decoration: none;
+  font-family: var(--uw-font-accent);
+  font-weight: 600;
+}
+
+.uw-detail__links a:hover {
+  color: var(--uw-color-primary-hover);
+  text-decoration: underline;
+}
