@@ -1,0 +1,359 @@
+/* ============================================================
+   Uranus Widget — Theme 2 (poppig / bunt / verspielt)
+   Beispiel für "weitreichende Designänderungen".
+
+   Einbindung über config.styles, z. B.:
+     "styles": ["./theme-2.css"]
+
+   Diese Datei wird NACH dem internen Standard-CSS in den
+   Shadow Root geladen und überschreibt:
+     1. Die Design-Tokens (--uw-*) auf :host
+     2. Viele konkrete .uw-*-Klassen (Layout, Farben, Effekte)
+
+   Konzept & Klassen-Referenz: siehe template.md
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   1) Variablen: kräftige, zusammenhängende Farbwelt
+   ------------------------------------------------------------ */
+:host {
+  /* Verspielte Grundfarben */
+  --uw-color-page: #fffaf3;
+  --uw-color-page-hover: #ffe9d2;
+  --uw-color-page-border: #ffd9a8;
+  --uw-color-page-border-strong: #ffb26b;
+
+  --uw-color-card: #ffffff;
+  --uw-color-card-hover: #fff3e0;
+  --uw-color-card-text: #3d2b4f;
+  --uw-color-card-text-hover: #ff4d8d;
+  --uw-color-card-placeholder: #f4a9c8;
+
+  --uw-color-text: #3d2b4f;
+  --uw-color-text-muted: #9a5f7a;
+  --uw-color-text-subtle: #c98ba8;
+
+  --uw-color-primary: #ff4785;
+  --uw-color-primary-hover: #e63670;
+
+  --uw-color-danger: #ff3b30;
+
+  --uw-color-button-bg: #6c4bf4;
+  --uw-color-button-text: #ffffff;
+  --uw-color-button-bg-hover: #5536e2;
+  --uw-color-button-text-hover: #ffffff;
+
+  /* Runde, "knubbelige" Ecken */
+  --uw-radius: 20px;
+  --uw-radius-pill: 999px;
+
+  --uw-font-family: "Comic Sans MS", "Comic Neue", "Chalkboard SE", "Comic Sans", ui-rounded, system-ui, sans-serif;
+
+  display: block;
+}
+
+/* ------------------------------------------------------------
+   2) Gesamtrahmen: bunter, abgerundeter Kasten
+   ------------------------------------------------------------ */
+.uw-widget {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem;
+  background:
+      linear-gradient(135deg, rgba(255,71,133,.12), rgba(108,75,244,.12)),
+      #fffaf3;
+  border: 4px dashed #ffb26b;
+  border-radius: 28px;
+  box-shadow: 0 12px 0 rgba(255,178,107,.35);
+}
+
+/* Kopfbereich wie ein buntes Banner */
+.uw-widget__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: .75rem;
+  margin-bottom: 1.25rem;
+  padding: .6rem 1rem;
+  background: linear-gradient(90deg, #ff4785, #ff9f1c, #ffd23f, #47d16f);
+  border-radius: var(--uw-radius);
+  color: #fff;
+}
+
+.uw-widget__title {
+  margin: 0;
+  font-size: 1.9rem;
+  font-weight: 800;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  text-shadow: 2px 2px 0 rgba(0,0,0,.18);
+  color: inherit;
+}
+
+.uw-widget__count {
+  font-size: 1rem;
+  font-weight: 700;
+  background: rgba(255,255,255,.28);
+  color: #fff;
+  border-radius: var(--uw-radius-pill);
+  padding: .15rem .7rem;
+}
+
+/* ------------------------------------------------------------
+   3) Filterleiste: lustige Selects & Sticker-Chips
+   ------------------------------------------------------------ */
+.uw-filter {
+  gap: .8rem;
+  margin-bottom: 1.4rem;
+  padding: .9rem;
+  background: #ffffff;
+  border: 3px solid #ffe0c2;
+  border-radius: var(--uw-radius);
+}
+
+.uw-filter__search-input,
+.uw-select {
+  border: 3px solid #cbb2ff;
+  border-radius: var(--uw-radius-pill);
+  background: #ffffff;
+  color: var(--uw-color-text);
+  font-weight: 600;
+  transition: box-shadow .15s, transform .15s, border-color .15s;
+}
+
+.uw-filter__search-input:focus,
+.uw-select:focus {
+  outline: none;
+  border-color: var(--uw-color-primary);
+  box-shadow: 0 4px 0 #ffd1e2;
+}
+
+.uw-filter__search-button {
+  border: 3px solid var(--uw-color-primary);
+  border-radius: var(--uw-radius-pill);
+  background: var(--uw-color-primary);
+  color: #fff;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  transform: rotate(-2deg);
+  transition: transform .15s;
+}
+
+.uw-filter__search-button:hover {
+  transform: rotate(0deg) scale(1.05);
+}
+
+/* Chips wie aufklebbare Sticker */
+.uw-filter__chip {
+  border: 3px solid #ffd1e2;
+  border-radius: var(--uw-radius-pill);
+  background: #fff0f6;
+  color: var(--uw-color-text);
+  font-weight: 700;
+  box-shadow: 0 3px 0 rgba(255,178,107,.4);
+  transition: transform .12s, box-shadow .12s;
+}
+
+.uw-filter__chip:hover {
+  transform: translateY(-2px) rotate(-2deg);
+  box-shadow: 0 5px 0 rgba(255,178,107,.5);
+}
+
+.uw-filter__chip--active {
+  background: linear-gradient(135deg, var(--uw-color-primary), #ff9f1c);
+  color: #ffffff;
+  border-color: #ff9f1c;
+  box-shadow: 0 3px 0 #cc2f66;
+}
+
+.uw-filter__chip--active:hover {
+  background: linear-gradient(135deg, #ff6ba9, #ffb347);
+  border-color: #ff9f1c;
+  box-shadow: 0 5px 0 #cc2f66;
+}
+
+/* ------------------------------------------------------------
+   4) Liste & Event-Karten: bunte, "schwebende" Karten
+   ------------------------------------------------------------ */
+.uw-list {
+  gap: 2rem;
+}
+
+.uw-card,
+.uw-event-card {
+  display: flex;
+  gap: 1.25rem;
+  background: var(--uw-color-card);
+  border: 0 none;
+  border-radius: var(--uw-radius);
+  /* Mehrfarbiger Doppelrahmen per Box-Shadow */
+  box-shadow:
+      6px 6px 0 #ffb26b,
+      -6px -6px 0 #c4ffb0,
+      6px -6px 0 #9ecbff,
+      -6px 6px 0 #ffb8e0;
+  overflow: hidden;
+  transition: transform .18s, box-shadow .18s;
+}
+
+.uw-event-card:hover {
+  transform: translate(-3px, -3px);
+  box-shadow:
+      9px 9px 0 #ffb26b,
+      -9px -9px 0 #c4ffb0,
+      9px -9px 0 #9ecbff,
+      -9px 9px 0 #ffb8e0;
+  background: var(--uw-color-card-hover);
+}
+
+.uw-event-card__image {
+  flex: 0 0 240px;
+  width: 240px;
+  border-radius: 0;
+}
+
+.uw-event-card__image img {
+  object-fit: cover;
+}
+
+.uw-card__placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--uw-color-card-placeholder);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Karten-Text mit verspielter Schrift und Farbakzenten */
+.uw-event-card__date {
+  display: inline-block;
+  font-size: 1rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--uw-color-primary);
+  background: #ffd1e2;
+  border-radius: var(--uw-radius-pill);
+  padding: .15rem .6rem;
+  margin-bottom: .5rem;
+}
+
+.uw-event-card__title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--uw-color-text);
+}
+
+.uw-event-card__subtitle {
+  font-size: 1.05rem;
+  color: #8a4f70;
+}
+
+.uw-event-card__meta {
+  font-size: .9rem;
+  font-weight: 600;
+  color: var(--uw-color-text-muted);
+}
+
+.uw-event-card__summary {
+  font-size: .95rem;
+  color: #6a4a7a;
+}
+
+/* ------------------------------------------------------------
+   5) Buttons ("Mehr laden", "Zurück")
+   ------------------------------------------------------------ */
+.uw-button {
+  border-radius: var(--uw-radius-pill);
+  background: linear-gradient(135deg, var(--uw-color-button-bg), #ff9f1c);
+  border: 3px solid #fff;
+  color: #fff;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  box-shadow: 0 5px 0 #4a33c9;
+  transition: transform .12s, box-shadow .12s;
+}
+
+.uw-button:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, var(--uw-color-button-bg-hover), #ffb347);
+  box-shadow: 0 7px 0 #4a33c9;
+  color: #fff;
+}
+
+.uw-button--big {
+  font-size: 1.15rem;
+  padding: .55rem 1.6rem;
+}
+
+.uw-load-more {
+  text-align: center;
+  margin-top: 1.25rem;
+}
+
+/* ------------------------------------------------------------
+   6) Detail-Seite: buntes großes Layout
+   ------------------------------------------------------------ */
+.uw-detail__container {
+  padding: .5rem;
+}
+
+.uw-detail__image {
+  border-radius: var(--uw-radius);
+  border: 5px solid #fff;
+  outline: 4px dashed #ffb26b;
+  overflow: hidden;
+  box-shadow: 0 10px 0 rgba(255,178,107,.4);
+}
+
+.uw-detail__title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--uw-color-text);
+}
+
+.uw-detail__subtitle {
+  font-size: 1.15rem;
+  color: #8a4f70;
+}
+
+/* Meta-Info wie bunte Kärtchen */
+.uw-detail__meta {
+  background: linear-gradient(90deg, #fff0f6, #ffe9f2);
+  border: 3px solid #ffd1e2;
+  border-radius: var(--uw-radius);
+  padding: .75rem 1rem;
+  color: var(--uw-color-text);
+  font-weight: 600;
+}
+
+.uw-detail__meta strong {
+  color: var(--uw-color-primary);
+}
+
+.uw-detail__description {
+  color: #5b3a70;
+  line-height: 1.7;
+}
+
+.uw-detail__links a {
+  color: var(--uw-color-primary);
+  font-weight: 700;
+  background: #fff0f6;
+  border: 2px dashed #ff9f1c;
+  border-radius: var(--uw-radius);
+  padding: .3rem .8rem;
+  display: inline-block;
+  width: fit-content;
+}
+
+.uw-detail__links a:hover {
+  background: #ffe4f0;
+  text-decoration: none;
+  color: #e63670;
+}
