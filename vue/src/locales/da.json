@@ -56,8 +56,15 @@
     "price": "Pris",
     "ticketLabel": "Billet",
     "ticketLink": "Køb billet",
-    "participation": "Deltagelse",
-    "dates": "Flere datoer"
+    "participation": "Deltagelsesinfo",
+    "dates": "Flere datoer",
+    "imageBy": "© {name}",
+    "onSiteTickets": "Billetkøb i døren",
+    "presaleFee": "Gebyr for forhåndssalg",
+    "ageFrom": "Fra {min} år",
+    "ageUntil": "Op til {max} år",
+    "ageRange": "{min}–{max} år",
+    "organizerBy": "Arrangeret af"
   },
 
   "pagination": {

@@ -90,6 +90,51 @@ export function formatDetailDate(venue, locale = 'de-DE') {
   return formatShortDate(venue || {}, locale)
 }
 
+/**
+ * Formatiert einen Preis(bereich) mit Währung, z. B. "10,00 € – 15,00 €".
+ * Sind min und max gleich bzw. nur ein Wert vorhanden, wird nur ein
+ * Betrag ausgegeben.
+ *
+ * @param {string} locale        z. B. 'de-DE'
+ * @param {number|null|undefined} min
+ * @param {number|null|undefined} max
+ * @param {string} [currency]    ISO-Währungscode, z. B. 'EUR'
+ * @returns {string}
+ */
+export function formatPrice(locale, min, max, currency) {
+  const formatOptions = {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }
+
+  const hasCurrency = currency && String(currency).length > 0
+
+  const formatNumber = (value) => {
+    const options = hasCurrency
+        ? { ...formatOptions, style: 'currency', currency: String(currency) }
+        : { ...formatOptions, style: 'decimal' }
+    return new Intl.NumberFormat(locale, options).format(value)
+  }
+
+  const toNumber = (value) =>
+      value == null || value === '' || !Number.isFinite(Number(value))
+          ? null
+          : Number(value)
+
+  const minNum = toNumber(min)
+  const maxNum = toNumber(max)
+
+  if (minNum != null && maxNum != null && minNum <= maxNum) {
+    return minNum === maxNum
+        ? formatNumber(minNum)
+        : `${formatNumber(minNum)} – ${formatNumber(maxNum)}`
+  }
+  if (minNum != null) return formatNumber(minNum)
+  if (maxNum != null) return formatNumber(maxNum)
+  return ''
+}
+
+
 export function escapeHtml(str) {
   if (!str) return ''
   const div = document.createElement('div')

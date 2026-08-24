@@ -2,8 +2,10 @@
 import { computed, inject } from 'vue'
 import {
   formatShortDate,
+  formatPrice,
   markdownToHtml,
 } from '../lib/format'
+import { aiLabelImage } from '../lib/eventImage'
 import { useEventTypes } from '../composables/useEventTypes'
 import { priceKey } from '../composables/useEventCard'
 
@@ -11,11 +13,14 @@ import { priceKey } from '../composables/useEventCard'
  * Einspaltige Event-Detailansicht.
  *
  * Reihenfolge (vertikal):
- *   Bild → Datum/Uhrzeit → Venue → Titel → Subtitle → Event-Typen →
- *   Beschreibung → Details (Preis, Ticket, Teilnahme) → Weitere Termine
+ *   Bild (+ Copyright, AI-Label) → Datum/Uhrzeit → Venue → Titel → Subtitle →
+ *   Event-Typen → Beschreibung → Details (Preis, Einlasskasse, Vorverkaufs­
+ *   gebühr, Alter, Teilnahme, Ticket) → Links → Weitere Termine →
+ *   Veranstalter-Hinweis
  *
  * Verwendet ausschließlich vorhandene Utilities/Komposables für Datum, i18n,
- * Markdown und Event-Typ-Labels. Keine parallele Formatierungslogik.
+ * Markdown, Event-Typ-Labels, Preisformatierung, AI-Label und Link-Icons.
+ * Keine parallele Mapping-/Formatierungslogik.
  */
 const props = defineProps({
   loading: {
@@ -43,7 +48,6 @@ const locale = inject('locale', 'de-DE')
 const lang = inject('lang', { value: 'de' })
 const apiBaseUrl = inject('apiBaseUrl', '')
 
-// apiBaseUrl kann als reaktive Ref (provide) oder als String übergeben werden
 const apiBase = computed(() => {
   if (apiBaseUrl && typeof apiBaseUrl === 'object' && 'value' in apiBaseUrl) {
     return apiBaseUrl.value || ''
@@ -51,7 +55,7 @@ const apiBase = computed(() => {
   return apiBaseUrl || ''
 })
 
-// ---- Daten aus den vorhandenen Event-Strukturen -----------------------------
+// ---- Daten aus den vorhandenen Event-/Image-Strukturen ----------------------
 const date = computed(() => props.data?.date)
 const furtherDates = computed(() =>
     Array.isArray(props.data?.further_dates)
@@ -62,17 +66,25 @@ const furtherDates = computed(() =>
 const title = computed(() => props.data?.title || '')
 const subtitle = computed(() => props.data?.subtitle || '')
 
-// Hauptbild: nur wenn vorhanden (nie ein leerer Bereich) + inkl. Maßen
 const mainImage = computed(() => props.data?.images?.main || null)
 
-// Bild-URL: maximal 800px breit, Seitenverhältnis bleibt erhalten,
-// wenn wir KEIN ratio vorgeben (~> API liefert Original-Proportionen).
 const imageUrl = computed(() => {
   const img = mainImage.value
   if (!img?.url) return ''
   const width = Math.min(Number(img.width) || 800, 800)
   return `${img.url}/?width=${width}`
 })
+
+// Copyright-/Credits-Zeile unter dem Bild (nur wenn vorhanden)
+const imageCredit = computed(() => {
+  const name = mainImage.value?.copyright
+  return name ? t('detail.imageBy', { name }) : ''
+})
+
+// AI-Label: nur wenn ai_label vorhanden und !== 'none'
+const aiLabel = computed(() =>
+    aiLabelImage(mainImage.value?.ai_label)
+)
 
 // ---- Datum/Uhrzeit (vorhandene Utility), Venue-Adresse ----------------------
 const dateStr = computed(() =>
@@ -113,20 +125,60 @@ const descriptionHtml = computed(() =>
         : ''
 )
 
-// ---- Preis, Ticket, Teilnahme ----------------------------------------------
-const priceLabel = computed(() => {
+// ---- Preis & Ticket ---------------------------------------------------------
+const priceValue = computed(() => {
+  if (!props.data) return ''
+
   const key = priceKey(props.data)
   if (key) return t(key)
 
-  const priceType = props.data?.price_type
-  if (['regular_price', 'tiered_prices'].includes(priceType)) {
+  const d = props.data
+  if (d.min_price != null || d.max_price != null) {
+    const price = formatPrice(
+        locale.value,
+        d.min_price,
+        d.max_price,
+        d.currency
+    )
+    if (price) return price
+  }
+
+  if (['regular_price', 'tiered_prices'].includes(d.price_type)) {
     return t('eventCard.priceEntry')
   }
   return ''
 })
 
+const ticketFlags = computed(() =>
+    Array.isArray(props.data?.ticket_flags) ? props.data.ticket_flags : []
+)
+
+const hasOnSiteTickets = computed(() =>
+    ticketFlags.value.includes('on_site_ticket_sales')
+)
+
+const hasPresaleFee = computed(() =>
+    ticketFlags.value.includes('presale_fee_applies')
+)
+
+const ageLabel = computed(() => {
+  const minAge = props.data?.min_age
+  const maxAge = props.data?.max_age
+
+  if (minAge == null && maxAge == null) return ''
+  if (minAge != null && maxAge != null) {
+    return t('detail.ageRange', { min: minAge, max: maxAge })
+  }
+  if (minAge != null) return t('detail.ageFrom', { min: minAge })
+  return t('detail.ageUntil', { max: maxAge })
+})
+
 const ticketLink = computed(() => props.data?.ticket_link || '')
 const participationInfo = computed(() => props.data?.participation_info || '')
+
+// ---- Veranstalter -----------------------------------------------------------
+const organizerName = computed(() => props.data?.org_name || '')
+const organizerWebLink = computed(() => props.data?.org_web_link || '')
 </script>
 
 <template>
@@ -135,9 +187,20 @@ const participationInfo = computed(() => props.data?.participation_info || '')
     <div v-else-if="error" class="uw-is-error">{{ t('detail.error', { error }) }}</div>
 
     <article v-else-if="data" class="uw-event-detail">
-      <!-- 1. Hauptbild -->
+      <!-- 1. Hauptbild + Copyright + AI-Label -->
       <figure v-if="imageUrl" class="uw-event-detail__image">
-        <img :src="imageUrl" :alt="title || ''">
+        <div class="uw-event-detail__image-frame">
+          <img :src="imageUrl" :alt="title || ''">
+          <img
+              v-if="aiLabel"
+              class="uw-event-detail__image-ai-label"
+              :src="aiLabel"
+              alt=""
+          >
+        </div>
+        <figcaption v-if="imageCredit" class="uw-event-detail__image-credit">
+          {{ imageCredit }}
+        </figcaption>
       </figure>
 
       <!-- 2.-6. Kopf: Datum, Venue, Titel, Subtitle, Event-Typen -->
@@ -170,15 +233,56 @@ const participationInfo = computed(() => props.data?.participation_info || '')
           v-html="descriptionHtml"
       ></div>
 
-      <!-- 8.-10. Details: Preis, Ticket, Teilnahme -->
-      <dl v-if="priceLabel || ticketLink || participationInfo" class="uw-event-detail__details">
-        <div v-if="priceLabel" class="uw-event-detail__detail">
+      <!-- 8.-10. Details: Preis, Einlasskasse, Vorverkaufsgebühr, Alter, Teilnahme, Ticket -->
+      <dl
+          v-if="priceValue || hasOnSiteTickets || hasPresaleFee || ageLabel || participationInfo || ticketLink"
+          class="uw-event-detail__details"
+      >
+        <div
+            v-if="priceValue"
+            class="uw-event-detail__detail"
+        >
           <dt>{{ t('detail.price') }}</dt>
-          <dd>{{ priceLabel }}</dd>
+          <dd>{{ priceValue }}</dd>
         </div>
 
-        <div v-if="ticketLink" class="uw-event-detail__detail">
+        <div
+            v-if="hasOnSiteTickets"
+            class="uw-event-detail__detail"
+        >
           <dt>{{ t('detail.ticketLabel') }}</dt>
+          <dd>{{ t('detail.onSiteTickets') }}</dd>
+        </div>
+
+        <div
+            v-if="hasPresaleFee"
+            class="uw-event-detail__detail"
+        >
+          <dt>{{ t('detail.ticketLabel') }}</dt>
+          <dd>{{ t('detail.presaleFee') }}</dd>
+        </div>
+
+        <div
+            v-if="ageLabel"
+            class="uw-event-detail__detail"
+        >
+          <dt>{{ t('detail.participation') }}</dt>
+          <dd>{{ ageLabel }}</dd>
+        </div>
+
+        <div
+            v-if="participationInfo"
+            class="uw-event-detail__detail"
+        >
+          <dt>{{ t('detail.participation') }}</dt>
+          <dd>{{ participationInfo }}</dd>
+        </div>
+
+        <div
+            v-if="ticketLink"
+            class="uw-event-detail__detail uw-event-detail__detail--action"
+        >
+          <dt></dt>
           <dd>
             <a
                 class="uw-button"
@@ -188,14 +292,9 @@ const participationInfo = computed(() => props.data?.participation_info || '')
             >{{ t('detail.ticketLink') }}</a>
           </dd>
         </div>
-
-        <div v-if="participationInfo" class="uw-event-detail__detail">
-          <dt>{{ t('detail.participation') }}</dt>
-          <dd>{{ participationInfo }}</dd>
-        </div>
       </dl>
 
-      <!-- Weitere Links (Veranstalter/Webseite) - bestehende Funktionalität -->
+      <!-- Links (mit Icons) -->
       <div v-if="links.length" class="uw-detail__links">
         <a
             v-for="link in links"
@@ -203,7 +302,11 @@ const participationInfo = computed(() => props.data?.participation_info || '')
             :href="link.url"
             target="_blank"
             rel="noopener"
-        >{{ link.label }}</a>
+            class="uw-detail__link"
+        >
+          <img v-if="link.icon" class="uw-detail__link-icon" :src="link.icon" alt="">
+          <span>{{ link.label }}</span>
+        </a>
       </div>
 
       <!-- 11. Weitere Termine -->
@@ -220,6 +323,18 @@ const participationInfo = computed(() => props.data?.participation_info || '')
           </li>
         </ul>
       </section>
+
+      <!-- 12. Veranstalter-Hinweis -->
+      <footer v-if="organizerName" class="uw-event-detail__organizer">
+        {{ t('detail.organizerBy') }}
+        <a
+            v-if="organizerWebLink"
+            :href="organizerWebLink"
+            target="_blank"
+            rel="noopener noreferrer"
+        >{{ organizerName }}</a>
+        <span v-else>{{ organizerName }}</span>
+      </footer>
     </article>
   </div>
 </template>

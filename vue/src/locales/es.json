@@ -56,8 +56,15 @@
     "price": "Precio",
     "ticketLabel": "Entrada",
     "ticketLink": "Comprar entrada",
-    "participation": "Participación",
-    "dates": "Más fechas"
+    "participation": "Información de participación",
+    "dates": "Más fechas",
+    "imageBy": "© {name}",
+    "onSiteTickets": "Venta de entradas en el lugar",
+    "presaleFee": "Se aplica una comisión de venta anticipada",
+    "ageFrom": "Desde {min} años",
+    "ageUntil": "Hasta {max} años",
+    "ageRange": "{min}–{max} años",
+    "organizerBy": "Organizado por"
   },
 
   "pagination": {

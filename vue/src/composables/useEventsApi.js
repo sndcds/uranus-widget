@@ -3,6 +3,7 @@ import {
   PARAM_MAP,
   OVERRIDABLE_PARAMS,
 } from '../lib/constants'
+import { resolveLinkIcon } from '../lib/linkIcon'
 
 export default function useEventsApi(config) {
   const t = inject('t', (k) => k)
@@ -444,6 +445,7 @@ export default function useEventsApi(config) {
       links.push({
         url: d.source_link,
         label: t('links.eventLink'),
+        icon: resolveLinkIcon('source'),
       })
     }
 
@@ -451,6 +453,7 @@ export default function useEventsApi(config) {
       links.push({
         url: d.org_web_link,
         label: t('links.organizerWebsite'),
+        icon: resolveLinkIcon('web'),
       })
     }
 
@@ -466,6 +469,7 @@ export default function useEventsApi(config) {
                 l.label ||
                 l.type ||
                 l.url,
+            icon: resolveLinkIcon(l.type),
           })
         }
       }

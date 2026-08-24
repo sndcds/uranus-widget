@@ -56,8 +56,15 @@
     "price": "Preis",
     "ticketLabel": "Ticket",
     "ticketLink": "Ticket buchen",
-    "participation": "Teilnahme",
-    "dates": "Weitere Termine"
+    "participation": "Teilnahme-Info",
+    "dates": "Weitere Termine",
+    "imageBy": "© {name}",
+    "onSiteTickets": "Einlasskasse vorhanden",
+    "presaleFee": "Vorverkaufsgebühr fällt an",
+    "ageFrom": "Ab {min} Jahren",
+    "ageUntil": "Bis {max} Jahren",
+    "ageRange": "{min}–{max} Jahre",
+    "organizerBy": "Veranstaltet von"
   },
 
   "pagination": {
@@ -66,7 +73,7 @@
 
   "links": {
     "eventLink": "Veranstaltungslink",
-    "organizerWebsite": "Webseite des Veranstalters"
+    "organizerWebsite": "Website des Veranstalters"
   },
 
   "categories": {

@@ -20,14 +20,35 @@
 .uw-event-detail__image {
   max-width: 800px;
   margin: 0 auto 1.5rem;
+}
+
+.uw-event-detail__image-frame {
+  position: relative;
   border-radius: var(--uw-radius);
   overflow: hidden;
 }
 
-.uw-event-detail__image img {
+.uw-event-detail__image-frame img {
   display: block;
   width: 100%;
   height: auto;
+}
+
+/* AI-Label: kleines Badge (oben links) */
+.uw-event-detail__image-ai-label {
+  position: absolute;
+  top: .5rem;
+  left: .5rem;
+  width: 44px;
+  height: auto;
+  pointer-events: none;
+}
+
+/* Copyright-Credits: dezent unter dem Bild */
+.uw-event-detail__image-credit {
+  margin: .4rem 0 0;
+  font-size: .8rem;
+  color: var(--uw-color-text-subtle);
 }
 
 /* Kopfbereich */
@@ -132,6 +153,15 @@
   margin: 0;
 }
 
+/* Ticket-Aktionszeile (Button linksbündig) */
+.uw-event-detail__detail--action dt {
+  display: none;
+}
+
+.uw-event-detail__detail--action {
+  align-items: center;
+}
+
 /* Weitere Termine */
 .uw-event-detail__dates {
   margin-top: 1.5rem;
@@ -189,11 +219,39 @@
   margin-bottom: 2rem;
 }
 
-.uw-detail__links a {
+.uw-detail__link {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  width: fit-content;
   color: var(--uw-color-primary);
   text-decoration: none;
 }
 
-.uw-detail__links a:hover {
+.uw-detail__link:hover {
+  text-decoration: underline;
+}
+
+.uw-detail__link-icon {
+  width: 1.1rem;
+  height: 1.1rem;
+  flex: none;
+}
+
+/* Veranstalter-Hinweis am Ende */
+.uw-event-detail__organizer {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--uw-color-page-border);
+  font-size: .95rem;
+  color: var(--uw-color-text-muted);
+}
+
+.uw-event-detail__organizer a {
+  color: var(--uw-color-primary);
+  text-decoration: none;
+}
+
+.uw-event-detail__organizer a:hover {
   text-decoration: underline;
 }

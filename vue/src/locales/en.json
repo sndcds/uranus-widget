@@ -56,8 +56,15 @@
     "price": "Price",
     "ticketLabel": "Ticket",
     "ticketLink": "Book ticket",
-    "participation": "Participation",
-    "dates": "Further dates"
+    "participation": "Participation info",
+    "dates": "Further dates",
+    "imageBy": "© {name}",
+    "onSiteTickets": "Box office on site",
+    "presaleFee": "Advance booking fee applies",
+    "ageFrom": "From {min} years",
+    "ageUntil": "Up to {max} years",
+    "ageRange": "{min}–{max} years",
+    "organizerBy": "Organized by"
   },
 
   "pagination": {
