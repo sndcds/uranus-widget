@@ -32,11 +32,13 @@ const {
 } = useWidgetConfig(props)
 
 const lang = computed(() => config.value.language || 'de')
+const apiBaseUrl = computed(() => String(config.value.apiBaseUrl || '').replace(/\/$/, ''))
 const { t, locale } = useI18n(lang)
 
 provide('lang', lang)
 provide('locale', locale)
 provide('t', t)
+provide('apiBaseUrl', apiBaseUrl)
 
 const {
   events,

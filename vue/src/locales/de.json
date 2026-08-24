@@ -36,6 +36,7 @@
   "eventCard": {
     "priceFree": "Kostenlos",
     "priceDonation": "Spende",
+    "priceEntry": "Eintritt",
     "statusCancelled": "Abgesagt",
     "statusPostponed": "Verschoben",
     "statusMoved": "Verlegt"
@@ -51,7 +52,12 @@
     "loading": "Lade Details...",
     "error": "Fehler beim Laden: {error}",
     "date": "Datum & Uhrzeit:",
-    "venue": "Ort:"
+    "venue": "Ort:",
+    "price": "Preis",
+    "ticketLabel": "Ticket",
+    "ticketLink": "Ticket buchen",
+    "participation": "Teilnahme",
+    "dates": "Weitere Termine"
   },
 
   "pagination": {

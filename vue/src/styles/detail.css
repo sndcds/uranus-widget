@@ -1,52 +1,192 @@
-.uw-detail__image {
-  margin-bottom: 1rem;
+/**
+ * Event-Detailansicht — einspaltig, vertikal.
+ *
+ * Struktur (wenige funktionale Bereiche statt vieler Einzelklassen):
+ *   .uw-event-detail                Gesamtblock (einspaltig, max. Breite)
+ *   .uw-event-detail__image         Hauptbild (max. 800px, Verhältnis erhalten)
+ *   .uw-event-detail__header        Kopf: Datum, Venue, Titel, Subtitle, Typen
+ *   .uw-event-detail__description   Beschreibung (typografischer Fließtext)
+ *   .uw-event-detail__details       Details: Preis, Ticket, Teilnahme
+ *   .uw-event-detail__dates         Weitere Termine
+ */
+
+.uw-event-detail {
+  max-width: 56rem;          /* ~896px, sinnvolle Lesebreite */
+  margin: 0 auto;
+}
+
+/* Hauptbild: maximal 800px, Seitenverhältnis bleibt erhalten.
+   Ist kein Bild vorhanden, wird keine Bildfläche gerendert. */
+.uw-event-detail__image {
+  max-width: 800px;
+  margin: 0 auto 1.5rem;
   border-radius: var(--uw-radius);
   overflow: hidden;
 }
 
-.uw-detail__image img {
-  width: 100%;
+.uw-event-detail__image img {
   display: block;
+  width: 100%;
+  height: auto;
 }
 
-.uw-detail__body {
-  max-width: 100%;
+/* Kopfbereich */
+.uw-event-detail__header {
+  margin-bottom: 1.5rem;
+}
+
+.uw-event-detail__date {
+  margin: 0 0 .5rem;
+  font-size: clamp(0.9rem, 2.5vw, 1.05rem);
+  font-weight: 600;
+  color: var(--uw-color-primary);
+}
+
+.uw-event-detail__venue {
+  margin: 0 0 1rem;
+  font-style: normal;
+  font-size: .95rem;
+  color: var(--uw-color-text-muted);
 }
 
 .uw-detail__title {
-  margin: 0 0 4px;
-  font-size: 1.375rem;
+  margin: 0 0 .5rem;
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
   font-weight: 700;
+  line-height: 1.15;
+  color: var(--uw-color-text);
 }
 
 .uw-detail__subtitle {
-  margin: 0 0 12px;
-  font-size: 1rem;
+  margin: 0 0 1rem;
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  color: var(--uw-color-text-muted);
 }
 
-.uw-detail__meta {
-  margin-bottom: 16px;
-  font-size: 0.9rem;
+/* Event-Typen: bestehende Chip-Konvention (siehe filter.css) */
+.uw-event-detail__types {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 .25rem;
 }
 
-.uw-detail__meta p {
-  margin: 0 0 4px;
+/* Beschreibung: gut lesbarer Fließtext */
+.uw-event-detail__description {
+  margin-bottom: 2rem;
+  font-size: clamp(1rem, 2.5vw, 1.05rem);
+  line-height: 1.7;
+  color: var(--uw-color-text);
 }
 
-.uw-detail__description {
-  margin-bottom: 20px;
-  font-size: 0.95rem;
-  line-height: 1.6;
+.uw-event-detail__description p {
+  margin: 0 0 1rem;
 }
 
-.uw-detail__description p {
-  margin: 0 0 8px;
+.uw-event-detail__description ul {
+  margin: 0 0 1rem;
+  padding-left: 1.25rem;
 }
 
+.uw-event-detail__description ol {
+  margin: 0 0 1rem;
+  padding-left: 1.5rem;
+}
+
+.uw-event-detail__description h1,
+.uw-event-detail__description h2,
+.uw-event-detail__description h3 {
+  margin: 1.25rem 0 .5rem;
+  line-height: 1.3;
+}
+
+.uw-event-detail__description a {
+  color: var(--uw-color-primary);
+}
+
+/* Details: Preis / Ticket / Teilnahme */
+.uw-event-detail__details {
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+  margin: 0 0 2rem;
+  padding: 1.25rem;
+  background: var(--uw-color-page-hover);
+  border: 1px solid var(--uw-color-page-border);
+  border-radius: var(--uw-radius);
+}
+
+.uw-event-detail__detail {
+  display: flex;
+  align-items: baseline;
+  gap: .75rem;
+}
+
+.uw-event-detail__detail dt {
+  flex: 0 0 8rem;
+  font-weight: 600;
+  color: var(--uw-color-text-muted);
+}
+
+.uw-event-detail__detail dd {
+  margin: 0;
+}
+
+/* Weitere Termine */
+.uw-event-detail__dates {
+  margin-top: 1.5rem;
+}
+
+.uw-event-detail__dates-title {
+  margin: 0 0 .75rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.uw-event-detail__dates-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.uw-event-detail__date-item {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem 1rem;
+  padding: .6rem 0;
+  border-bottom: 1px solid var(--uw-color-page-border);
+}
+
+.uw-event-detail__date-item:last-child {
+  border-bottom: none;
+}
+
+.uw-event-detail__date-item-date {
+  font-weight: 600;
+}
+
+.uw-event-detail__date-item-venue {
+  color: var(--uw-color-text-muted);
+}
+
+@media (max-width: 480px) {
+  .uw-event-detail__detail {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .25rem;
+  }
+
+  .uw-event-detail__detail dt {
+    flex-basis: auto;
+  }
+}
+
+/* Bestehende Funktionalität: weiterführende Links (Veranstalter/Webseite) */
 .uw-detail__links {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: .5rem;
+  margin-bottom: 2rem;
 }
 
 .uw-detail__links a {

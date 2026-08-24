@@ -36,6 +36,7 @@
   "eventCard": {
     "priceFree": "Gratis",
     "priceDonation": "Donation",
+    "priceEntry": "Entre",
     "statusCancelled": "Aflyst",
     "statusPostponed": "Udsat",
     "statusMoved": "Flyttet"
@@ -51,7 +52,12 @@
     "loading": "Indlæser detaljer...",
     "error": "Fejl under indlæsning: {error}",
     "date": "Dato & tid:",
-    "venue": "Sted:"
+    "venue": "Sted:",
+    "price": "Pris",
+    "ticketLabel": "Billet",
+    "ticketLink": "Køb billet",
+    "participation": "Deltagelse",
+    "dates": "Flere datoer"
   },
 
   "pagination": {
