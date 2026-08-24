@@ -3,7 +3,7 @@ import {
   PARAM_MAP,
   OVERRIDABLE_PARAMS,
 } from '../lib/constants'
-import { resolveLinkIcon } from '../lib/linkIcon'
+import { resolveLinkStyle } from '../lib/linkIcon'
 
 export default function useEventsApi(config) {
   const t = inject('t', (k) => k)
@@ -441,20 +441,24 @@ export default function useEventsApi(config) {
 
     const links = []
 
-    if (isSafeUrl(d.source_link)) {
+    const pushLink = (url, label, type) => {
+      if (!isSafeUrl(url)) return
+      const style = resolveLinkStyle(type)
       links.push({
-        url: d.source_link,
-        label: t('links.eventLink'),
-        icon: resolveLinkIcon('source'),
+        url,
+        label,
+        icon: style.path,
+        color: style.color,
+        type: type || 'web',
       })
     }
 
-    if (isSafeUrl(d.org_web_link)) {
-      links.push({
-        url: d.org_web_link,
-        label: t('links.organizerWebsite'),
-        icon: resolveLinkIcon('web'),
-      })
+    if (d.source_link) {
+      pushLink(d.source_link, t('links.eventLink'), 'source')
+    }
+
+    if (d.org_web_link) {
+      pushLink(d.org_web_link, t('links.organizerWebsite'), 'web')
     }
 
     if (
@@ -462,16 +466,18 @@ export default function useEventsApi(config) {
         Array.isArray(d.event_links)
     ) {
       for (const l of d.event_links) {
-        if (isSafeUrl(l.url)) {
-          links.push({
-            url: l.url,
-            label:
-                l.label ||
-                l.type ||
-                l.url,
-            icon: resolveLinkIcon(l.type),
-          })
-        }
+        if (!isSafeUrl(l.url)) continue
+
+        const type = l.type || 'web'
+        const translatedLabel = t(`links.${type}`)
+        // Nur die Übersetzung verwenden, wenn ein Key existiert,
+        // sonst auf das vom Event gelieferte Label/den Typ/URL fallen.
+        const label =
+            translatedLabel === `links.${type}`
+                ? l.label || l.type || l.url
+                : translatedLabel
+
+        pushLink(l.url, label, type)
       }
     }
 

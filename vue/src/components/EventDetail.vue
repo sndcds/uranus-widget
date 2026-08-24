@@ -294,17 +294,23 @@ const organizerWebLink = computed(() => props.data?.org_web_link || '')
         </div>
       </dl>
 
-      <!-- Links (mit Icons) -->
+      <!-- Links (mit Icon + zentraler Farbe) -->
       <div v-if="links.length" class="uw-detail__links">
         <a
             v-for="link in links"
             :key="link.url"
             :href="link.url"
             target="_blank"
-            rel="noopener"
+            rel="noopener noreferrer"
             class="uw-detail__link"
         >
-          <img v-if="link.icon" class="uw-detail__link-icon" :src="link.icon" alt="">
+          <img
+              v-if="link.icon"
+              class="uw-detail__link-icon"
+              :src="link.icon"
+              :style="link.color ? { color: link.color } : undefined"
+              alt=""
+          >
           <span>{{ link.label }}</span>
         </a>
       </div>

@@ -1,19 +1,20 @@
 <script setup>
 import { computed, inject } from 'vue'
+import { aiLabelImage } from '../../lib/eventImage'
 
 /**
- * Rendert das Event-Bild bzw. einen Platzhalter.
+ * Rendert das Event-Bild (bzw. einen Platzhalter) inkl. AI-Label-Overlay.
  *
  * Die Bild-Parameter (ratio/width/quality/type) kommen vollständig aus
  * `config.event_card.image` und werden als Query-Parameter an
  * `event.image_path` angehängt. Es sind KEINE festen Werte enthalten.
  *
+ * AI-Label: nutzt das vorhandene Mapping aus `lib/eventImage.js` —
+ * Quelle ist `event.image_ai_label` (Listenansicht) bzw. der Fallback
+ * `event.images.main.ai_label`. Unbekannte/`"none"`-Werte zeigen KEIN Label.
+ *
  * Einbindung:
  *   <EventImage :event="event" :image-config="config" />
- *
- * Props:
- *   event        Event-Daten (image_path, title)
- *   image-config Bild-Konfiguration (ImageConfig, normalisiert)
  */
 const props = defineProps({
   event: {
@@ -48,6 +49,15 @@ const src = computed(() => {
   const qs = params.toString()
   return `${base}${qs ? `/?${qs}` : ''}`
 })
+
+// AI-Label: Listen-/Detail-Quelle vereinheitlichen, über das zentrale Mapping.
+const aiLabel = computed(() => {
+  const value =
+      props.event?.image_ai_label ??
+      props.event?.images?.main?.ai_label ??
+      props.event?.image?.ai_label
+  return aiLabelImage(value)
+})
 </script>
 
 <template>
@@ -59,5 +69,12 @@ const src = computed(() => {
       loading="lazy"
     >
     <div v-else class="uw-card__placeholder">{{ t('noImage') }}</div>
+
+    <img
+        v-if="aiLabel"
+        class="uw-event-card__ai-label"
+        :src="aiLabel"
+        alt=""
+    >
   </div>
 </template>

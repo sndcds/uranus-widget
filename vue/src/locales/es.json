@@ -73,7 +73,25 @@
 
   "links": {
     "eventLink": "Enlace del evento",
-    "organizerWebsite": "Sitio web del organizador"
+    "organizerWebsite": "Sitio web del organizador",
+    "artist_website": "Sitio web del artista",
+    "web": "Sitio web",
+    "pdf": "PDF",
+    "youtube": "YouTube",
+    "facebook": "Facebook",
+    "instagram": "Instagram",
+    "mastodon": "Mastodon",
+    "bandcamp": "Bandcamp",
+    "deezer": "Deezer",
+    "spotify": "Spotify",
+    "vimeo": "Vimeo",
+    "twitter-x": "X (Twitter)",
+    "github": "GitHub",
+    "gitlab": "GitLab",
+    "soundcloud": "SoundCloud",
+    "uranus": "Uranus",
+    "kulturbytes": "kulturbytes",
+    "pippa": "Pippa"
   },
 
   "categories": {

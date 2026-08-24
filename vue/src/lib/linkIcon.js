@@ -1,10 +1,17 @@
 /**
- * Link-Icon-Auflösung.
+ * Zentrale Link-Konfiguration.
  *
  * Ordnet den Link-Typen (aus `event_links[].type`, `source_link`,
- * `org_web_link`) die passenden, im Projekt bereits vorhandenen
- * Icon-Assets unter `src/assets/icons` zu. Es werden KEINE neuen Icons
- * eingeführt — unbekannte Typen fallen auf das generische Link-Icon.
+ * `org_web_link`) das passende, im Projekt vorhandene Icon-Asset unter
+ * `src/assets/icons` sowie die zentrale Icon-Farbe zu.
+ *
+ * Es werden KEINE neuen Icons eingeführt — unbekannte Typen fallen auf
+ * das generische Link-Icon. Die Farbe wird zentral an einer Stelle
+ * gepflegt und von EventDetail sowie den Event Cards gemeinsam genutzt.
+ *
+ * Hinweis zur Farbe: Icons mit `fill="currentColor"` übernehmen die Farbe
+ * automatisch (präferierte Variante). Icons ohne currentColor-Unterstützung
+ * behalten ihre eingebettete Markenfarbe.
  */
 import iconWeb from '../assets/icons/web.svg'
 import iconPdf from '../assets/icons/pdf.svg'
@@ -25,39 +32,61 @@ import iconUranus from '../assets/icons/uranus.svg'
 import iconVimeo from '../assets/icons/vimeo.svg'
 import iconYoutube from '../assets/icons/youtube.svg'
 
-/** Direkte Zuordnung Link-Typ -> Icon-Asset. */
-const LINK_ICONS = {
-  web: iconWeb,
-  website: iconWeb,
-  artist_website: iconWeb,
-  homepage: iconWeb,
-  source: iconWeb,
-  pdf: iconPdf,
-  bandcamp: iconBandcamp,
-  deezer: iconDeezer,
-  facebook: iconFacebook,
-  github: iconGithub,
-  gitlab: iconGitlab,
-  instagram: iconInstagram,
-  kulturbytes: iconKulturbytes,
-  mastodon: iconMastodon,
-  pippa: iconPippa,
-  soundcloud: iconSoundcloud,
-  spotify: iconSpotify,
-  'twitter-x': iconTwitterX,
-  twitter: iconTwitterX,
-  uranus: iconUranus,
-  vimeo: iconVimeo,
-  youtube: iconYoutube,
+const DEFAULT_LINK_COLOR = '#333333'
+const DEFAULT_LINK_STYLE = { path: iconLink, color: DEFAULT_LINK_COLOR }
+
+/**
+ * Zentrale Zuordnung Link-Typ -> { path, color }.
+ * @type {Record<string, { path: string, color: string }>}
+ */
+export const LINK_ICONS = {
+  facebook: { path: iconFacebook, color: '#1877F2' },
+  instagram: { path: iconInstagram, color: '#405DE6' },
+  mastodon: { path: iconMastodon, color: '#6364FF' },
+  bandcamp: { path: iconBandcamp, color: '#239FC2' },
+  pdf: { path: iconPdf, color: '#F40F02' },
+  spotify: { path: iconSpotify, color: '#1DB954' },
+  vimeo: { path: iconVimeo, color: '#1AB7EA' },
+  youtube: { path: iconYoutube, color: '#FF0000' },
+  'twitter-x': { path: iconTwitterX, color: '#000000' },
+  deezer: { path: iconDeezer, color: '#A238FF' },
+  web: { path: iconWeb, color: '#333333' },
+  github: { path: iconGithub, color: '#333333' },
+  gitlab: { path: iconGitlab, color: '#FC6D26' },
+  soundcloud: { path: iconSoundcloud, color: '#FF5500' },
+  uranus: { path: iconUranus, color: '#6D26FC' },
+  kulturbytes: { path: iconKulturbytes, color: '#F20D5E' },
+  pippa: { path: iconPippa, color: DEFAULT_LINK_COLOR },
+}
+
+/** Alias-Zuordnung (beispielsweise "artist_website" -> Web-Icon). */
+const LINK_ALIASES = {
+  website: 'web',
+  artist_website: 'web',
+  homepage: 'web',
+  source: 'web',
+  twitter: 'twitter-x',
+}
+
+/**
+ * Liefert { path, color } für einen Link-Typ (Fallback: generisches
+ * Link-Icon neutral gefärbt).
+ *
+ * @param {string} [type]  Link-Typ, z. B. 'web', 'pdf', 'youtube'.
+ * @returns {{ path: string, color: string }}
+ */
+export function resolveLinkStyle(type) {
+  const key = String(type || '').toLowerCase()
+  return LINK_ICONS[key] || LINK_ICONS[LINK_ALIASES[key]] || DEFAULT_LINK_STYLE
 }
 
 /**
  * Liefert die passende Icon-URL für einen Link-Typ.
+ * Komfort-Wrapper um { styles }.path.
  *
- * @param {string} [type]  Link-Typ, z. B. 'web', 'pdf', 'youtube'.
- * @returns {string}       Resolved Icon-Asset-URL (Fallback: Link-Icon).
+ * @param {string} [type]
+ * @returns {string}
  */
 export function resolveLinkIcon(type) {
-  const key = String(type || '').toLowerCase()
-  return LINK_ICONS[key] || iconLink
+  return resolveLinkStyle(type).path
 }
