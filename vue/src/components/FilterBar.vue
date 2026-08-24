@@ -150,25 +150,27 @@ function onTypeChange(value) {
       <button type="submit" class="uw-filter__search-button">{{ t('search.submit') }}</button>
     </form>
 
-    <EventTypeSelect
-      :model-value="selectedType"
-      :summary="summary"
-      :api-base-url="apiBaseUrl"
-      @update:model-value="onTypeChange"
-    />
+    <div class="uw-filter__selects">
+      <EventTypeSelect
+        :model-value="selectedType"
+        :summary="summary"
+        :api-base-url="apiBaseUrl"
+        @update:model-value="onTypeChange"
+      />
 
-    <select
-      v-model="dateRangeKey"
-      class="uw-select"
-      :aria-label="t('dateRange.ariaLabel')"
-      @change="onDateRangeChange"
-    >
-      <option
-        v-for="opt in DATE_RANGE_OPTIONS"
-        :key="opt.value"
-        :value="opt.value"
-      >{{ t(opt.labelKey) }}</option>
-    </select>
+      <select
+        v-model="dateRangeKey"
+        class="uw-select"
+        :aria-label="t('dateRange.ariaLabel')"
+        @change="onDateRangeChange"
+      >
+        <option
+          v-for="opt in DATE_RANGE_OPTIONS"
+          :key="opt.value"
+          :value="opt.value"
+        >{{ t(opt.labelKey) }}</option>
+      </select>
+    </div>
 
     <div class="uw-filter__chips">
       <button

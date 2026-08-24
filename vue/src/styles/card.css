@@ -1,5 +1,6 @@
 .uw-card {
     display: flex;
+    align-items: flex-start;
     gap: 1rem;
     border: 0 solid var(--uw-color-page-border-strong);
     border-radius: var(--uw-radius);
@@ -27,7 +28,9 @@
 }
 
 .uw-card__content {
+    box-sizing: border-box;
     flex: 1;
     padding: 0;
+    width: 100%;
     min-width: 0;
 }

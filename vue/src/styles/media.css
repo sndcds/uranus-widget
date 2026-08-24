@@ -6,4 +6,9 @@
   .uw-card__content {
     padding: 0 12px 12px;
   }
+
+  .uw-event-card__image {
+    flex: none;
+    width: 100%;
+  }
 }

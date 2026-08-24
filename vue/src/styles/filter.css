@@ -42,6 +42,11 @@
   background: var(--uw-color-primary-hover);
 }
 
+.uw-filter__selects {
+    display: flex;
+    gap: 8px;
+}
+
 .uw-select {
   padding: .4rem .8rem;
   border: 1px solid var(--uw-color-page-border);

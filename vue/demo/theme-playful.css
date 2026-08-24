@@ -357,3 +357,11 @@
   text-decoration: none;
   color: #e63670;
 }
+
+
+@media (max-width: 600px) {
+  .uw-event-card__image {
+    flex: none;
+    width: 100%;
+  }
+}
