@@ -19,21 +19,19 @@
   overflow: hidden;
 }
 
-.uw-event-card__image img {
-  display: block;
+.uw-event-card__image > img:not(.uw-event-card__ai-label) {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-/* AI-Label: Overlay (links oben), beeinflusst die Bildgröße nicht */
 .uw-event-card__ai-label {
   position: absolute;
-  top: .5rem;
+  bottom: .5rem;
   left: .5rem;
-  width: 44px;
-  height: auto;
-  max-width: 30%;
+  height: 44px;
+  max-width: 80px;
+  object-fit: contain;
   pointer-events: none;
 }
 
