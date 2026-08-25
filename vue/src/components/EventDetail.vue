@@ -304,13 +304,14 @@ const organizerWebLink = computed(() => props.data?.org_web_link || '')
             rel="noopener noreferrer"
             class="uw-detail__link"
         >
-          <img
+          <span
               v-if="link.icon"
               class="uw-detail__link-icon"
-              :src="link.icon"
-              :style="link.color ? { color: link.color } : undefined"
-              alt=""
-          >
+              :style="link.color
+                  ? { '--uw-link-icon': `url('${link.icon}')`, color: link.color }
+                  : undefined"
+              aria-hidden="true"
+          ></span>
           <span>{{ link.label }}</span>
         </a>
       </div>

@@ -51,39 +51,88 @@ export function formatDate(e, locale = 'de-DE') {
   return parts.join(' ')
 }
 
-export function formatShortDate(e, locale = 'de-DE') {
-  if (!e.start_date) return ''
+/** Zweistellige deutsche Wochentagsabkürzungen (getDay(): 0 = Sonntag). */
+const DE_WEEKDAYS = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa']
 
-  const format = (date) => {
-    const [year, month, day] = date.split('-')
+/** Erkennt deutsche Locales ("de", "de-DE", …). */
+function isGermanLocale(locale) {
+  return String(locale || '').toLowerCase().startsWith('de')
+}
 
-    const dateObj = new Date(
-        Number(year),
-        Number(month) - 1,
-        Number(day)
-    )
+/** Kürzt eine Uhrzeit auf "HH:MM" (ohne Sekunden). */
+function formatTime(time) {
+  if (time == null || time === '') return ''
+  const match = String(time).match(/^(\d{1,2}):(\d{2})/)
+  if (match) return `${match[1].padStart(2, '0')}:${match[2]}`
+  return String(time).slice(0, 5)
+}
 
-    const weekday = new Intl.DateTimeFormat(locale, {
-      weekday: 'short',
-    }).format(dateObj)
+/**
+ * Formatiert "YYYY-MM-DD" als "Wochentag DD.MM.YY".
+ * Für Deutsch wird die feste zweistellige Abkürzung ("Mo", "Di", …) verwendet,
+ * für andere Sprachen die lokalisierte Kurzform des Browsers.
+ */
+function formatDatePart(date, locale) {
+  const [year, month, day] = date.split('-')
 
-    const capitalizedWeekday =
-        weekday.charAt(0).toUpperCase() + weekday.slice(1)
-
-    return `${capitalizedWeekday} ${day}.${month}.${year.slice(-2)}`
+  if (isGermanLocale(locale)) {
+    const weekday = DE_WEEKDAYS[
+        new Date(Number(year), Number(month) - 1, Number(day)).getDay()
+    ]
+    return `${weekday} ${day}.${month}.${year.slice(-2)}`
   }
 
-  const parts = []
+  const weekday = new Intl.DateTimeFormat(locale, {
+    weekday: 'short',
+  }).format(
+      new Date(Number(year), Number(month) - 1, Number(day))
+  )
 
-  parts.push(format(e.start_date))
+  const capitalizedWeekday =
+      weekday.charAt(0).toUpperCase() + weekday.slice(1)
+
+  return `${capitalizedWeekday} ${day}.${month}.${year.slice(-2)}`
+}
+
+/**
+ * Einheitliche Datums-/Zeitangabe für Event Cards und die Event-Detailansicht.
+ *
+ * Deutsch (Standard):
+ *   Mo 08.08.26 10:00
+ *   Mo 08.08.26 10:00–14:00
+ *   Mo 08.08.26 10:00 – Do 11.08.26 18:00
+ *
+ * - Nur start_time → "Mo 08.08.26 10:00"
+ * - start_time + end_time am selben Tag → "Mo 08.08.26 10:00–14:00"
+ * - unterschiedliche Tage → "Mo 08.08.26 10:00 – Do 11.08.26 18:00"
+ * - ohne end_time wird keine Endzeit angezeigt; ein Enddatum ohne Endzeit
+ *   bleibt als Datumsbereich erhalten.
+ * - Für andere Sprachen bleibt die bisherige lokalisierte Kurzform erhalten.
+ */
+export function formatShortDate(e, locale = 'de-DE') {
+  if (!e?.start_date) return ''
+
+  const german = isGermanLocale(locale)
+  const startTime = formatTime(e.start_time)
+  const endTime = formatTime(e.end_time)
+
+  let result = formatDatePart(e.start_date, locale)
+  if (german && startTime) {
+    result += ` ${startTime}`
+  }
 
   if (e.end_date && e.end_date !== e.start_date) {
-    parts.push(`– ${format(e.end_date)}`)
-  } else if (e.end_time && e.end_time !== e.start_time) {
-    parts.push(`– ${e.end_time}`)
+    result += ` – ${formatDatePart(e.end_date, locale)}`
+    if (german && endTime) {
+      result += ` ${endTime}`
+    }
+  } else if (endTime && endTime !== startTime) {
+    result += german && startTime
+        ? `–${endTime}`
+        : ` – ${endTime}`
   }
 
-  return parts.join(' ')
+  return result
 }
 
 export function formatDetailDate(venue, locale = 'de-DE') {
