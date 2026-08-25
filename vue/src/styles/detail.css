@@ -15,36 +15,36 @@
   margin: 0 auto;
 }
 
-/* Hauptbild: maximal 800px, Seitenverhältnis bleibt erhalten.
-   Ist kein Bild vorhanden, wird keine Bildfläche gerendert. */
 .uw-event-detail__image {
   max-width: 800px;
-  margin: 0 auto 1.5rem;
+  margin: 0 0 1.5rem;
 }
 
 .uw-event-detail__image-frame {
   position: relative;
   border-radius: var(--uw-radius);
   overflow: hidden;
+  max-width: 600px;
+  max-height: 500px;
 }
 
-.uw-event-detail__image-frame img {
+.uw-event-detail__image-frame > img:not(.uw-event-detail__image-ai-label) {
   display: block;
   width: 100%;
   height: auto;
 }
 
-/* AI-Label: kleines Badge (oben links) */
 .uw-event-detail__image-ai-label {
   position: absolute;
-  top: .5rem;
-  left: .5rem;
-  width: 44px;
-  height: auto;
+  bottom: .25rem;
+  left: .25rem;
+  height: 30px;
+  width: auto;
+  max-width: 120px;
+  object-fit: contain;
   pointer-events: none;
 }
 
-/* Copyright-Credits: dezent unter dem Bild */
 .uw-event-detail__image-credit {
   margin: .4rem 0 0;
   font-size: .8rem;

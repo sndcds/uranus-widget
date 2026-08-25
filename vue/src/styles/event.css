@@ -27,10 +27,10 @@
 
 .uw-event-card__ai-label {
   position: absolute;
-  bottom: .5rem;
-  left: .5rem;
-  height: 44px;
-  max-width: 80px;
+  bottom: .25rem;
+  left: .25rem;
+  height: 30px;
+  max-width: 120px;
   object-fit: contain;
   pointer-events: none;
 }
