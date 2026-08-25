@@ -2,6 +2,7 @@
 import { computed, inject } from 'vue'
 import EventImage from '../EventImage.vue'
 import { formatShortDate } from '../../../lib/format'
+import { buildEventUrl, isWidgetNavigationClick } from '../../../lib/url'
 import { useEventTypes } from '../../../composables/useEventTypes'
 import {
   priceKey,
@@ -35,7 +36,7 @@ const props = defineProps({
   }
 })
 
-defineEmits(['open'])
+const emit = defineEmits(['open'])
 
 const t = inject('t', (k) => k)
 const locale = inject('locale', 'de-DE')
@@ -48,6 +49,15 @@ const { label: typeLabel } = useEventTypes(
 )
 
 const dateStr = computed(() => formatShortDate(props.event, locale.value || 'de-DE'))
+
+const cardHref = computed(() => buildEventUrl(props.event?.uuid))
+
+// Link-Klick: ohne Modifier-Taste selbst behandeln (SPA), sonst Browser.
+function onCardClick(event) {
+  if (!isWidgetNavigationClick(event)) return
+  event.preventDefault()
+  emit('open', props.event)
+}
 
 const venue = computed(() => venueLabel(props.event))
 
@@ -69,9 +79,10 @@ const releaseStatus = computed(() => {
 </script>
 
 <template>
-  <div
+  <a
+      :href="cardHref"
       class="uw-card uw-event-card"
-      @click="$emit('open', event)"
+      @click="onCardClick"
   >
     <EventImage :event="event" :image-config="imageConfig" />
 
@@ -111,5 +122,5 @@ const releaseStatus = computed(() => {
 
       </div>
     </div>
-  </div>
+  </a>
 </template>

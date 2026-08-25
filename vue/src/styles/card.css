@@ -7,6 +7,7 @@
     overflow: hidden;
     background: var(--uw-color-card);
     color: var(--uw-color-card-text);
+    text-decoration: none;
     cursor: pointer;
     transition: all 0.2s;
 }
@@ -14,6 +15,12 @@
 .uw-card:hover {
     background: var(--uw-color-card-hover);
     color: var(--uw-color-card-text-hover);
+}
+
+/* Tastatur-Fokus auf den Card-Links (Event-Cards sind <a>-Elemente) */
+.uw-card:focus-visible {
+    outline: 2px solid var(--uw-color-primary);
+    outline-offset: 2px;
 }
 
 .uw-card__placeholder {

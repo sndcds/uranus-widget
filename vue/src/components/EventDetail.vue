@@ -1,5 +1,5 @@
 <script setup>
-import { computed, inject } from 'vue'
+import { computed, inject, nextTick, ref, watch } from 'vue'
 import {
   formatShortDate,
   formatPrice,
@@ -179,6 +179,18 @@ const participationInfo = computed(() => props.data?.participation_info || '')
 // ---- Veranstalter -----------------------------------------------------------
 const organizerName = computed(() => props.data?.org_name || '')
 const organizerWebLink = computed(() => props.data?.org_web_link || '')
+
+// ---- Fokus-Management -------------------------------------------------------
+// Nach dem Laden der Detaildaten wird der Fokus auf die Überschrift gesetzt
+// (programmatisch fokussierbar via tabindex="-1"), damit Tastatur- und
+// Screenreader-Nutzer*innen den Wechsel zur Detailansicht mitbekommen.
+const titleEl = ref(null)
+
+watch(() => props.data, async (data) => {
+  if (!data) return
+  await nextTick()
+  titleEl.value?.focus({ preventScroll: true })
+})
 </script>
 
 <template>
@@ -213,7 +225,7 @@ const organizerWebLink = computed(() => props.data?.org_web_link || '')
           {{ venueName }}<template v-if="venueAddress">, {{ venueAddress }}</template>
         </address>
 
-        <h2 class="uw-detail__title">{{ title }}</h2>
+        <h2 ref="titleEl" tabindex="-1" class="uw-detail__title">{{ title }}</h2>
 
         <p v-if="subtitle" class="uw-detail__subtitle">{{ subtitle }}</p>
 

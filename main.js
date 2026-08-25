@@ -47,9 +47,50 @@ class UranusWidget extends HTMLElement {
 
   connectedCallback() {
     this.#parseConfig();
+    window.addEventListener('popstate', () => this.#onUrlChange());
+    this.#onUrlChange();
+  }
+
+  /**
+   * Erzeugt die Deep-Link-URL mit gesetztem bzw. entferntem `event`-Parameter.
+   * Pfad, Hash und alle übrigen Query-Parameter bleiben erhalten.
+   */
+  #detailUrl(uuid) {
+    const url = new URL(window.location.href);
+    if (uuid) url.searchParams.set('event', uuid);
+    else url.searchParams.delete('event');
+    return url.toString();
+  }
+
+  /**
+   * Reagiert auf URL-Änderungen (initiales Laden sowie popstate).
+   * Die URL ist die Quelle der Wahrheit für Liste vs. Detailansicht.
+   */
+  #onUrlChange() {
+    const params = new URLSearchParams(location.search);
+    const uuid = params.get('event');
+
+    if (uuid) {
+      this.#detailUuid = uuid;
+      this.#detailData = null;
+      this.#render();
+      this.#loadDetail();
+      return;
+    }
+
+    this.#detailUuid = null;
+    this.#detailData = null;
     this.#render();
-    this.#loadEvents();
-    this.#loadSummary();
+
+    if (!this.#loading) {
+      this.#wireFilterBar();
+      this.#renderPagination();
+      this.#renderEvents();
+      if (!this.#events.length) {
+        this.#loadEvents();
+        this.#loadSummary();
+      }
+    }
   }
 
   #parseConfig() {
@@ -199,11 +240,13 @@ class UranusWidget extends HTMLElement {
   async #openDetail(e) {
     this.#detailUuid = e.uuid;
     this.#detailData = null;
+    history.pushState(null, '', this.#detailUrl(e.uuid));
     this.#render();
     this.#loadDetail();
   }
 
   #closeDetail() {
+    history.replaceState(null, '', this.#detailUrl(null));
     this.#detailUuid = null;
     this.#detailData = null;
     this.#render();

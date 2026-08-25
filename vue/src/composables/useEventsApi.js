@@ -4,6 +4,7 @@ import {
   OVERRIDABLE_PARAMS,
 } from '../lib/constants'
 import { resolveLinkStyle } from '../lib/linkIcon'
+import { getEventUuidFromUrl, buildEventUrl } from '../lib/url'
 
 export default function useEventsApi(config) {
   const t = inject('t', (k) => k)
@@ -513,18 +514,43 @@ export default function useEventsApi(config) {
     }
   }
 
+  /**
+   * Öffnet die Detailansicht für ein Event und setzt die URL auf einen
+   * tiefen Link (`?event=<uuid>`). Bestehende Query-Parameter, Pfad und
+   * Hash bleiben erhalten. Es findet kein Seiten-Reload statt.
+   */
   function openDetail(event) {
     detailScrollY.value = window.scrollY
 
+    const url = buildEventUrl(event?.uuid)
+
+    if (window.history.pushState && url !== window.location.href) {
+      window.history.pushState({}, '', url)
+    }
+
     detailUuid.value = event.uuid
     detailData.value = null
+    detailError.value = ''
 
     loadDetail()
   }
 
+  /**
+   * Schließt die Detailansicht und entfernt den `event`-Parameter aus der
+   * URL (alle übrigen Parameter bleiben erhalten). replaceState vermeidet
+   * einen zusätzlichen Verlaufseintrag, sodass der Browser-Zurück-Knopf
+   * anschließend zur Liste vor der Detailansicht zurückkehrt.
+   */
   async function closeDetail() {
+    const url = buildEventUrl(null)
+
+    if (window.history.replaceState && url !== window.location.href) {
+      window.history.replaceState({}, '', url)
+    }
+
     detailUuid.value = null
     detailData.value = null
+    detailError.value = ''
 
     await nextTick()
 
@@ -532,6 +558,53 @@ export default function useEventsApi(config) {
       top: detailScrollY.value,
       behavior: 'auto',
     })
+
+    // Nach direktem Aufruf der Detail-URL ist die Liste noch nie geladen
+    // worden und muss beim Zurückkehren nachgeladen werden.
+    if (events.value.length === 0 && !loading.value) {
+      loadMore()
+      loadSummary()
+    }
+  }
+
+  /**
+   * Reagiert auf Änderungen der Browser-URL (popstate sowie initiales
+   * Laden). Die URL ist die Quelle der Wahrheit: Mit `event`-Parameter wird
+   * die Detailansicht angezeigt, ohne ihn die Event-Liste.
+   */
+  function onUrlChange() {
+    const uuid = getEventUuidFromUrl()
+
+    if (uuid) {
+      if (detailUuid.value !== uuid) {
+        detailScrollY.value = window.scrollY
+        detailUuid.value = uuid
+        detailData.value = null
+        detailError.value = ''
+        loadDetail()
+      }
+      return
+    }
+
+    if (detailUuid.value) {
+      detailUuid.value = null
+      detailData.value = null
+      detailError.value = ''
+
+      nextTick(() => {
+        window.scrollTo({
+          top: detailScrollY.value,
+          behavior: 'auto',
+        })
+      })
+    }
+
+    // Beim initialen Aufruf (und nach direktem Aufruf der Detail-URL) ist
+    // die Liste noch leer und muss geladen werden.
+    if (events.value.length === 0 && !loading.value) {
+      loadMore()
+      loadSummary()
+    }
   }
 
   /*
@@ -569,5 +642,6 @@ export default function useEventsApi(config) {
 
     openDetail,
     closeDetail,
+    onUrlChange,
   }
 }
