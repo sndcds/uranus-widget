@@ -449,6 +449,7 @@ export default function useEventsApi(config) {
         url,
         label,
         icon: style.path,
+        svg: style.svg,
         color: style.color,
         type: type || 'web',
       })

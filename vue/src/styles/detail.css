@@ -232,23 +232,30 @@
   text-decoration: underline;
 }
 
+/* Link-Icon: Inline-SVG, eingefärbt über currentColor.
+   Die Farbe (color) kommt aus der zentralen LINK_ICONS-Konfiguration und
+   wird auf das SVG angewendet. Presentation-Attribute (z. B. fill="#…")
+   werden von der CSS-Regel überschrieben; eingebettete Mehrfarben via
+   inline style="fill:…" bleiben als Markenfarbe erhalten. */
 .uw-detail__link-icon {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 1.25rem;
   height: 1.25rem;
   flex: 0 0 auto;
+  line-height: 0;
+}
 
-  background-color: var(--uw-link-color);
+.uw-detail__link-icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
 
-  mask-image: var(--uw-link-icon);
-  mask-repeat: no-repeat;
-  mask-position: center;
-  mask-size: contain;
-
-  -webkit-mask-image: var(--uw-link-icon);
-  -webkit-mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-  -webkit-mask-size: contain;
+.uw-detail__link-icon svg,
+.uw-detail__link-icon svg * {
+  fill: currentColor;
 }
 
 /* Veranstalter-Hinweis am Ende */
