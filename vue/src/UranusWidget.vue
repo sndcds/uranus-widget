@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, onUnmounted, ref, provide } from 'vue'
+import { computed, onMounted, ref, provide } from 'vue'
 import useEventsApi from './composables/useEventsApi'
 import useWidgetConfig from './composables/useWidgetConfig'
 import useStyles from './composables/useStyles'
@@ -55,14 +55,14 @@ const {
   detailError,
   detailLinks,
   loadMore,
+  loadSummary,
   selectCategories,
   selectType,
   selectRange,
   setCategories,
   setSearch,
   openDetail,
-  closeDetail,
-  onUrlChange
+  closeDetail
 } = useEventsApi(config)
 
 const { host: rootEl, styleError, applyStyles } = useStyles()
@@ -73,16 +73,12 @@ async function start() {
   await initConfig()
   setCategories(config.value.filter?.categories || [])
   applyStyles(styles.value)
-  window.addEventListener('popstate', onUrlChange)
-  onUrlChange()
+  loadMore()
+  loadSummary()
 }
 
 onMounted(() => {
   start()
-})
-
-onUnmounted(() => {
-  window.removeEventListener('popstate', onUrlChange)
 })
 </script>
 

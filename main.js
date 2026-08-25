@@ -47,32 +47,9 @@ class UranusWidget extends HTMLElement {
 
   connectedCallback() {
     this.#parseConfig();
-    window.addEventListener('popstate', () => this.#onUrlChange());
-    this.#onUrlChange();
-  }
-
-  #onUrlChange() {
-    const params = new URLSearchParams(location.search);
-    const uuid = params.get('event');
-    if (uuid) {
-      this.#detailUuid = uuid;
-      this.#detailData = null;
-      this.#render();
-      this.#loadDetail();
-    } else if (this.#detailUuid) {
-      this.#detailUuid = null;
-      this.#detailData = null;
-      this.#render();
-      if (!this.#loading) {
-        this.#wireFilterBar();
-        this.#renderPagination();
-        this.#renderEvents();
-      }
-    } else {
-      this.#render();
-      this.#loadEvents();
-      this.#loadSummary();
-    }
+    this.#render();
+    this.#loadEvents();
+    this.#loadSummary();
   }
 
   #parseConfig() {
@@ -222,13 +199,11 @@ class UranusWidget extends HTMLElement {
   async #openDetail(e) {
     this.#detailUuid = e.uuid;
     this.#detailData = null;
-    history.pushState(null, '', `?event=${e.uuid}`);
     this.#render();
     this.#loadDetail();
   }
 
   #closeDetail() {
-    history.pushState(null, '', window.location.pathname);
     this.#detailUuid = null;
     this.#detailData = null;
     this.#render();

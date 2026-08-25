@@ -519,26 +519,10 @@ export default function useEventsApi(config) {
     detailUuid.value = event.uuid
     detailData.value = null
 
-    if (window.history.pushState) {
-      window.history.pushState(
-          {},
-          '',
-          `?event=${event.uuid}`
-      )
-    }
-
     loadDetail()
   }
 
   async function closeDetail() {
-    if (window.history.pushState) {
-      window.history.pushState(
-          {},
-          '',
-          window.location.pathname
-      )
-    }
-
     detailUuid.value = null
     detailData.value = null
 
@@ -548,34 +532,6 @@ export default function useEventsApi(config) {
       top: detailScrollY.value,
       behavior: 'auto',
     })
-  }
-
-  /*
-   * --------------------------------------------------------------------------
-   * Browser URL changes
-   * --------------------------------------------------------------------------
-   */
-
-  function onUrlChange() {
-    const params = new URLSearchParams(
-        window.location.search
-    )
-
-    const uuid = params.get('event')
-
-    if (uuid) {
-      detailUuid.value = uuid
-      detailData.value = null
-      loadDetail()
-    } else {
-      detailUuid.value = null
-      detailData.value = null
-
-      resetPagination()
-
-      loadMore()
-      loadSummary()
-    }
   }
 
   /*
@@ -613,6 +569,5 @@ export default function useEventsApi(config) {
 
     openDetail,
     closeDetail,
-    onUrlChange,
   }
 }
