@@ -232,23 +232,23 @@
   text-decoration: underline;
 }
 
-/* Link-Icon: monochrom über CSS-Mask in der zentralen LINK_ICONS-Farbe.
-   Die Icon-URL (--uw-link-icon) und die Farbe (color) kommen aus der
-   zentralen Link-Konfiguration; die Farbe wird über currentColor angewandt. */
 .uw-detail__link-icon {
-  width: 1.1rem;
-  height: 1.1rem;
-  flex: none;
   display: inline-block;
-  background-color: currentColor;
-  -webkit-mask-image: var(--uw-link-icon);
+  width: 1.25rem;
+  height: 1.25rem;
+  flex: 0 0 auto;
+
+  background-color: var(--uw-link-color);
+
   mask-image: var(--uw-link-icon);
-  -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
-  -webkit-mask-size: contain;
-  mask-size: contain;
-  -webkit-mask-position: center;
   mask-position: center;
+  mask-size: contain;
+
+  -webkit-mask-image: var(--uw-link-icon);
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
 }
 
 /* Veranstalter-Hinweis am Ende */

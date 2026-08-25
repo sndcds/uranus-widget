@@ -319,9 +319,10 @@ watch(() => props.data, async (data) => {
           <span
               v-if="link.icon"
               class="uw-detail__link-icon"
-              :style="link.color
-                  ? { '--uw-link-icon': `url('${link.icon}')`, color: link.color }
-                  : undefined"
+              :style="{
+              '--uw-link-icon': `url(${link.icon})`,
+              '--uw-link-color': link.color || '#333333'
+            }"
               aria-hidden="true"
           ></span>
           <span>{{ link.label }}</span>
