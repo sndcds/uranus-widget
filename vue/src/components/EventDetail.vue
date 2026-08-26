@@ -42,7 +42,7 @@ const props = defineProps({
   }
 })
 
-defineEmits(['close'])
+const emit = defineEmits(['close'])
 
 const t = inject('t', (k) => k)
 const locale = inject('locale', 'de-DE')
@@ -56,13 +56,20 @@ const apiBase = computed(() => {
   return apiBaseUrl || ''
 })
 
-// ---- Daten aus den vorhandenen Event-/Image-Strukturen ----------------------
 const date = computed(() => props.data?.date)
 const furtherDates = computed(() =>
     Array.isArray(props.data?.further_dates)
         ? props.data.further_dates
         : []
 )
+function formatVenue(fd) {
+  return [
+    fd.venue_name,
+    fd.venue_city,
+  ]
+      .filter(Boolean)
+      .join(', ')
+}
 
 const title = computed(() => props.data?.title || '')
 const subtitle = computed(() => props.data?.subtitle || '')
@@ -199,8 +206,23 @@ watch(() => props.data, async (data) => {
 const kulturbytesUrl = computed(() => {
   const uuid = props.data?.uuid
   if (!uuid) return ''
-  const langCode = String(lang.value || 'de').toLowerCase()
-  return `https://kulturbytes.de/${langCode}/veranstaltungen/${uuid}`
+
+  const dateSlug = props.data?.date?.slug
+  if (!dateSlug) return ''
+
+  const locale = String(lang.value || 'en').toLowerCase()
+
+  const eventPath = {
+    de: 'veranstaltung',
+    da: 'begivenhed',
+    en: 'event',
+  }[locale] || 'event'
+
+  const langCode = ['de', 'da', 'en'].includes(locale)
+      ? locale
+      : 'en'
+
+  return `https://kulturbytes.de/${langCode}/${eventPath}/${uuid}/${dateSlug}`
 })
 </script>
 
@@ -210,21 +232,31 @@ const kulturbytesUrl = computed(() => {
     <div v-else-if="error" class="uw-is-error">{{ t('detail.error', { error }) }}</div>
 
     <article v-else-if="data" class="uw-event-detail">
-      <!-- 0. Externer Link: Kulturbytes (oben rechts) -->
-      <div v-if="kulturbytesUrl" class="uw-event-detail__toolbar">
-        <a
-            class="uw-button uw-event-detail__kulturbytes"
-            :href="kulturbytesUrl"
-            target="_blank"
-            rel="noopener noreferrer"
+      <div class="top">
+        <button
+            class="uw-button uw-button--big"
+            type="button"
+            @click="emit('close')"
         >
-          <span
-              class="uw-event-detail__kulturbytes-logo"
-              v-html="kulturbytesLogo"
-              aria-hidden="true"
-          ></span>
-          <span>{{ t('detail.toKulturbytes') }}</span>
-        </a>
+          {{ t('back') }}
+        </button>
+
+        <!-- 0. Externer Link: Kulturbytes (oben rechts) -->
+        <div v-if="kulturbytesUrl" class="uw-event-detail__toolbar">
+          <a
+              class="uw-button uw-event-detail__kulturbytes"
+              :href="kulturbytesUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+          >
+            <span
+                class="uw-event-detail__kulturbytes-logo"
+                v-html="kulturbytesLogo"
+                aria-hidden="true"
+            ></span>
+            <span>{{ t('detail.toKulturbytes') }}</span>
+          </a>
+        </div>
       </div>
 
       <!-- 1. Hauptbild + Copyright + AI-Label -->
@@ -365,7 +397,9 @@ const kulturbytesUrl = computed(() => {
               class="uw-event-detail__date-item"
           >
             <span class="uw-event-detail__date-item-date">{{ formatShortDate(fd, locale.value) }}</span>
-            <span v-if="fd.venue_name" class="uw-event-detail__date-item-venue">{{ fd.venue_name }}</span>
+            <span v-if="fd.venue_name" class="uw-event-detail__date-item-venue">
+              {{ formatVenue(fd) }}
+            </span>
           </li>
         </ul>
       </section>
@@ -384,3 +418,11 @@ const kulturbytesUrl = computed(() => {
     </article>
   </div>
 </template>
+
+<style scoped>
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+}
+</style>

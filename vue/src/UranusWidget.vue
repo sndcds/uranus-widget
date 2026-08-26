@@ -97,18 +97,12 @@ onUnmounted(() => {
     </template>
 
     <template v-else-if="detailUuid">
-      <button
-          class="uw-button uw-button--big"
-          @click="closeDetail"
-      >
-        {{ t('back') }}
-      </button>
-
       <EventDetail
           :loading="detailLoading"
           :error="detailError"
           :data="detailData"
           :links="detailLinks"
+          @close="closeDetail"
       />
     </template>
 

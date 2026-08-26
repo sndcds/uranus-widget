@@ -92,7 +92,7 @@ const releaseStatus = computed(() => {
 
       <span
           v-if="releaseStatus"
-          class="uw-event-card__status"
+          class="uw-card__status uw-event-card__status"
       >{{ releaseStatus }}</span>
 
       <span class="uw-card__title uw-event-card__title">
@@ -103,7 +103,7 @@ const releaseStatus = computed(() => {
         {{ venue }}
       </p>
 
-      <p v-if="typeIds.length" class="uw-chips uw-event-card__type-chips">
+      <p v-if="typeIds.length" class="uw-chips uw-event-card__chips">
         <span
             v-for="(id, i) in typeIds"
             :key="`${id}-${i}`"

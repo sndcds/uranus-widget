@@ -82,22 +82,28 @@
   border-radius: var(--uw-radius)
 }
 
-@media (max-width: 600px) {
+@media (max-width: 800px) {
   .uw-event-card {
     flex-direction: column;
   }
 
   .uw-event-card__image {
+    position: relative;
+    flex: 0 0 auto;
     width: 100%;
-    height: auto;
     aspect-ratio: var(--uw-event-image-ratio-mobile);
     overflow: hidden;
   }
 
-  .uw-event-card__image img {
+  .uw-event-card__image > img:not(.uw-event-card__ai-label) {
+    display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+
+  .uw-card__content {
+    padding: 0 12px 12px;
   }
 
   .uw-card__content {
