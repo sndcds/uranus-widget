@@ -141,13 +141,13 @@ function onTypeChange(value) {
     <form class="uw-filter__search" @submit.prevent="submitSearch">
       <input
         v-model="query"
-        class="uw-filter__search-input"
+        class="uw-input uw-filter__search-input"
         type="search"
         :placeholder="t('search.placeholder')"
         @input="onClearSearch"
         @keydown.enter.prevent="onKeydownEnter"
       >
-      <button type="submit" class="uw-filter__search-button">{{ t('search.submit') }}</button>
+      <button type="submit" class="uw-button uw-filter__search-button">{{ t('search.submit') }}</button>
     </form>
 
     <div class="uw-filter__selects">
@@ -172,12 +172,12 @@ function onTypeChange(value) {
       </select>
     </div>
 
-    <div class="uw-filter__chips">
+    <div class="uw-chips uw-filter__chips">
       <button
         v-for="c in CATEGORIES"
         :key="c.id"
-        class="uw-filter__chip"
-        :class="{ 'uw-filter__chip--active': modelValue.includes(c.id) }"
+        class="uw-chip uw-filter__chip"
+        :class="{ 'uw-chip--active uw-filter__chip--active': modelValue.includes(c.id) }"
         @click="toggle(c.id)"
       >{{ t(`categories.${c.id}`) }}</button>
     </div>

@@ -1,5 +1,4 @@
 .uw-event-card {
-  background-color: var(--uw-color-card);
 }
 
 .uw-event-card__content {
@@ -9,7 +8,6 @@
 }
 
 .uw-event-card:hover {
-  background-color: var(--uw-color-card-hover);
 }
 
 .uw-event-card__image {
@@ -46,15 +44,8 @@
   font-size: 1.3rem;
 }
 
-.uw-event-card__date {
-  margin: 0;
-  font-size: 1.3rem;
-  font-weight: 500;
-}
-
+.uw-event-card__date,
 .uw-event-card__meta {
-  margin: 0 0 8px;
-  font-size: .85rem;
 }
 
 .uw-event-card__summary {
@@ -73,14 +64,6 @@
   margin: 0 0 8px;
 }
 
-/* Nicht-interaktive Chip-Darstellung (Event-Typen auf der Karte) */
-.uw-chip-static {
-  padding: 3px 10px;
-  font-size: .78rem;
-  cursor: default;
-  pointer-events: none;
-}
-
 .uw-event-card__price {
   margin: 0;
   font-size: 0.85rem;
@@ -90,17 +73,13 @@
 
 /* Release-Status deutlich hervorgehoben */
 .uw-event-card__status {
-  display: inline-block;
-  width: fit-content;
-  margin: 0 0 4px;
-  padding: 2px 10px;
-  font-size: .72rem;
-  font-weight: 800;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  background: var(--uw-color-danger);
-  color: #ffffff;
-  border-radius: 3px;
+}
+
+.uw-event-card__type-chip {
+  border: 0;
+  background: var(--uw-color-static-chip-bg);
+  color: var(--uw-color-static-chip-text);
+  border-radius: var(--uw-radius)
 }
 
 @media (max-width: 600px) {

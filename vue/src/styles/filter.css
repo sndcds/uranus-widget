@@ -13,95 +13,18 @@
 }
 
 .uw-filter__search-input {
-  flex: 1;
-  min-width: 0;
-  padding: .4rem .8rem;
-  border: 1px solid var(--uw-color-page-border);
-  border-radius: var(--uw-radius);
-  background: var(--uw-color-page);
-  font-size: 1rem;
 }
 
 .uw-filter__search-input:focus {
-  outline: none;
-  border-color: var(--uw-color-page-border-strong);
 }
 
 .uw-filter__search-button {
-  padding: 8px 16px;
-  border: 1px solid var(--uw-color-primary);
-  border-radius: var(--uw-radius);
-  background: var(--uw-color-primary);
-  color: #fff;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: background 0.15s;
 }
 
 .uw-filter__search-button:hover {
-  background: var(--uw-color-primary-hover);
 }
 
 .uw-filter__selects {
     display: flex;
     gap: 8px;
-}
-
-.uw-select {
-  padding: .4rem .8rem;
-  border: 1px solid var(--uw-color-page-border);
-  border-radius: var(--uw-radius);
-  background: var(--uw-color-page);
-  color: var(--uw-color-text);
-  font-size: 0.875rem;
-  cursor: pointer;
-}
-
-.uw-select:focus {
-  outline: none;
-  border-color: var(--uw-color-page-border-strong);
-}
-
-.uw-select:disabled {
-  cursor: wait;
-  opacity: .6;
-}
-
-.uw-filter__chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.uw-filter__chip {
-    padding: 6px 16px;
-    border: 1px solid var(--uw-color-page-border);
-    border-radius: var(--uw-radius-pill);
-    background: var(--uw-color-page);
-    color: var(--uw-color-text);
-    font-size: 0.875rem;
-    cursor: pointer;
-    transition:
-        background 0.15s,
-        border-color 0.15s,
-        color 0.15s;
-}
-
-/* Normal hover */
-.uw-filter__chip:hover {
-    background: var(--uw-color-page-hover);
-    border-color: var(--uw-color-page-hover);
-}
-
-/* Active */
-.uw-filter__chip--active {
-    background: var(--uw-color-primary);
-    color: var(--uw-color-button-text);
-    border-color: var(--uw-color-primary);
-}
-
-/* Active + hover */
-.uw-filter__chip--active:hover {
-    background: var(--uw-color-primary-hover);
-    border-color: var(--uw-color-primary-hover);
 }

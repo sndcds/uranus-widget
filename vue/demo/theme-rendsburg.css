@@ -12,9 +12,15 @@
 :host {
     --uw-color-text: #4A5056;
 
+    --uw-color-page: #fff;
+    --uw-text-input: #fff;
+    --uw-text-input-border: #ddd;
+
+
+
     --uw-color-primary: #1C4780;
     --uw-color-primary-hover: #0F2C4F;
-    --uw-color-danger: #D02C29;
+    --uw-color-danger: #C53B5E;
 
     --uw-color-button-bg: #1C4780;
     --uw-color-button-text: #D9E5F0;
@@ -25,6 +31,43 @@
     --uw-color-card-hover: transparent;
     --uw-color-card-text: #4A5056;
     --uw-color-card-text-hover: #264361;
+    --uw-color-card-border: #EAEDEF;
 
     --uw-event-image-width: 200px;
+
+    --rd-color-nav-bg: #EAEDEF;
+    --rd-color-medium-bg: #5D80A6;
+    --rd-color-dark-blue: #1C4780;
+    --rd-color-accent-1: #C53B5E;
+    --rd-color-accent-2: #8A7EA9;
+}
+
+.uw-widget {
+    font-family: "Open Sans", sans-serif;
+}
+
+.uw-widget__title {
+}
+
+.uw-widget__count {
+}
+
+.uw-widget__header,
+.uw-filter {
+    padding: 1rem;
+    color: var(--rd-color-dark-blue);
+    background: #EDF3F8;
+    border: 0 solid var(--uw-color-card-border);
+}
+
+.uw-event-card__type-chip,
+.uw-event-detail__type-chip {
+    border: 0;
+    background: var(--rd-color-medium-bg);
+    color: var(--uw-color-static-chip-text);
+    border-radius: var(--uw-radius)
+}
+
+.uw-event-detail__type-chip {
+    font-size: 1rem;
 }

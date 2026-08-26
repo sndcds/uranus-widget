@@ -1,6 +1,8 @@
 @import 'base.css';
 @import 'card.css';
 @import 'button.css';
+@import 'select.css';
+@import 'chip.css';
 @import 'pagination.css';
 @import 'filter.css';
 @import 'event.css';

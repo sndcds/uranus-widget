@@ -225,15 +225,15 @@ watch(() => props.data, async (data) => {
           {{ venueName }}<template v-if="venueAddress">, {{ venueAddress }}</template>
         </address>
 
-        <h2 ref="titleEl" tabindex="-1" class="uw-detail__title">{{ title }}</h2>
+        <h2 ref="titleEl" tabindex="-1" class="uw-title uw-detail__title">{{ title }}</h2>
 
         <p v-if="subtitle" class="uw-detail__subtitle">{{ subtitle }}</p>
 
-        <p v-if="typeIds.length" class="uw-event-detail__types">
+        <p v-if="typeIds.length" class="uw-chips uw-event-detail__types">
           <span
               v-for="(id, i) in typeIds"
               :key="`${id}-${i}`"
-              class="uw-filter__chip uw-chip-static"
+              class="uw-chip uw-event-detail__type-chip uw-chip-static"
           >{{ typeLabel(id) || `Typ ${id}` }}</span>
         </p>
       </header>

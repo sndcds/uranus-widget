@@ -86,41 +86,35 @@ const releaseStatus = computed(() => {
   >
     <EventImage :event="event" :image-config="imageConfig" />
 
-    <div class="uw-card__content">
-      <div class="uw-event-card__content">
+    <div class="uw-card__content uw-event-card__content">
 
-        <!-- 1. Datum / Uhrzeit -->
-        <span class="uw-event-card__date">{{ dateStr }}</span>
+      <span class="uw-card__meta uw-event-card__date">{{ dateStr }}</span>
 
-        <!-- 6. Release-Status (visuell hervorgehoben) -->
+      <span
+          v-if="releaseStatus"
+          class="uw-event-card__status"
+      >{{ releaseStatus }}</span>
+
+      <span class="uw-card__title uw-event-card__title">
+        {{ event.title }}
+      </span>
+
+      <p v-if="venue" class="uw-card__meta uw-event-card__meta">
+        {{ venue }}
+      </p>
+
+      <p v-if="typeIds.length" class="uw-chips uw-event-card__type-chips">
         <span
-            v-if="releaseStatus"
-            class="uw-event-card__status"
-        >{{ releaseStatus }}</span>
+            v-for="(id, i) in typeIds"
+            :key="`${id}-${i}`"
+            class="uw-chip uw-event-card__type-chip uw-chip-static"
+        >{{ typeLabel(id) || `Typ ${id}` }}</span>
+      </p>
 
-        <!-- 2. Titel -->
-        <span class="uw-event-card__title">{{ event.title }}</span>
+      <p v-if="price" class="uw-event-card__price">
+        {{ price }}
+      </p>
 
-        <!-- 3. Ort -->
-        <p v-if="venue" class="uw-event-card__meta">
-          {{ venue }}
-        </p>
-
-        <!-- 4. Event-Typen als Chips -->
-        <p v-if="typeIds.length" class="uw-event-card__chips">
-          <span
-              v-for="(id, i) in typeIds"
-              :key="`${id}-${i}`"
-              class="uw-filter__chip uw-chip-static"
-          >{{ typeLabel(id) || `Typ ${id}` }}</span>
-        </p>
-
-        <!-- 5. Preis-Hinweis -->
-        <p v-if="price" class="uw-event-card__price">
-          {{ price }}
-        </p>
-
-      </div>
     </div>
   </a>
 </template>

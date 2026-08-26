@@ -1,4 +1,5 @@
-import { ref, computed, nextTick, inject } from 'vue'
+import { ref, computed, nextTick } from 'vue'
+import { useI18n } from './useI18n'
 import {
   PARAM_MAP,
   OVERRIDABLE_PARAMS,
@@ -7,7 +8,8 @@ import { resolveLinkStyle } from '../lib/linkIcon'
 import { getEventUuidFromUrl, buildEventUrl } from '../lib/url'
 
 export default function useEventsApi(config) {
-  const t = inject('t', (k) => k)
+  const lang = computed(() => config.value.language || 'de')
+  const { t } = useI18n(lang)
 
   const events = ref([])
   const hasMore = ref(true)

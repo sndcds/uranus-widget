@@ -1,6 +1,7 @@
 {
-  "styles_": ["/wp-content/widgets/theme-rendsburg.css"],
-  "styles": ["/fileadmin/widget/kulturbytes/theme-rendsburg.css"],
+  "styles-": ["./theme-rendsburg.css?v=4"],
+  "styles--": ["/wp-content/widgets/theme-rendsburg.css?v=4"],
+  "styles": ["/fileadmin/widget/kulturbytes/theme-rendsburg.css?v=4"],
   "language": "de",
 
   "apiBaseUrl": "https://api.kulturbytes.de/api",
