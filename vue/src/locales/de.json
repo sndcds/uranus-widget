@@ -64,7 +64,8 @@
     "ageFrom": "Ab {min} Jahren",
     "ageUntil": "Bis {max} Jahren",
     "ageRange": "{min}–{max} Jahre",
-    "organizerBy": "Veranstaltet von"
+    "organizerBy": "Veranstaltet von",
+    "toKulturbytes": "Zur Kulturbytes"
   },
 
   "pagination": {

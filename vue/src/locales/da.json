@@ -64,7 +64,8 @@
     "ageFrom": "Fra {min} år",
     "ageUntil": "Op til {max} år",
     "ageRange": "{min}–{max} år",
-    "organizerBy": "Arrangeret af"
+    "organizerBy": "Arrangeret af",
+    "toKulturbytes": "Gå til Kulturbytes"
   },
 
   "pagination": {

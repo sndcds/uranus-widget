@@ -8,6 +8,7 @@ import {
 import { aiLabelImage } from '../lib/eventImage'
 import { useEventTypes } from '../composables/useEventTypes'
 import { priceKey } from '../composables/useEventCard'
+import kulturbytesLogo from '../assets/icons/kulturbytes.svg?raw'
 
 /**
  * Einspaltige Event-Detailansicht.
@@ -191,6 +192,16 @@ watch(() => props.data, async (data) => {
   await nextTick()
   titleEl.value?.focus({ preventScroll: true })
 })
+
+// ---- Externer Link "Zur Kulturbytes" ----------------------------------------
+// Öffnet das Event im Kulturbytes-Portal in einem neuen Fenster.
+// Die URL leitet sich aus der Widget-Sprache und der Event-UUID ab.
+const kulturbytesUrl = computed(() => {
+  const uuid = props.data?.uuid
+  if (!uuid) return ''
+  const langCode = String(lang.value || 'de').toLowerCase()
+  return `https://kulturbytes.de/${langCode}/veranstaltungen/${uuid}`
+})
 </script>
 
 <template>
@@ -199,6 +210,23 @@ watch(() => props.data, async (data) => {
     <div v-else-if="error" class="uw-is-error">{{ t('detail.error', { error }) }}</div>
 
     <article v-else-if="data" class="uw-event-detail">
+      <!-- 0. Externer Link: Kulturbytes (oben rechts) -->
+      <div v-if="kulturbytesUrl" class="uw-event-detail__toolbar">
+        <a
+            class="uw-button uw-event-detail__kulturbytes"
+            :href="kulturbytesUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+          <span
+              class="uw-event-detail__kulturbytes-logo"
+              v-html="kulturbytesLogo"
+              aria-hidden="true"
+          ></span>
+          <span>{{ t('detail.toKulturbytes') }}</span>
+        </a>
+      </div>
+
       <!-- 1. Hauptbild + Copyright + AI-Label -->
       <figure v-if="imageUrl" class="uw-event-detail__image">
         <div class="uw-event-detail__image-frame">
