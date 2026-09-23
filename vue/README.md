@@ -131,6 +131,43 @@ bleiben erhalten.
 | `styles`     | string/array | Externe CSS-Dateien zum Überschreiben | `"./theme.css"` oder `["./a.css","./b.css"]` |
 | `event_card` | object       | Card-Variante + Bildparameter (siehe unten) | siehe unten |
 
+### `event_list.layout` (Liste oder Kacheln)
+
+In der `config.json` aktiviert diese zusätzliche Einstellung die Kachelansicht:
+
+```json
+"event_list": { "layout": "grid" }
+```
+
+Das Grid verteilt die Karten automatisch auf die verfügbaren Spalten. Eine
+Kachel ist mindestens **360px** breit; freie Breite wird gleichmäßig verteilt.
+Maßgeblich ist die Widget-Breite, auch in einer schmalen CMS-Spalte. Unterhalb
+von 360px füllt eine einzelne Kachel die verfügbare Breite ohne horizontalen
+Überlauf. Fehlende oder unbekannte Layout-Werte ergeben `list` (Standard).
+
+Die bestehenden `event_card.variant`-Varianten funktionieren in beiden Layouts.
+Im Grid steht das Bild über dem Inhalt; Farben, Rahmen, Hover und Tastaturfokus
+entsprechen der Liste. Das Basisdesign fügt keine Schatten hinzu.
+
+Eine über `styles` geladene Theme-Datei kann das Grid und die Kacheln gezielt
+anpassen. Die Modifier ergänzen die bestehenden Karten- und Listenklassen:
+
+```css
+:host {
+  --uw-grid-min-width: 360px;
+  --uw-grid-gap: 1.5rem;
+  --uw-tile-image-ratio: 16 / 9;
+}
+
+.uw-list--grid { row-gap: 2rem; }
+.uw-event-card--tile { padding: 1rem; }
+.uw-event-card--tile .uw-event-card__title { font-size: 1.4rem; }
+```
+
+Der Standardabstand beträgt `2rem`, das Bildseitenverhältnis `16 / 9`.
+Den Zuschnitt der angeforderten Bilder weiterhin über `event_card.image.ratio`
+einstellen. `event_list` wird über JSON bzw. die `config`-Property konfiguriert.
+
 ### `event_card` (Event-Card-Varianten)
 
 Steuert, welche Event-Card-Variante gerendert wird und wie das Bild generiert wird.

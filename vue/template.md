@@ -71,6 +71,9 @@ nicht mit dem Host-Seiten-Design kollidieren.
 | `--uw-color-button-bg-hover` | Button-Hover | `#434343` |
 | `--uw-color-button-text` | Button-Text | `#ffffff` |
 | `--uw-color-button-text-hover` | Button-Text-Hover | `#ffffff` |
+| `--uw-grid-min-width` | Mindestbreite einer Kachel, begrenzt auf die verfügbare Containerbreite | `360px` |
+| `--uw-grid-gap` | Spalten- und Zeilenabstand im Grid | `2rem` |
+| `--uw-tile-image-ratio` | Bildseitenverhältnis im Grid, unabhängig von der Viewportbreite | `16 / 9` |
 
 Zusätzlich gibt es **optionale Auszeichnungs-Tokens**, die vom Basis-CSS nicht gesetzt,
 aber von den mitgelieferten Themes (z. B. `theme-blaupause.css`) auf `:host` definiert
@@ -137,6 +140,7 @@ BEM flach halten: keine verschachtelten Element-Blocks wie `.uw-filter__search-i
 | `.uw-container` | Listen-Wrapper: relative Position, Mindesthöhe |
 | `.uw-container__loading` | „Lädt…“-Indikator beim Nachladen (absolut oben rechts) |
 | `.uw-list` | Abfolge der Karten (vertikale Flex-Liste, Abstand) |
+| `.uw-list--grid` | Alternative Grid-Anordnung mit automatisch passender Spaltenzahl; aktiv über `event_list.layout: "grid"` |
 | `.uw-is-loading` | Zentraler Ladezustand |
 | `.uw-is-error` | Zentraler Fehlerzustand (Fehlerfarbe) |
 | `.uw-is-empty` | Zentraler Leerzustand („Keine Events gefunden“) |
@@ -147,6 +151,7 @@ BEM flach halten: keine verschachtelten Element-Blocks wie `.uw-filter__search-i
 |--------|-----------|
 | `.uw-card` | Basis-Kartenblock: Flex, Rahmen, Radius, Überlauf, Hintergrund, Textfarbe, Cursor |
 | `.uw-card:hover` | Karten-Hover: Hintergrund-/Textfarbe |
+| `.uw-event-card--tile` | Grid-Kachel: Bild oben, Inhalt darunter; erbt Farben, Rahmen, Hover und Fokus von der Karte |
 | `.uw-card__content` | Textbereich rechts neben dem Bild (Flex, Padding, min-width) |
 | `.uw-card__placeholder` | „Kein Bild“-Box: zentrierter Text, Hintergrund, Platzhalter-Farbe |
 | `.uw-event-card` | Event-Karte: Karten-Hintergrund |
