@@ -436,6 +436,23 @@ Für eine einzelne Seite ist alternativ der komplette Eintrag im HTML-Inhaltsele
 
 Dabei den zusätzlichen TypoScript-Script-Eintrag weglassen. Anschließend speichern, TYPO3-Frontend-Caches leeren und die öffentliche Seite prüfen. Redaktionsrechte allein reichen je nach Projekt nicht für Dateiupload, HTML-Inhaltselement und TypoScript-Zugriff; die Erstinstallation übernimmt dann die zuständige Administration.
 
+### Scrollposition beim Öffnen von Details
+
+Nach dem Laden einer Detailansicht springt die Seite automatisch zum Anfang
+des Widgets. Eine zusätzliche Anker-ID ist nicht erforderlich. Bei einer
+feststehenden Kopfzeile im CSS der TYPO3-Seite einen passenden Abstand setzen:
+
+```css
+uranus-widget {
+  --uw-scroll-offset: 100px;
+}
+```
+
+Der Standardabstand beträgt `0px`. In einer über `styles` geladenen Theme-Datei
+die Variable auf `:host` setzen. Die Rückkehr zur Liste stellt weiterhin die
+zuvor gespeicherte Scrollposition wieder her. Für dieses Verhalten das neu
+gebaute `uranus-widget-vue.js` hochladen und die Caches aktualisieren.
+
 ## 7. Einbindung in WordPress
 
 ### Variante A: Dateien hochladen und HTML-Block verwenden

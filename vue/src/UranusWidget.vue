@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, onUnmounted, ref, provide } from 'vue'
+import { computed, onMounted, onUnmounted, ref, provide, watch } from 'vue'
 import useEventsApi from './composables/useEventsApi'
 import useWidgetConfig from './composables/useWidgetConfig'
 import useStyles from './composables/useStyles'
@@ -68,6 +68,22 @@ const {
 const { host: rootEl, styleError, applyStyles } = useStyles()
 
 const eventsList = ref(null)
+
+// Erst nach dem Rendern der geladenen Detailansicht scrollen: Der kurze
+// Ladezustand bietet unter Umständen noch nicht genügend Seitenhöhe.
+watch([detailUuid, detailLoading], ([uuid, loading], _, onCleanup) => {
+  if (!uuid || loading) return
+
+  // Auch Fokuswechsel und die Scroll-Wiederherstellung des Browsers abwarten.
+  const frame = window.requestAnimationFrame(() => {
+    rootEl.value?.scrollIntoView({
+      behavior: 'instant',
+      block: 'start',
+      inline: 'nearest'
+    })
+  })
+  onCleanup(() => window.cancelAnimationFrame(frame))
+}, { flush: 'post' })
 
 async function start() {
   await initConfig()
