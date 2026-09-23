@@ -17,6 +17,10 @@ const props = defineProps({
     type: Array,
     default: () => []
   },
+  layout: {
+    type: String,
+    default: 'list'
+  },
   eventCardConfig: {
     type: Object,
     default: () => ({ variant: 'standard', image: {} })
@@ -68,10 +72,12 @@ defineEmits(['open'])
           v-else
           key="events"
           class="uw-list"
+          :class="{ 'uw-list--grid': layout === 'grid' }"
       >
         <EventCard
             v-for="e in events"
             :key="`${e.uuid}-${e.date_slug}`"
+            :class="{ 'uw-event-card--tile': layout === 'grid' }"
             :event="e"
             :event-card-config="eventCardConfig"
             :api-base-url="apiBaseUrl"

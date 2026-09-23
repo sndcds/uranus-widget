@@ -77,6 +77,7 @@ Diese Datei enthält die Einstellungen als gültiges JSON: doppelte Anführungsz
 | `filter.start`, `filter.end` | Optionaler Zeitraum in der Form `"2026-10-01"` bzw. `"2026-12-31"`. Ein festes Enddatum muss später gepflegt werden. |
 | `filter.tags`, `filter.venue` | Optionale Tag- bzw. Veranstaltungsortfilter. Werte und Datentypen müssen der angeschlossenen Filter-API entsprechen; das Widget reicht JSON-Werte weiter. |
 | `event_card.variant` | `standard`: Bild, Datum, Titel, Ort, Typen, Preis-/Statushinweise; `compact`: Bild, Datum, Titel, Ort; `minimal`: Datum und Titel ohne Bild. Fehlende oder unbekannte Variante ergibt `standard`. |
+| `event_list.layout` | `list` (Standard): Karten untereinander; `grid`: responsive Kacheln mit mindestens 360px Breite. Fehlende oder unbekannte Werte ergeben `list`. |
 | `event_card.image.ratio` | Zuschnitt der angeforderten Kartenbilder; `"16:9"` oder z. B. `"4/3"`. Standard `"16:9"`. |
 | `event_card.image.width` | Angeforderte Bildbreite in Pixeln; Standard `480`. Das ist nicht die CSS-Anzeigebreite. |
 | `event_card.image.quality` | Angeforderte Bildqualität von `0` bis `100`; Standard `80`. |
@@ -91,6 +92,38 @@ Zur Konfiguration stehen außerdem die HTML-Attribute `limit`, `start`, `end`, `
 Bei einer Einbindung per JavaScript kann stattdessen die DOM-Property `element.config` mit einem Objekt belegt werden. Sie ersetzt die externe Konfigurationsquelle und muss vor der Initialisierung gesetzt sein. Für die hier beschriebene Dateieinbindung reicht `config-url`.
 
 Für die verwendete verschachtelte Konfiguration gilt bei der Initialisierung: **HTML-Filterattribute vor JSON-Werten vor Standardwerten**. Die interaktive Auswahl und bestimmte URL-Parameter können anschließend Abfragen verändern. Deshalb alte Beispiele mit Filtern auf oberster JSON-Ebene nicht mit diesem Schema mischen. `styles-` und `styles--` in der mitgelieferten Demo sind keine wirksamen Optionen; nur `styles` wird verwendet.
+
+### Alternative Kachelansicht
+
+In der `config.json` zusätzlich eintragen:
+
+```json
+"event_list": { "layout": "grid" }
+```
+
+Die Spaltenzahl passt sich automatisch an die Breite des Widgets an, auch in
+einer CMS-Inhaltsspalte. Kacheln sind mindestens 360px breit und füllen gemeinsam
+die verfügbare Breite. Ist der gesamte Bereich schmaler als 360px, wird eine
+einzelne Kachel entsprechend schmaler. Das Bild steht über den Veranstaltungsinfos.
+Die Varianten unter `event_card.variant` bleiben verwendbar; das Basisdesign
+übernimmt Farben, Rahmen und Hover aus der Liste ohne zusätzliche Schatten.
+
+Die Klassen `.uw-list--grid` und `.uw-event-card--tile` lassen sich in einer
+über `styles` geladenen Theme-Datei überschreiben:
+
+```css
+:host {
+  --uw-grid-min-width: 360px;
+  --uw-grid-gap: 1.5rem;
+  --uw-tile-image-ratio: 16 / 9;
+}
+
+.uw-list--grid { row-gap: 2rem; }
+.uw-event-card--tile { padding: 1rem; }
+.uw-event-card--tile .uw-event-card__title { font-size: 1.4rem; }
+```
+
+`event_list` wie `event_card` über JSON oder die `config`-Property setzen.
 
 ### `theme.css`
 
@@ -197,7 +230,7 @@ Konfiguration und Theme möglichst auf derselben Domain wie die Website bereitst
 
 ## 4. Vollständige CSS-Variablen-Referenz
 
-Die folgenden Tabellen erfassen alle 42 CSS-Variablen im Basis-CSS und den drei mitgelieferten Themes: 37 mit `--uw-` und fünf mit `--rd-`. **„Ohne Standardwert“** bedeutet, dass das Basis-CSS die Variable verwendet, aber nicht definiert. Solche Werte im eigenen Theme explizit setzen. Nicht jede im Repository deklarierte Variable wird tatsächlich ausgewertet.
+Die folgenden Tabellen erfassen die CSS-Variablen im Basis-CSS und den drei mitgelieferten Themes. **„Ohne Standardwert“** bedeutet, dass das Basis-CSS die Variable verwendet, aber nicht definiert. Solche Werte im eigenen Theme explizit setzen. Nicht jede im Repository deklarierte Variable wird tatsächlich ausgewertet.
 
 ### Wirksame Variablen des Basis-CSS
 
@@ -229,6 +262,9 @@ Die folgenden Tabellen erfassen alle 42 CSS-Variablen im Basis-CSS und den drei 
 | `--uw-event-image-width` | `240px` | Breite der Kartenbildspalte oberhalb von 800px Viewportbreite. |
 | `--uw-event-image-ratio-desktop` | `16 / 9` | Seitenverhältnis der Kartenbildfläche oberhalb von 800px. |
 | `--uw-event-image-ratio-mobile` | `16 / 9` | Seitenverhältnis der Kartenbildfläche bis einschließlich 800px. |
+| `--uw-grid-min-width` | `360px` | Mindestbreite einer Grid-Kachel; bei schmaleren Containern auf deren Breite begrenzt. |
+| `--uw-grid-gap` | `2rem` | Horizontaler und vertikaler Abstand im Grid. |
+| `--uw-tile-image-ratio` | `16 / 9` | Bildseitenverhältnis der Kacheln bei allen Bildschirmbreiten; ersetzt dort die Desktop-/Mobile-Bildverhältnisse. |
 | `--uw-color-page-hover` | Ohne Standardwert | Hover-Fläche inaktiver Chips und der derzeit nicht eingeblendeten Pagination. |
 | `--uw-color-page-border` | Ohne Standardwert | Trennlinien weiterer Termine/Veranstalter sowie Rahmen der derzeit nicht eingeblendeten Pagination. |
 
@@ -278,6 +314,7 @@ Später geladene Regeln gewinnen bei gleicher Priorität und Spezifität. Gegen 
 | `.uw-container` | Container der Ergebnisliste. |
 | `.uw-container__loading` | Ladehinweis während des Nachladens. |
 | `.uw-list` | Kartenliste und Abstand zwischen Karten. |
+| `.uw-list--grid` | Grid-Anordnung, Spalten und Abstände; nur bei `event_list.layout: "grid"`. |
 | `.uw-load-more` | Bereich um den „Mehr laden“-Button. |
 | `.uw-is-loading` | Initialer Ladezustand. |
 | `.uw-is-error` | Fehlermeldungen. |
@@ -321,6 +358,7 @@ Später geladene Regeln gewinnen bei gleicher Priorität und Spezifität. Gegen 
 | `.uw-event-card` | Alle Veranstaltungskarten; responsive Anordnung. |
 | `.uw-event-card--compact` | Nur Karten der Variante `compact`. |
 | `.uw-event-card--minimal` | Nur Karten der Variante `minimal`. |
+| `.uw-event-card--tile` | Vertikale Kachel mit Bild über dem Inhalt; ergänzt im Grid die jeweilige Kartenvariante. |
 | `.uw-event-card__content` | Inhalt und vertikale Anordnung der Karte. |
 | `.uw-event-card__image` | Bildcontainer der Standard-/Compact-Karte. |
 | `.uw-event-card__ai-label` | Kennzeichnung für KI-Bilder. |

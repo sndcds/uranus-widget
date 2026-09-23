@@ -121,6 +121,11 @@ export default function useWidgetConfig(props) {
       // Always ensure a valid event_card config (variant + image params)
       config.value.event_card = normalizeEventCardConfig(config.value.event_card)
 
+      // Missing or unknown list layouts retain the existing row layout.
+      config.value.event_list = {
+        layout: config.value.event_list?.layout === 'grid' ? 'grid' : 'list',
+      }
+
       styles.value = config.value.styles
 
       // 6. Configuration is ready

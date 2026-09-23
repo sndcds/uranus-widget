@@ -142,6 +142,7 @@ onUnmounted(() => {
           :events="events"
           :loading="loading"
           :error="error"
+          :layout="config.event_list.layout"
           :event-card-config="config.event_card"
           :api-base-url="config.apiBaseUrl"
           @open="openDetail"
