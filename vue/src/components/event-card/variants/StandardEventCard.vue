@@ -50,7 +50,7 @@ const { label: typeLabel } = useEventTypes(
 
 const dateStr = computed(() => formatShortDate(props.event, locale.value || 'de-DE'))
 
-const cardHref = computed(() => buildEventUrl(props.event?.uuid))
+const cardHref = computed(() => buildEventUrl(props.event))
 
 // Link-Klick: ohne Modifier-Taste selbst behandeln (SPA), sonst Browser.
 function onCardClick(event) {
@@ -84,6 +84,7 @@ const releaseStatus = computed(() => {
       class="uw-card uw-event-card"
       @click="onCardClick"
   >
+
     <EventImage :event="event" :image-config="imageConfig" />
 
     <div class="uw-card__content uw-event-card__content">

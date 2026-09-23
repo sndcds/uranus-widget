@@ -1,7 +1,5 @@
 {
-  "styles": ["./theme-rendsburg.css?v=6"],
-  "styles-": ["/wp-content/widgets/theme-rendsburg.css?v=5"],
-  "styles--": ["/fileadmin/widget/kulturbytes/theme-rendsburg.css?v=5"],
+  "styles": ["/fileadmin/widget/kulturbytes/theme-gluecksburg.css?v=5"],
   "language": "de",
 
   "apiBaseUrl": "https://api.kulturbytes.de/api",
@@ -17,7 +15,7 @@
   },
 
   "filter": {
-    "portal": "b6f497e5-89bf-4869-86a8-b22af396daa3",
+    "portal": "019e0b75-b034-7220-a7ba-23b7ee35b1a9",
     "categories": [],
     "limit": 16
   }

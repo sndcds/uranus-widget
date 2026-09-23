@@ -16,7 +16,7 @@ const emit = defineEmits(['open'])
 
 const locale = inject('locale', 'de-DE')
 
-const cardHref = computed(() => buildEventUrl(props.event?.uuid))
+const cardHref = computed(() => buildEventUrl(props.event))
 
 // Link-Klick: ohne Modifier-Taste selbst behandeln (SPA), sonst Browser.
 function onCardClick(event) {

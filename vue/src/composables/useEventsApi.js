@@ -27,6 +27,7 @@ export default function useEventsApi(config) {
   const searchTerm = ref('')
 
   const detailUuid = ref(null)
+  const detailDateSlug = ref(null)
   const detailData = ref(null)
   const detailLoading = ref(false)
   const detailError = ref('')
@@ -61,8 +62,8 @@ export default function useEventsApi(config) {
     return `${getApiBaseUrl()}/events/type-summary`
   }
 
-  function getDetailUrl(uuid) {
-    return `${getApiBaseUrl()}/event/${uuid}?lang=de`
+  function getDetailUrl(uuid, dateSlug) {
+    return `${getApiBaseUrl()}/event/${uuid}/date/${dateSlug}?lang=de`
   }
 
   /*
@@ -496,7 +497,7 @@ export default function useEventsApi(config) {
 
     try {
       const res = await fetch(
-          getDetailUrl(detailUuid.value)
+          getDetailUrl(detailUuid.value, detailDateSlug.value)
       )
 
       if (!res.ok) {
@@ -525,13 +526,14 @@ export default function useEventsApi(config) {
   function openDetail(event) {
     detailScrollY.value = window.scrollY
 
-    const url = buildEventUrl(event?.uuid)
+    const url = buildEventUrl(event)
 
     if (window.history.pushState && url !== window.location.href) {
       window.history.pushState({}, '', url)
     }
 
     detailUuid.value = event.uuid
+    detailDateSlug.value = event.date_slug
     detailData.value = null
     detailError.value = ''
 

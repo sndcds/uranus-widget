@@ -19,7 +19,6 @@
   margin-top: 1rem;
 }
 
-/* Toolbar oben rechts: Externer Link "Zur Kulturbytes" */
 .uw-event-detail__toolbar {
   display: flex;
   justify-content: flex-end;
@@ -65,6 +64,7 @@
   height: auto;
   max-height: 500px;
   object-fit: contain;
+  object-position: left center;
 }
 
 .uw-event-detail__image-ai-label {

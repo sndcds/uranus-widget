@@ -20,7 +20,7 @@ const locale = inject('locale', 'de-DE')
 
 const venue = computed(() => venueLabel(props.event))
 
-const cardHref = computed(() => buildEventUrl(props.event?.uuid))
+const cardHref = computed(() => buildEventUrl(props.event))
 
 // Link-Klick: ohne Modifier-Taste selbst behandeln (SPA), sonst Browser.
 function onCardClick(event) {

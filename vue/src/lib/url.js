@@ -24,14 +24,20 @@ export function getEventUuidFromUrl(url = window.location.href) {
  *
  * @param {string|null} [uuid]
  * @param {string} [url]  Ausgangs-URL, standardmäßig die aktuelle Browser-URL.
+ * @param {string} [dateSlug] Slug des Veranstaltungstermins, der über den
+ *   `date`-Query-Parameter an die URL angehängt wird.
  * @returns {string}
  */
-export function buildEventUrl(uuid, url = window.location.href) {
+export function buildEventUrl(event, url = window.location.href) {
+  const uuid = event?.uuid
+  const dateSlug = event?.date_slug
   const parsed = new URL(url)
   if (uuid) {
     parsed.searchParams.set('event', uuid)
+    parsed.searchParams.set('date', dateSlug)
   } else {
     parsed.searchParams.delete('event')
+    parsed.searchParams.delete('date')
   }
   return parsed.toString()
 }

@@ -16,6 +16,8 @@
     --uw-text-input: #fff;
     --uw-text-input-border: #ddd;
 
+
+
     --uw-color-primary: #1C4780;
     --uw-color-primary-hover: #0F2C4F;
     --uw-color-danger: #C53B5E;
@@ -64,9 +66,6 @@
     background: var(--rd-color-medium-bg);
     color: var(--uw-color-static-chip-text);
     border-radius: var(--uw-radius)
-}
-
-.uw-event-detail__image {
 }
 
 .uw-event-detail__type-chip {
