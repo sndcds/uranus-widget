@@ -101,6 +101,23 @@ Das Widget lädt seine Konfiguration aus einer externen JSON-Datei. Im Tag steht
 
 ## Konfigurierbare Optionen
 
+Beim Öffnen einer Detailansicht scrollt die Seite nach dem Laden automatisch
+zum Anfang des Widgets. Das gilt auch für direkte Event-Links und die
+Browser-Vorwärtsnavigation. Beim Zurückkehren zur Liste wird die bisherige
+Scrollposition wiederhergestellt.
+
+Für eine feststehende Kopfzeile (z. B. in TYPO3) kann im CSS der einbindenden
+Seite ein Abstand eingestellt werden:
+
+```css
+uranus-widget {
+  --uw-scroll-offset: 100px;
+}
+```
+
+Eine zusätzliche Anker-ID ist dafür nicht erforderlich; vorhandene URL-Anker
+bleiben erhalten.
+
 | Schlüssel    | Typ          | Beschreibung                     | Beispiel            |
 |--------------|--------------|----------------------------------|---------------------|
 | `limit`      | number       | Events pro Seite                 | `12`                |
