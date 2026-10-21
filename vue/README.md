@@ -44,7 +44,7 @@ vue/
 
 - **Neue Ansicht**: Component unter `src/components/` anlegen und in `UranusWidget.vue` per Ansichts-Kondition (z. B. `v-if="view === 'planner'"`) einblenden.
 - **Kompakte Styles**: Neues CSS-Modul unter `src/styles/` anlegen und in `src/styles/index.css` per `@import` aufnehmen. Alle Styles landen global im Shadow Root des Custom Elements — Kind-Components brauchen keinen eigenen `<style>`-Block.
-- **Neue Daten-/API-Funktion**: Im Composable `useEventsApi.js` bündeln und in `UranusWidget.vue` zurückgeben.
+- **Daten und Navigation**: `useEventsApi.js` verwaltet unabhängige Ergebnislisten, `useEventDetail.js` lädt Event-Details, `useWidgetNavigation.js` koordiniert URL und History. Neue Datenkontexte getrennt halten.
 
 ## Build
 
@@ -55,8 +55,29 @@ npm run build
 ```
 
 Ergebnis in `dist/`:
-- `dist/uranus-widget-vue.iife.js` — das komplette Widget als standalone IIFE-Bundle (Vue-Runtime inklusive)
-- `dist/style.css` — optionale Basis-Styles (die SFC-Styles werden automatisch in den Shadow DOM injiziert)
+- `uranus-widget-vue.js` — Web Component mit Vue und Basis-Styles.
+- `uranus-widget-map.js` — getrenntes Kartenpaket mit MapLibre und dessen CSS.
+- `map/markers/`, `versatiles/`, `licenses/` — Kartenressourcen und Lizenzhinweise.
+
+Für die Kartenfunktion das gesamte Verzeichnis gemeinsam ausliefern. Die
+Konfiguration, Ansichten und Direktlinks sind in der
+[Hauptdokumentation](../README.md#ortskarte-und-ortsdetails) beschrieben.
+Die große Ortskarte wird mit `"map": { "enabled": true }` aktiviert. Ortsdetails
+sind standardmäßig aktiv und mit `"venue_details": { "enabled": false }` abschaltbar.
+
+## Prüfungen
+
+```bash
+npm test
+npx playwright install chromium
+npm run test:e2e
+```
+
+Vor den Browsertests `npm run build` ausführen. Die Tests verwenden einen lokalen
+Webserver, echte MapLibre-Darstellung und deterministische API-Antworten. Alternativ
+kann über `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` ein vorhandener Chrome angegeben
+werden. Sie prüfen das Nachladen des Kartenpakets, Marker/Cluster, Ortsdetails,
+History, Direktlinks, Fehlerbehandlung und mobile Darstellung.
 
 ## Einbindung auf einer Website
 

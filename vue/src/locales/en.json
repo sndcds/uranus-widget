@@ -4,17 +4,14 @@
   "styleError": "Styles could not be loaded: {error}",
   "back": "Back",
   "loadMore": "Load more",
-
   "header": {
     "title": "Events",
     "count": "{count} events"
   },
-
   "search": {
     "placeholder": "Free text search…",
     "submit": "Search"
   },
-
   "dateRange": {
     "ariaLabel": "Filter by time range",
     "all": "All",
@@ -25,14 +22,11 @@
     "weekendAfter": "Weekend after",
     "sixMonths": "Next 6 months"
   },
-
   "eventType": {
     "ariaLabel": "Filter by event type",
     "all": "All event types"
   },
-
   "noImage": "No image",
-
   "eventCard": {
     "priceFree": "Free",
     "priceDonation": "Donation",
@@ -41,13 +35,11 @@
     "statusPostponed": "Postponed",
     "statusMoved": "Moved"
   },
-
   "list": {
     "loading": "Loading events...",
     "empty": "No events found.",
     "loadingMore": "Loading…"
   },
-
   "detail": {
     "loading": "Loading details...",
     "error": "Error while loading: {error}",
@@ -67,11 +59,9 @@
     "organizerBy": "Organized by",
     "toKulturbytes": "Go to kulturbytes"
   },
-
   "pagination": {
     "of": "of"
   },
-
   "links": {
     "eventLink": "Event link",
     "organizerWebsite": "Organizer's website",
@@ -94,7 +84,6 @@
     "kulturbytes": "kulturbytes",
     "pippa": "Pippa"
   },
-
   "categories": {
     "1": "Culture",
     "2": "Education",
@@ -102,5 +91,34 @@
     "4": "Leisure",
     "5": "Family",
     "6": "Society"
+  },
+  "retry": "Try again",
+  "views": {
+    "label": "Choose view",
+    "events": "Events",
+    "map": "Places / Map"
+  },
+  "map": {
+    "title": "Places on the map",
+    "description": "Discover places in this portal. Event filters apply to the event list.",
+    "expand": "Expand map",
+    "shrink": "Shrink map",
+    "loading": "Loading map and places…",
+    "loadError": "The map or places could not be loaded.",
+    "boundaryError": "The portal boundary could not be loaded.",
+    "empty": "No places in this map area.",
+    "places": "Places in this map area ({count})",
+    "closePopup": "Close place information"
+  },
+  "venue": {
+    "loading": "Loading place…",
+    "notFound": "This place was not found.",
+    "details": "Place details",
+    "website": "Website",
+    "address": "Address",
+    "organization": "Organisation",
+    "events": "Upcoming events at this place",
+    "showMap": "Show location on map",
+    "hideMap": "Hide location map"
   }
 }

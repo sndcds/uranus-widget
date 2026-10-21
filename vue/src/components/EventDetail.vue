@@ -9,6 +9,7 @@ import { aiLabelImage } from '../lib/eventImage'
 import { useEventTypes } from '../composables/useEventTypes'
 import { priceKey } from '../composables/useEventCard'
 import kulturbytesLogo from '../assets/icons/kulturbytes.svg?raw'
+import { buildVenueUrl, isWidgetNavigationClick } from '../lib/url'
 
 /**
  * Einspaltige Event-Detailansicht.
@@ -24,6 +25,7 @@ import kulturbytesLogo from '../assets/icons/kulturbytes.svg?raw'
  * Keine parallele Mapping-/Formatierungslogik.
  */
 const props = defineProps({
+  venueEnabled: { type: Boolean, default: false },
   loading: {
     type: Boolean,
     default: false
@@ -42,7 +44,13 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['close'])
+const emit = defineEmits(['close', 'venue', 'retry'])
+
+function openVenue(event) {
+  if (!isWidgetNavigationClick(event)) return
+  event.preventDefault()
+  emit('venue', props.data?.date?.venue_uuid)
+}
 
 const t = inject('t', (k) => k)
 const locale = inject('locale', 'de-DE')
@@ -228,8 +236,12 @@ const kulturbytesUrl = computed(() => {
 
 <template>
   <div class="uw-detail__container">
+    <button v-if="loading || error" class="uw-button uw-button--big" type="button" @click="emit('close')">{{ t('back') }}</button>
     <div v-if="loading" class="uw-is-loading">{{ t('detail.loading') }}</div>
-    <div v-else-if="error" class="uw-is-error">{{ t('detail.error', { error }) }}</div>
+    <div v-else-if="error" class="uw-is-error" role="alert">
+      {{ t('detail.error', { error }) }}
+      <button class="uw-button" type="button" @click="emit('retry')">{{ t('retry') }}</button>
+    </div>
 
     <article v-else-if="data" class="uw-event-detail">
       <div class="top">
@@ -282,7 +294,8 @@ const kulturbytesUrl = computed(() => {
         </p>
 
         <address v-if="venueName" class="uw-event-detail__venue">
-          {{ venueName }}<template v-if="venueAddress">, {{ venueAddress }}</template>
+          <a v-if="venueEnabled && date?.venue_uuid" :href="buildVenueUrl(date.venue_uuid)" @click="openVenue">{{ venueName }}</a>
+          <template v-else>{{ venueName }}</template><template v-if="venueAddress">, {{ venueAddress }}</template>
         </address>
 
         <h2 ref="titleEl" tabindex="-1" class="uw-title uw-detail__title">{{ title }}</h2>

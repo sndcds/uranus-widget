@@ -1,5 +1,6 @@
 import { ref, watch } from 'vue'
 import { DEFAULT_EVENT_CARD_CONFIG, normalizeEventCardConfig } from '../types/event-card'
+import { widgetAsset } from '../lib/assets'
 
 const DEFAULT_LIMIT = 12
 
@@ -125,6 +126,22 @@ export default function useWidgetConfig(props) {
       config.value.event_list = {
         layout: config.value.event_list?.layout === 'grid' ? 'grid' : 'list',
       }
+
+      const map = externalConfig.map || {}
+      const center = map.center
+      config.value.map = {
+        enabled: map.enabled === true,
+        initialView: map.initialView === 'map' ? 'map' : 'events',
+        center: Array.isArray(center) && center.length === 2 && center.every(Number.isFinite)
+          && Math.abs(center[0]) <= 180 && Math.abs(center[1]) <= 85
+          ? [...center] : [9.5, 54.3],
+        zoom: Number.isFinite(map.zoom) ? Math.min(19, Math.max(2, map.zoom)) : 8,
+        height: Number.isFinite(map.height) ? Math.max(300, map.height) : 500,
+        styleUrl: map.styleUrl || widgetAsset('versatiles/versatiles-style.json'),
+        showBuildings: map.showBuildings !== false,
+        showPortalBoundary: map.showPortalBoundary !== false,
+      }
+      config.value.venue_details = { enabled: externalConfig.venue_details?.enabled !== false }
 
       styles.value = config.value.styles
 

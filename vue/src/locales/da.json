@@ -4,17 +4,14 @@
   "styleError": "Styles kunne ikke indlæses: {error}",
   "back": "Tilbage",
   "loadMore": "Indlæs mere",
-
   "header": {
     "title": "Begivenheder",
     "count": "{count} begivenheder"
   },
-
   "search": {
     "placeholder": "Fritekstsøgning…",
     "submit": "Søg"
   },
-
   "dateRange": {
     "ariaLabel": "Filtrer efter tidsrum",
     "all": "Alle",
@@ -25,14 +22,11 @@
     "weekendAfter": "Weekenden efter",
     "sixMonths": "Kommende 6 måneder"
   },
-
   "eventType": {
     "ariaLabel": "Filtrer efter begivenhedstype",
     "all": "Alle begivenhedstyper"
   },
-
   "noImage": "Intet billede",
-
   "eventCard": {
     "priceFree": "Gratis",
     "priceDonation": "Donation",
@@ -41,13 +35,11 @@
     "statusPostponed": "Udsat",
     "statusMoved": "Flyttet"
   },
-
   "list": {
     "loading": "Indlæser begivenheder...",
     "empty": "Ingen begivenheder fundet.",
     "loadingMore": "Indlæser…"
   },
-
   "detail": {
     "loading": "Indlæser detaljer...",
     "error": "Fejl under indlæsning: {error}",
@@ -67,11 +59,9 @@
     "organizerBy": "Arrangeret af",
     "toKulturbytes": "Gå til kulturbytes"
   },
-
   "pagination": {
     "of": "af"
   },
-
   "links": {
     "eventLink": "Begivenhedslink",
     "organizerWebsite": "Arrangørens hjemmeside",
@@ -94,7 +84,6 @@
     "kulturbytes": "kulturbytes",
     "pippa": "Pippa"
   },
-
   "categories": {
     "1": "Kultur",
     "2": "Uddannelse",
@@ -102,5 +91,34 @@
     "4": "Fritid",
     "5": "Familie",
     "6": "Samfund"
+  },
+  "retry": "Prøv igen",
+  "views": {
+    "label": "Vælg visning",
+    "events": "Begivenheder",
+    "map": "Steder / Kort"
+  },
+  "map": {
+    "title": "Steder på kortet",
+    "description": "Opdag steder i portalen. Begivenhedsfiltre gælder for begivenhedslisten.",
+    "expand": "Forstør kort",
+    "shrink": "Formindsk kort",
+    "loading": "Indlæser kort og steder…",
+    "loadError": "Kortet eller stederne kunne ikke indlæses.",
+    "boundaryError": "Portalens grænse kunne ikke indlæses.",
+    "empty": "Ingen steder i dette kortudsnit.",
+    "places": "Steder i kortudsnittet ({count})",
+    "closePopup": "Luk oplysninger om stedet"
+  },
+  "venue": {
+    "loading": "Indlæser sted…",
+    "notFound": "Dette sted blev ikke fundet.",
+    "details": "Detaljer om stedet",
+    "website": "Hjemmeside",
+    "address": "Adresse",
+    "organization": "Organisation",
+    "events": "Kommende begivenheder på dette sted",
+    "showMap": "Vis placering på kort",
+    "hideMap": "Skjul kort"
   }
 }

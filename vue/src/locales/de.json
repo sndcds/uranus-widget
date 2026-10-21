@@ -4,17 +4,14 @@
   "styleError": "Styles konnten nicht geladen werden: {error}",
   "back": "Zurück",
   "loadMore": "Mehr laden",
-
   "header": {
     "title": "Events",
     "count": "{count} Events"
   },
-
   "search": {
     "placeholder": "Freitextsuche…",
     "submit": "Suchen"
   },
-
   "dateRange": {
     "ariaLabel": "Nach Zeitraum filtern",
     "all": "Alle",
@@ -25,14 +22,11 @@
     "weekendAfter": "Wochenende danach",
     "sixMonths": "Kommende 6 Monate"
   },
-
   "eventType": {
     "ariaLabel": "Nach Event-Typ filtern",
     "all": "Alle Event-Typen"
   },
-
   "noImage": "Kein Bild",
-
   "eventCard": {
     "priceFree": "Kostenlos",
     "priceDonation": "Spende",
@@ -41,13 +35,11 @@
     "statusPostponed": "Verschoben",
     "statusMoved": "Verlegt"
   },
-
   "list": {
     "loading": "Lade Events...",
     "empty": "Keine Events gefunden.",
     "loadingMore": "Lädt…"
   },
-
   "detail": {
     "loading": "Lade Details...",
     "error": "Fehler beim Laden: {error}",
@@ -67,11 +59,9 @@
     "organizerBy": "Veranstaltet von",
     "toKulturbytes": "Zu kulturbytes"
   },
-
   "pagination": {
     "of": "von"
   },
-
   "links": {
     "eventLink": "Veranstaltungslink",
     "organizerWebsite": "Website des Veranstalters",
@@ -94,7 +84,6 @@
     "kulturbytes": "kulturbytes",
     "pippa": "Pippa"
   },
-
   "categories": {
     "1": "Kultur",
     "2": "Bildung",
@@ -102,5 +91,34 @@
     "4": "Freizeit",
     "5": "Familie",
     "6": "Gesellschaft"
+  },
+  "retry": "Erneut versuchen",
+  "views": {
+    "label": "Ansicht wählen",
+    "events": "Veranstaltungen",
+    "map": "Orte / Karte"
+  },
+  "map": {
+    "title": "Orte auf der Karte",
+    "description": "Entdecke Orte im Portal. Die Veranstaltungsfilter gelten für die Event-Liste.",
+    "expand": "Karte vergrößern",
+    "shrink": "Karte verkleinern",
+    "loading": "Lade Karte und Orte…",
+    "loadError": "Die Karte oder die Orte konnten nicht geladen werden.",
+    "boundaryError": "Die Portalgrenze konnte nicht geladen werden.",
+    "empty": "Keine Orte in diesem Kartenausschnitt.",
+    "places": "Orte im Kartenausschnitt ({count})",
+    "closePopup": "Ortsinfo schließen"
+  },
+  "venue": {
+    "loading": "Lade Ort…",
+    "notFound": "Dieser Ort wurde nicht gefunden.",
+    "details": "Details zum Ort",
+    "website": "Website",
+    "address": "Adresse",
+    "organization": "Organisation",
+    "events": "Kommende Veranstaltungen an diesem Ort",
+    "showMap": "Standort auf Karte anzeigen",
+    "hideMap": "Standortkarte ausblenden"
   }
 }

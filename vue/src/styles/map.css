@@ -1,0 +1,48 @@
+.uw-view-switch {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .25rem;
+  margin-bottom: 1.5rem;
+}
+.uw-view-switch__button {
+  flex: 1 1 auto;
+  padding: .7rem 1rem;
+  border: 1px solid var(--uw-color-card-border);
+  border-radius: var(--uw-radius);
+  background: var(--uw-color-card);
+  color: var(--uw-color-text);
+  font: inherit;
+  cursor: pointer;
+}
+.uw-view-switch__button[aria-pressed="true"] {
+  background: var(--uw-color-button-bg);
+  color: var(--uw-color-button-text);
+  border-color: var(--uw-color-button-bg);
+}
+.uw-view-switch__button:focus-visible, .uw-map a:focus-visible, .uw-map summary:focus-visible {
+  outline: 2px solid var(--uw-color-primary);
+  outline-offset: 3px;
+}
+.uw-map__description { color: var(--uw-color-text-muted); margin: 0 0 1rem; }
+.uw-map__frame { position: relative; min-height: 300px; border: 1px solid var(--uw-color-card-border); }
+.uw-map__canvas { position: absolute; inset: 0; }
+.uw-map__expand { position: absolute; left: 10px; top: 10px; z-index: 2; max-width: calc(100% - 60px); }
+.uw-map__status { position: absolute; left: 10px; bottom: 36px; z-index: 2; padding: .4rem .6rem; background: var(--uw-color-card); color: var(--uw-color-text); }
+.uw-map__error { display: flex; align-items: center; flex-wrap: wrap; gap: 1rem; padding: 1rem 0; color: var(--uw-color-danger); }
+.uw-map__places { margin-top: 1rem; }
+.uw-map__places summary { cursor: pointer; }
+.uw-map__places ul { padding-left: 1.5rem; }
+.uw-map__places li { margin: .5rem 0; }
+.uw-map a, .uw-venue a, .uw-event-detail__venue a { color: var(--uw-color-primary); }
+.uw-map-popup { color: var(--uw-color-text); font: 1rem/1.5 var(--uw-font-family); min-width: min(220px, 60vw); }
+.uw-map-popup h3 { font-size: 1.1rem; margin: .25rem 1rem .5rem 0; }
+.uw-map-popup p { margin: 0 0 .75rem; }
+.uw-map-popup__actions { display: flex; flex-wrap: wrap; gap: 1rem; }
+.uw-map .maplibregl-popup-content { background: var(--uw-color-card); padding: 1rem; border-radius: var(--uw-radius); }
+.uw-map .maplibregl-popup-close-button { color: var(--uw-color-text); font-size: 1.25rem; }
+.uw-map--expanded { position: fixed; inset: 1rem; z-index: 2147483000; padding: 1rem; overflow: auto; background: var(--uw-color-page); box-sizing: border-box; }
+.uw-map--expanded .uw-map__frame { height: calc(100dvh - 10rem) !important; }
+@media (max-width: 480px) {
+  .uw-map--expanded { inset: 0; padding: .5rem; }
+  .uw-map--expanded .uw-map__frame { height: calc(100dvh - 9rem) !important; }
+}
