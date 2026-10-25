@@ -90,7 +90,9 @@
     "3": "Sport",
     "4": "Fritid",
     "5": "Familie",
-    "6": "Samfund"
+    "6": "Samfund",
+    "7": "Kreativt",
+    "8": "Mad og drikke"
   },
   "retry": "Prøv igen",
   "views": {
@@ -120,8 +122,5 @@
     "events": "Kommende begivenheder på dette sted",
     "showMap": "Vis placering på kort",
     "hideMap": "Skjul kort"
-    "6": "Samfund",
-    "7": "Kreativt",
-    "8": "Mad og drikke"
   }
 }

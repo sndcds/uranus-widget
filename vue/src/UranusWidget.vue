@@ -75,32 +75,6 @@ onUnmounted(() => { disposed = true; navigation.dispose() })
         <button class="uw-view-switch__button" type="button" :aria-pressed="view === 'events'" @click="selectView('events')">{{ t('views.events') }}</button>
         <button class="uw-view-switch__button" type="button" :aria-pressed="view === 'map'" @click="selectView('map')">{{ t('views.map') }}</button>
       </div>
-      <WidgetHeader :summary="summary" />
-
-      <FilterBar
-          v-model="selectedCategories"
-          :search="searchTerm"
-          :summary="summary"
-          :api-base-url="config.apiBaseUrl"
-          :selected-type="selectedType"
-          @change="() => selectCategories(selectedCategories)"
-          @type-change="selectType"
-          @range-change="selectRange"
-          @search="setSearch"
-      />
-
-      <EventsList
-          ref="eventsList"
-          :events="events"
-          :loading="loading"
-          :error="error"
-          :layout="config.event_list.layout"
-          :max-columns="config.event_list.max_columns"
-          :event-card-config="config.event_card"
-          :api-base-url="config.apiBaseUrl"
-          @open="openDetail"
-      />
-
       <div v-show="!eventUuid && !venueUuid && view === 'events'">
         <WidgetHeader :summary="summary" />
         <FilterBar v-model="selectedCategories" :search="searchTerm" :summary="summary"
@@ -108,7 +82,8 @@ onUnmounted(() => { disposed = true; navigation.dispose() })
           @change="() => selectCategories(selectedCategories)" @type-change="selectType"
           @range-change="selectRange" @search="setSearch" />
         <EventsList :events="events" :loading="loading" :error="error" :layout="config.event_list.layout"
-          :event-card-config="config.event_card" :api-base-url="config.apiBaseUrl" @open="openEvent" @retry="loadMore" />
+          :max-columns="config.event_list.max_columns" :event-card-config="config.event_card"
+          :api-base-url="config.apiBaseUrl" @open="openEvent" @retry="loadMore" />
         <div v-if="!loading && hasMore && events.length" class="uw-load-more">
           <button class="uw-button uw-button--big" type="button" @click="loadMore">{{ t('loadMore') }}</button>
         </div>
