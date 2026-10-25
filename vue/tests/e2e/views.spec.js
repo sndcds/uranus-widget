@@ -216,6 +216,155 @@ test('returning to a long result list restores its scroll position', async ({ pa
   await expect.poll(async () => Math.abs((await page.evaluate(() => window.scrollY)) - before)).toBeLessThan(10)
 })
 
+async function addHostContent(page, footer = false) {
+  await page.locator('uranus-widget').evaluate((element, footer) => {
+    const intro = document.createElement('div')
+    intro.style.height = '1400px'
+    element.before(intro)
+    if (footer) {
+      const outro = document.createElement('div')
+      outro.style.height = '1400px'
+      element.after(outro)
+    }
+  }, footer)
+}
+
+async function positionWidget(page, top) {
+  await page.locator('.uw-widget').evaluate((element, top) => {
+    window.scrollTo({ top: window.scrollY + element.getBoundingClientRect().top - top, behavior: 'instant' })
+  }, top)
+  await expect.poll(async () => (await page.locator('.uw-widget').boundingBox()).y).toBeCloseTo(top, 0)
+}
+
+for (const width of [1280, 390]) {
+  test(`list/map switches and history keep the widget steady at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 })
+    await setup(page, { map: { enabled: true, height: 300, center: [9.67, 54.3], zoom: 11 } })
+    await page.route('**/api/events/filter', route => route.fulfill({ json: { status: 200, data: {
+      events: Array.from({ length: 8 }, (_, i) => ({ ...event, uuid: `event-${i + 1}`, title: `Konzert ${i + 1}` })),
+    } } }))
+    await page.goto('/demo/embed.html')
+    await expect(page.locator('.uw-event-card')).toHaveCount(8)
+    await addHostContent(page)
+    await positionWidget(page, 300)
+    await page.locator('.uw-widget').evaluate(element => {
+      const samples = []
+      let frame
+      const sample = () => {
+        samples.push({ top: element.getBoundingClientRect().top, url: location.search, y: scrollY,
+          height: element.getBoundingClientRect().height, min: element.style.getPropertyValue('--uw-scroll-min-height') })
+        frame = requestAnimationFrame(sample)
+      }
+      sample()
+      window.finishScrollSamples = () => { cancelAnimationFrame(frame); return samples }
+    })
+
+    await page.getByRole('button', { name: 'Orte / Karte', exact: true }).click()
+    await expect(page.locator('.uw-map__places')).toBeVisible()
+    await page.getByRole('button', { name: 'Veranstaltungen', exact: true }).click()
+    await expect(page.locator('.uw-filter')).toBeVisible()
+    await page.goBack()
+    await expect(page.locator('.uw-map')).toBeVisible()
+    await page.goBack()
+    await expect(page.locator('.uw-filter')).toBeVisible()
+    await page.goForward()
+    await expect(page.locator('.uw-map')).toBeVisible()
+    await page.goForward()
+    await expect(page.locator('.uw-filter')).toBeVisible()
+    const samples = await page.evaluate(async () => {
+      await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))
+      return window.finishScrollSamples()
+    })
+    expect(samples.length).toBeGreaterThan(2)
+    expect(Math.max(...samples.map(sample => Math.abs(sample.top - 300))), JSON.stringify(samples.filter(sample => Math.abs(sample.top - 300) >= 2))).toBeLessThan(2)
+    await page.getByRole('button', { name: 'Orte / Karte', exact: true }).click()
+    await expect(page.locator('.uw-map')).toBeVisible()
+    await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))))
+    const reservedHeight = (await page.locator('.uw-widget').boundingBox()).height
+    await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }))
+    await expect.poll(async () => (await page.locator('.uw-widget').boundingBox()).height).toBeLessThan(reservedHeight)
+  })
+}
+
+test('repeated view URLs restore each history entry and retain the host scroll policy', async ({ page }) => {
+  await setup(page)
+  await page.addInitScript(() => history.replaceState({ cms: 'keep' }, '', location.href))
+  await page.goto('/demo/embed.html?tracking=keep#calendar')
+  await expect(page.getByText(event.title)).toBeVisible()
+  await addHostContent(page, true)
+  await positionWidget(page, 250)
+  expect(await page.evaluate(() => history.scrollRestoration)).toBe('auto')
+  const expectTop = top => expect.poll(async () => (await page.locator('.uw-widget').boundingBox()).y).toBeCloseTo(top, 0)
+  await page.getByRole('button', { name: 'Orte / Karte', exact: true }).click()
+  await expect(page.locator('.uw-map__places')).toBeVisible()
+  expect(await page.evaluate(() => history.scrollRestoration)).toBe('manual')
+  await positionWidget(page, 80)
+  await page.getByRole('button', { name: 'Veranstaltungen', exact: true }).click()
+  await expect(page.locator('.uw-filter')).toBeVisible()
+  await expectTop(80)
+  await positionWidget(page, 200)
+  await page.getByRole('button', { name: 'Orte / Karte', exact: true }).click()
+  await expect(page.locator('.uw-map')).toBeVisible()
+  await expectTop(200)
+  await positionWidget(page, 140)
+  await page.goBack()
+  await expectTop(200)
+  await page.goBack()
+  await expectTop(80)
+  await page.goForward()
+  await expectTop(200)
+  await page.goForward()
+  await expectTop(140)
+  await page.goBack()
+  await page.goBack()
+  await page.goBack()
+  await expectTop(250)
+  expect(await page.evaluate(() => history.scrollRestoration)).toBe('auto')
+  expect(await page.evaluate(() => history.state.cms)).toBe('keep')
+  expect(new URL(page.url()).searchParams.get('tracking')).toBe('keep')
+  expect(new URL(page.url()).hash).toBe('#calendar')
+})
+
+test('detail navigation scrolls to the widget and forward restoration waits for its content', async ({ page }) => {
+  await setup(page)
+  await page.route('**/api/events/filter', route => route.fulfill({ json: { status: 200, data: {
+    events: Array.from({ length: 12 }, (_, i) => ({ ...event, uuid: `event-${i + 1}`, title: `Konzert ${i + 1}` })),
+  } } }))
+  let release
+  let requests = 0
+  const gate = new Promise(resolve => { release = resolve })
+  await page.route('**/api/event/event-9/**', async route => {
+    if (++requests === 2) await gate
+    await route.fulfill({ json: { status: 200, data: {
+      ...event, uuid: 'event-9', date: { ...event, slug: event.date_slug },
+      description: Array.from({ length: 80 }, () => 'Musik im Hafen.').join('\n\n'),
+    } } })
+  })
+  try {
+    await page.goto('/demo/embed.html')
+    await expect(page.locator('.uw-event-card')).toHaveCount(12)
+    await addHostContent(page)
+    await page.locator('uranus-widget').evaluate(element => element.style.setProperty('--uw-scroll-offset', '80px'))
+    const target = page.locator('.uw-event-card').nth(8)
+    await target.scrollIntoViewIfNeeded()
+    const listPosition = await page.evaluate(() => window.scrollY)
+    await target.click()
+    await expect(page.locator('.uw-event-detail__header')).toBeVisible()
+    await expect.poll(async () => (await page.locator('.uw-widget').boundingBox()).y).toBeCloseTo(80, 0)
+    const detailPosition = await page.evaluate(() => { window.scrollBy({ top: 300, behavior: 'instant' }); return window.scrollY })
+    await page.goBack()
+    await expect(page.locator('.uw-filter')).toBeVisible()
+    await expect.poll(async () => page.evaluate(() => window.scrollY)).toBeCloseTo(listPosition, 0)
+    await page.goForward()
+    await expect.poll(() => requests).toBe(2)
+    await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))))
+    expect(await page.evaluate(() => window.scrollY)).toBeCloseTo(listPosition, 0)
+    release()
+    await expect(page.locator('.uw-event-detail__header')).toBeAttached()
+    await expect.poll(async () => page.evaluate(() => window.scrollY)).toBeCloseTo(detailPosition, 0)
+  } finally { release() }
+})
+
 test('venue location map loads on demand and reuses the engine after event navigation', async ({ page }) => {
   await setup(page)
   const engines = []

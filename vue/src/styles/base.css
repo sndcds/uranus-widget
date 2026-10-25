@@ -47,7 +47,9 @@
   line-height: 1.5;
   color: var(--uw-color-text);
   max-width: 100%;
+  min-height: var(--uw-scroll-min-height, 0px);
   margin: 0 auto;
+  overflow-anchor: none;
   scroll-margin-top: var(--uw-scroll-offset, 0px);
 }
 

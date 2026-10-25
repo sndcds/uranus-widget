@@ -123,9 +123,15 @@ Das Widget lädt seine Konfiguration aus einer externen JSON-Datei. Im Tag steht
 ## Konfigurierbare Optionen
 
 Beim Öffnen einer Detailansicht scrollt die Seite nach dem Laden automatisch
-zum Anfang des Widgets. Das gilt auch für direkte Event-Links und die
-Browser-Vorwärtsnavigation. Beim Zurückkehren zur Liste wird die bisherige
-Scrollposition wiederhergestellt.
+zum Anfang des Widgets. Das gilt auch für direkte Event-Links. Das Umschalten
+zwischen Liste und Karte behält die Position der Umschaltung im sichtbaren
+Fenster bei. Dafür reserviert das Widget bei Bedarf Platz unter einer kürzeren
+Ansicht und gibt ihn beim Hochscrollen wieder frei.
+
+Browser-Zurück/-Vorwärts stellt nach dem Laden die Position des jeweiligen
+History-Eintrags wieder her. Die ursprüngliche Scroll-Wiederherstellung der
+einbindenden Seite bleibt erhalten; eigene neue Widget-Einträge verwenden
+manuelle Wiederherstellung.
 
 Für eine feststehende Kopfzeile (z. B. in TYPO3) kann im CSS der einbindenden
 Seite ein Abstand eingestellt werden:

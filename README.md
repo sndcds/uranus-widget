@@ -156,6 +156,16 @@ Website bleiben erhalten. Browser-Zurück/-Vorwärts und der Zurück-Button füh
 zum vorherigen Kontext; ein direkter Detailaufruf hat einen Rückweg zur Übersicht.
 Weiterhin ein Widget pro Seite verwenden.
 
+Beim Umschalten zwischen Event-Liste und Karte bleibt die Umschaltung an ihrer
+Position im sichtbaren Fenster. Reicht die kürzere Ansicht dafür nicht aus,
+reserviert das Widget den nötigen Platz unter dem Inhalt; beim Hochscrollen wird
+dieser Platz wieder freigegeben. Neue Detailaufrufe scrollen zum Widget-Anfang.
+Browser-Zurück/-Vorwärts stellt die Position des jeweiligen History-Eintrags nach
+dem Laden der Inhalte wieder her, auch bei mehrfach besuchten identischen URLs.
+Das Widget setzt die manuelle Scroll-Wiederherstellung erst für seine neu
+angelegten History-Einträge; der ursprüngliche Eintrag der Website behält seine
+vorhandene Einstellung.
+
 Die Kartenbibliothek und ihr CSS werden getrennt vom Hauptbundle geladen.
 Nach dem Build beim Aktualisieren immer das gesamte `dist/`-Verzeichnis gemeinsam
 ausliefern. Das Basiskartenmaterial benötigt Netzwerkzugriff auf die im

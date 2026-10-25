@@ -47,10 +47,13 @@ const venueDetail = ref(null)
 const mapActive = computed(() => view.value === 'map' && !eventUuid.value && !venueUuid.value)
 let disposed = false
 
-watch([revision, detailLoading], () => {
+watch([revision, detailLoading, loading], () => {
   if (!configLoaded.value || configError.value) return
   if (mapActive.value) mapVisited.value = true
-  if (!eventUuid.value && !venueUuid.value && view.value === 'events') ensureLoaded()
+  if (!eventUuid.value && !venueUuid.value && view.value === 'events') {
+    ensureLoaded()
+    if (loading.value) return
+  }
   if (eventUuid.value && detailLoading.value) return
   if (!eventUuid.value && venueUuid.value && venueDetail.value?.loading !== false) return
   settleScroll()
