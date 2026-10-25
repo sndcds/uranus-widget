@@ -21,6 +21,10 @@ const props = defineProps({
     type: String,
     default: 'list'
   },
+  maxColumns: {
+    type: Number,
+    default: null
+  },
   eventCardConfig: {
     type: Object,
     default: () => ({ variant: 'standard', image: {} })
@@ -73,7 +77,11 @@ defineEmits(['open', 'retry'])
           v-else
           key="events"
           class="uw-list"
-          :class="{ 'uw-list--grid': layout === 'grid' }"
+          :class="{
+            'uw-list--grid': layout === 'grid',
+            'uw-list--grid-limited': layout === 'grid' && maxColumns != null
+          }"
+          :style="layout === 'grid' && maxColumns != null ? { '--uw-grid-max-columns': maxColumns } : null"
       >
         <EventCard
             v-for="e in events"

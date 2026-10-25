@@ -99,11 +99,14 @@ Für das Grid den entsprechenden Abschnitt der `config.json` ändern:
 
 ```json
 "event_list": {
-  "layout": "grid"
+  "layout": "grid",
+  "max_columns": 3
 }
 ```
 
 Kacheln sind mindestens **360 Pixel** breit. Das Grid richtet sich nach der tatsächlichen Widget-Breite, also auch nach einer schmalen Inhaltsspalte innerhalb einer großen Website. Freier Platz wird gleichmäßig verteilt. Unterhalb von 360 Pixeln passt sich eine einzelne Kachel der verfügbaren Breite an.
+
+`max_columns` begrenzt das Grid auf die angegebene Spaltenzahl, im Beispiel auf höchstens drei. Bei weniger Platz werden automatisch weniger Spalten angezeigt. Erlaubt sind positive ganze Zahlen. Ohne die Option oder bei einem ungültigen Wert wird die Spaltenzahl weiterhin ausschließlich aus der verfügbaren Breite berechnet. Die Einstellung gilt nur für `layout: "grid"`.
 
 Das Grid verwendet die Farben, Rahmen und Hover-Zustände der Liste. Das Basisdesign kommt ohne Schatten aus. Alle drei `event_card.variant`-Varianten funktionieren in beiden Layouts.
 
