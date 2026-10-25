@@ -140,7 +140,8 @@ BEM flach halten: keine verschachtelten Element-Blocks wie `.uw-filter__search-i
 | `.uw-container` | Listen-Wrapper: relative Position, Mindesthöhe |
 | `.uw-container__loading` | „Lädt…“-Indikator beim Nachladen (absolut oben rechts) |
 | `.uw-list` | Abfolge der Karten (vertikale Flex-Liste, Abstand) |
-| `.uw-list--grid` | Alternative Grid-Anordnung mit automatisch passender Spaltenzahl; aktiv über `event_list.layout: "grid"` |
+| `.uw-list--grid` | Alternative Grid-Anordnung mit automatisch passender Spaltenzahl; aktiv über `event_list.layout: "grid"`, optional begrenzt durch `event_list.max_columns` |
+| `.uw-list--grid-limited` | Ergänzender Modifier bei konfigurierter maximaler Spaltenzahl; erhält die automatische Anpassung an schmale Container |
 | `.uw-is-loading` | Zentraler Ladezustand |
 | `.uw-is-error` | Zentraler Fehlerzustand (Fehlerfarbe) |
 | `.uw-is-empty` | Zentraler Leerzustand („Keine Events gefunden“) |

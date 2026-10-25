@@ -131,12 +131,15 @@ bleiben erhalten.
 | `styles`     | string/array | Externe CSS-Dateien zum Überschreiben | `"./theme.css"` oder `["./a.css","./b.css"]` |
 | `event_card` | object       | Card-Variante + Bildparameter (siehe unten) | siehe unten |
 
-### `event_list.layout` (Liste oder Kacheln)
+### `event_list` (Liste oder Kacheln)
 
 In der `config.json` aktiviert diese zusätzliche Einstellung die Kachelansicht:
 
 ```json
-"event_list": { "layout": "grid" }
+"event_list": {
+  "layout": "grid",
+  "max_columns": 3
+}
 ```
 
 Das Grid verteilt die Karten automatisch auf die verfügbaren Spalten. Eine
@@ -144,6 +147,11 @@ Kachel ist mindestens **360px** breit; freie Breite wird gleichmäßig verteilt.
 Maßgeblich ist die Widget-Breite, auch in einer schmalen CMS-Spalte. Unterhalb
 von 360px füllt eine einzelne Kachel die verfügbare Breite ohne horizontalen
 Überlauf. Fehlende oder unbekannte Layout-Werte ergeben `list` (Standard).
+
+`max_columns` legt die maximale Spaltenzahl fest, hier drei. Bei weniger Platz
+zeigt das Grid automatisch weniger Spalten. Die Option gilt nur für `grid` und
+akzeptiert positive ganze Zahlen. Fehlt sie oder ist sie ungültig, gibt es keine
+feste Obergrenze; die verfügbare Breite bestimmt die Spaltenzahl.
 
 Die bestehenden `event_card.variant`-Varianten funktionieren in beiden Layouts.
 Im Grid steht das Bild über dem Inhalt; Farben, Rahmen, Hover und Tastaturfokus
@@ -270,7 +278,7 @@ Konkrete Layout-Klassen:
 - Cursor-basierte Paginierung (`last_event_date_uuid` + `last_event_start_at`)
 - Seiteninfo unten: `← SEITE X VON Y →` (Y = `total_event_count / limit`)
 - Gesamtzahl über `api/events/type-summary`
-- Kategorie-Mehrfachfilter (Kultur, Bildung, Sport, Freizeit, Familie, Gesellschaft)
+- Kategorie-Mehrfachfilter (Kultur, Bildung, Sport, Freizeit, Familie, Gesellschaft, Kreativ, Essen und Trinken)
 - Detailansicht: Klick auf eine Karte lädt `api/event/{uuid}?lang=de` und zeigt Bild, Titel, Untertitel, Datum/Uhrzeit, Ort, Beschreibung und Links
 - Eigene URL pro Detailseite (`?event={uuid}`), Browser-Zurück/Weiter via History API — Direktaufruf rendert direkt die Detailansicht
 

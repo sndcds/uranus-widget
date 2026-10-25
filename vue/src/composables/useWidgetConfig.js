@@ -122,8 +122,12 @@ export default function useWidgetConfig(props) {
       config.value.event_card = normalizeEventCardConfig(config.value.event_card)
 
       // Missing or unknown list layouts retain the existing row layout.
+      const eventList = config.value.event_list
       config.value.event_list = {
-        layout: config.value.event_list?.layout === 'grid' ? 'grid' : 'list',
+        layout: eventList?.layout === 'grid' ? 'grid' : 'list',
+        max_columns: Number.isSafeInteger(eventList?.max_columns) && eventList.max_columns > 0
+            ? eventList.max_columns
+            : null,
       }
 
       styles.value = config.value.styles

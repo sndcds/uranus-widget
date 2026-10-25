@@ -6,6 +6,11 @@
 
   "apiBaseUrl": "https://api.kulturbytes.de/api",
 
+  "event_list": {
+    "layout": "grid",
+    "max_columns": 3
+  },
+
   "event_card": {
     "variant": "standard",
     "image": {

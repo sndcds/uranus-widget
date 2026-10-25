@@ -2,10 +2,21 @@
  * Unterhalb der Mindestbreite bleibt eine Kachel ohne horizontalen Überlauf.
  */
 .uw-list--grid {
+  --uw-grid-track-min-width: var(--uw-grid-min-width, 360px);
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--uw-grid-min-width, 360px)), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--uw-grid-track-min-width)), 1fr));
   gap: var(--uw-grid-gap, 2rem);
   align-items: stretch;
+}
+
+/* Eine größere Mindestbreite begrenzt die Anzahl der Spalten, während
+ * schmalere Container weiterhin automatisch weniger Spalten erhalten.
+ */
+.uw-list--grid-limited {
+  --uw-grid-track-min-width: max(
+    var(--uw-grid-min-width, 360px),
+    calc((100% - (var(--uw-grid-max-columns) - 1) * var(--uw-grid-gap, 2rem)) / var(--uw-grid-max-columns))
+  );
 }
 
 /* Farben, Rahmen, Hover und Fokus bleiben die der gemeinsamen .uw-card. */

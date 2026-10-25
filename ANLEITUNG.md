@@ -78,12 +78,13 @@ Diese Datei enthält die Einstellungen als gültiges JSON: doppelte Anführungsz
 | `filter.tags`, `filter.venue` | Optionale Tag- bzw. Veranstaltungsortfilter. Werte und Datentypen müssen der angeschlossenen Filter-API entsprechen; das Widget reicht JSON-Werte weiter. |
 | `event_card.variant` | `standard`: Bild, Datum, Titel, Ort, Typen, Preis-/Statushinweise; `compact`: Bild, Datum, Titel, Ort; `minimal`: Datum und Titel ohne Bild. Fehlende oder unbekannte Variante ergibt `standard`. |
 | `event_list.layout` | `list` (Standard): Karten untereinander; `grid`: responsive Kacheln mit mindestens 360px Breite. Fehlende oder unbekannte Werte ergeben `list`. |
+| `event_list.max_columns` | Optionale maximale Spaltenzahl im Grid, z. B. `3`. Positive ganze Zahl; fehlende oder ungültige Werte bedeuten keine feste Obergrenze. |
 | `event_card.image.ratio` | Zuschnitt der angeforderten Kartenbilder; `"16:9"` oder z. B. `"4/3"`. Standard `"16:9"`. |
 | `event_card.image.width` | Angeforderte Bildbreite in Pixeln; Standard `480`. Das ist nicht die CSS-Anzeigebreite. |
 | `event_card.image.quality` | Angeforderte Bildqualität von `0` bis `100`; Standard `80`. |
 | `event_card.image.type` | Angefordertes Bildformat; Standard `"webp"`. Weitere Formate hängen vom Bilddienst ab. |
 
-Kategorie-IDs: **1 Kultur, 2 Bildung, 3 Sport, 4 Freizeit, 5 Familie, 6 Gesellschaft**.
+Kategorie-IDs: **1 Kultur, 2 Bildung, 3 Sport, 4 Freizeit, 5 Familie, 6 Gesellschaft, 7 Kreativ, 8 Essen und Trinken**.
 
 Die Bildparameter betreffen die Karten der Übersicht. Das tatsächlich sichtbare Seitenverhältnis steuern zusätzlich die CSS-Variablen `--uw-event-image-ratio-desktop` und `--uw-event-image-ratio-mobile`. Für einen durchgehend gleichen Ausschnitt beide Ebenen auf denselben Wert einstellen.
 
@@ -98,7 +99,10 @@ Für die verwendete verschachtelte Konfiguration gilt bei der Initialisierung: *
 In der `config.json` zusätzlich eintragen:
 
 ```json
-"event_list": { "layout": "grid" }
+"event_list": {
+  "layout": "grid",
+  "max_columns": 3
+}
 ```
 
 Die Spaltenzahl passt sich automatisch an die Breite des Widgets an, auch in
@@ -107,6 +111,11 @@ die verfügbare Breite. Ist der gesamte Bereich schmaler als 360px, wird eine
 einzelne Kachel entsprechend schmaler. Das Bild steht über den Veranstaltungsinfos.
 Die Varianten unter `event_card.variant` bleiben verwendbar; das Basisdesign
 übernimmt Farben, Rahmen und Hover aus der Liste ohne zusätzliche Schatten.
+
+`max_columns` begrenzt die Anzahl im Beispiel auf höchstens drei Spalten. Bei
+weniger Platz werden automatisch weniger Spalten angezeigt. Die Option gilt
+nur für `layout: "grid"` und akzeptiert positive ganze Zahlen. Ohne die Option
+oder bei ungültigen Werten ergibt sich die Spaltenzahl allein aus der Breite.
 
 Die Klassen `.uw-list--grid` und `.uw-event-card--tile` lassen sich in einer
 über `styles` geladenen Theme-Datei überschreiben:

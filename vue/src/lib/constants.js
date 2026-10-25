@@ -24,5 +24,7 @@ export const CATEGORIES = [
   { id: 3, label: 'Sport' },
   { id: 4, label: 'Freizeit' },
   { id: 5, label: 'Familie' },
-  { id: 6, label: 'Gesellschaft' }
+  { id: 6, label: 'Gesellschaft' },
+  { id: 7, label: 'Kreativ' },
+  { id: 8, label: 'Essen und Trinken' }
 ]
