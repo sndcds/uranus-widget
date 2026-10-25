@@ -15,9 +15,9 @@ const loading = ref(false)
 const error = ref('')
 const titleEl = ref(null)
 const showMap = ref(false)
-defineExpose({ loading })
 const venueUuid = computed(() => props.uuid)
 const { events, hasMore, loading: eventsLoading, error: eventsError, reset, loadMore } = useEventsApi(computed(() => props.config), { venueUuid })
+defineExpose({ loading: computed(() => loading.value || eventsLoading.value) })
 const description = computed(() => markdownToHtml(venue.value?.description || ''))
 const photo = computed(() => venue.value?.images?.main_photo)
 const imageUrl = computed(() => {
@@ -51,10 +51,13 @@ async function load() {
   } catch (err) {
     if (request === version && err.name !== 'AbortError') error.value = err.message
   } finally {
-    if (request === version) { loading.value = false; emit('ready') }
+    if (request === version) loading.value = false
   }
 }
 watch(() => props.uuid, load, { immediate: true })
+watch([loading, eventsLoading], ([venuePending, eventsPending]) => {
+  if (!venuePending && !eventsPending) emit('ready')
+}, { flush: 'post' })
 watch(() => [loading.value, props.active], async () => {
   if (!loading.value && props.active && venue.value) {
     await nextTick()
