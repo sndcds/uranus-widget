@@ -30,16 +30,42 @@ export function getEventUuidFromUrl(url = window.location.href) {
  */
 export function buildEventUrl(event, url = window.location.href) {
   const uuid = event?.uuid
-  const dateSlug = event?.date_slug
+  const dateSlug = event?.date_slug || event?.date?.slug
   const parsed = new URL(url)
   if (uuid) {
     parsed.searchParams.set('event', uuid)
-    parsed.searchParams.set('date', dateSlug)
+    if (dateSlug) parsed.searchParams.set('date', dateSlug)
+    else parsed.searchParams.delete('date')
   } else {
     parsed.searchParams.delete('event')
     parsed.searchParams.delete('date')
   }
   return parsed.toString()
+}
+
+export function buildVenueUrl(uuid, url = window.location.href) {
+  const parsed = new URL(buildEventUrl(null, url))
+  if (uuid) parsed.searchParams.set('uw-venue', uuid)
+  else parsed.searchParams.delete('uw-venue')
+  return parsed.href
+}
+
+export function buildViewUrl(view, url = window.location.href) {
+  const parsed = new URL(buildVenueUrl(null, url))
+  if (view === 'map') parsed.searchParams.set('uw-view', 'map')
+  else parsed.searchParams.set('uw-view', 'events')
+  return parsed.href
+}
+
+export function readWidgetRoute(url, { mapEnabled = false, venueEnabled = true, initialView = 'events' } = {}) {
+  const params = new URL(url).searchParams
+  const view = params.get('uw-view') || initialView
+  return {
+    view: mapEnabled && view === 'map' ? 'map' : 'events',
+    venueUuid: venueEnabled ? params.get('uw-venue') : null,
+    eventUuid: params.get('event'),
+    dateSlug: params.get('date'),
+  }
 }
 
 /**

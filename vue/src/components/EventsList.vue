@@ -35,7 +35,7 @@ const props = defineProps({
   }
 })
 
-defineEmits(['open'])
+defineEmits(['open', 'retry'])
 
 </script>
 
@@ -60,6 +60,7 @@ defineEmits(['open'])
           class="uw-is-error"
       >
         {{ error }}
+        <button class="uw-button" type="button" @click="$emit('retry')">{{ t('retry') }}</button>
       </div>
 
       <!-- Empty -->
@@ -94,6 +95,11 @@ defineEmits(['open'])
       </div>
 
     </Transition>
+
+    <div v-if="error && events.length" class="uw-is-error" role="alert">
+      {{ error }}
+      <button class="uw-button" type="button" @click="$emit('retry')">{{ t('retry') }}</button>
+    </div>
 
     <!-- Loading additional events -->
     <div

@@ -4,17 +4,14 @@
   "styleError": "No se pudieron cargar los estilos: {error}",
   "back": "Volver",
   "loadMore": "Cargar más",
-
   "header": {
     "title": "Eventos",
     "count": "{count} eventos"
   },
-
   "search": {
     "placeholder": "Búsqueda de texto libre…",
     "submit": "Buscar"
   },
-
   "dateRange": {
     "ariaLabel": "Filtrar por rango de tiempo",
     "all": "Todos",
@@ -25,14 +22,11 @@
     "weekendAfter": "Fin de semana siguiente",
     "sixMonths": "Próximos 6 meses"
   },
-
   "eventType": {
     "ariaLabel": "Filtrar por tipo de evento",
     "all": "Todos los tipos de evento"
   },
-
   "noImage": "Sin imagen",
-
   "eventCard": {
     "priceFree": "Gratis",
     "priceDonation": "Donación",
@@ -41,13 +35,11 @@
     "statusPostponed": "Aplazado",
     "statusMoved": "Trasladado"
   },
-
   "list": {
     "loading": "Cargando eventos...",
     "empty": "No se encontraron eventos.",
     "loadingMore": "Cargando…"
   },
-
   "detail": {
     "loading": "Cargando detalles...",
     "error": "Error al cargar: {error}",
@@ -67,11 +59,9 @@
     "organizerBy": "Organizado por",
     "toKulturbytes": "Ir a kulturbytes"
   },
-
   "pagination": {
     "of": "de"
   },
-
   "links": {
     "eventLink": "Enlace del evento",
     "organizerWebsite": "Sitio web del organizador",
@@ -94,13 +84,42 @@
     "kulturbytes": "kulturbytes",
     "pippa": "Pippa"
   },
-
   "categories": {
     "1": "Cultura",
     "2": "Educación",
     "3": "Deportes",
     "4": "Ocio",
     "5": "Familia",
+    "6": "Sociedad"
+  },
+  "retry": "Reintentar",
+  "views": {
+    "label": "Elegir vista",
+    "events": "Eventos",
+    "map": "Lugares / Mapa"
+  },
+  "map": {
+    "title": "Lugares en el mapa",
+    "description": "Descubre lugares de este portal. Los filtros de eventos se aplican a la lista de eventos.",
+    "expand": "Ampliar mapa",
+    "shrink": "Reducir mapa",
+    "loading": "Cargando mapa y lugares…",
+    "loadError": "No se pudo cargar el mapa o los lugares.",
+    "boundaryError": "No se pudo cargar el límite del portal.",
+    "empty": "No hay lugares en esta zona del mapa.",
+    "places": "Lugares en esta zona del mapa ({count})",
+    "closePopup": "Cerrar información del lugar"
+  },
+  "venue": {
+    "loading": "Cargando lugar…",
+    "notFound": "No se encontró este lugar.",
+    "details": "Detalles del lugar",
+    "website": "Sitio web",
+    "address": "Dirección",
+    "organization": "Organización",
+    "events": "Próximos eventos en este lugar",
+    "showMap": "Mostrar ubicación en el mapa",
+    "hideMap": "Ocultar mapa"
     "6": "Sociedad",
     "7": "Creatividad",
     "8": "Comida y bebida"

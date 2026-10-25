@@ -1,6 +1,6 @@
 # Uranus Widget – Veranstaltungskalender für Websites
 
-**Veranstaltungen aus der Kulturbytes-API als Liste oder responsives Kachel-Grid in die eigene Website einbinden.** Uranus Widget ist eine Web Component auf Basis von Vue 3: ein JavaScript-Bundle, ein HTML-Element und eine JSON-Konfiguration. Geeignet für TYPO3, WordPress und Websites mit eigenem HTML.
+**Veranstaltungen als Liste oder Kachel-Grid und Orte auf einer optionalen Karte in die eigene Website einbinden.** Uranus Widget ist eine Web Component auf Basis von Vue 3: ein Hauptbundle, ein HTML-Element und eine JSON-Konfiguration; die Kartenbibliothek lädt bei Bedarf. Geeignet für TYPO3, WordPress und Websites mit eigenem HTML.
 
 *Embeddable event calendar widget for TYPO3, WordPress and HTML websites. Built with Vue 3 and Web Components, with responsive event grids and CSS themes.*
 
@@ -15,6 +15,8 @@
 | Suche und Filter | Volltextsuche, Kategorien, Veranstaltungstyp und Zeitraum; Vorauswahl über die Konfiguration. |
 | Weitere Veranstaltungen | Ergebnisse schrittweise über „Mehr laden“ ergänzen. |
 | Event-Details | Beschreibung, Bilder, Termine, Veranstaltungsort und weiterführende Links. |
+| Optionale Ortskarte | MapLibre-Karte mit Clustern, Ortsmarkern, Gebäudeumrissen und Portalgrenze; lädt erst beim Öffnen. |
+| Ortsdetails | Beschreibung, Adresse, Website und kommende Veranstaltungen eines Ortes; aus Karte und Event-Details erreichbar. |
 | Teilbare Event-Links | Detailansicht über URL-Parameter öffnen; Browser-Zurück und -Vorwärts werden unterstützt. |
 | Passender Scrollpunkt | Beim Öffnen von Details zum Widget-Anfang springen, mit einstellbarem Abstand für feste Kopfzeilen. |
 | Eigenes Erscheinungsbild | CSS-Variablen und `uw-`-Klassen über externe Theme-Dateien anpassen. |
@@ -35,7 +37,7 @@ npm ci
 npm run build
 ```
 
-Das Ergebnis ist **`vue/dist/uranus-widget-vue.js`**. Das generierte Bundle wird nicht im Repository versioniert. Zum Betrieb auf dem Webserver ist kein Node.js erforderlich.
+Das Ergebnis liegt in **`vue/dist/`**. Für die Karte das gesamte Verzeichnis hochladen: Hauptbundle, separat geladenes `uranus-widget-map.js`, `map/markers/` und `versatiles/`. Die generierten Bundles werden nicht im Repository versioniert. Zum Betrieb auf dem Webserver ist kein Node.js erforderlich.
 
 ### 2. Konfiguration anlegen
 
@@ -107,6 +109,61 @@ Kacheln sind mindestens **360 Pixel** breit. Das Grid richtet sich nach der tats
 `max_columns` begrenzt das Grid auf die angegebene Spaltenzahl, im Beispiel auf höchstens drei. Bei weniger Platz werden automatisch weniger Spalten angezeigt. Erlaubt sind positive ganze Zahlen. Ohne die Option oder bei einem ungültigen Wert wird die Spaltenzahl weiterhin ausschließlich aus der verfügbaren Breite berechnet. Die Einstellung gilt nur für `layout: "grid"`.
 
 Das Grid verwendet die Farben, Rahmen und Hover-Zustände der Liste. Das Basisdesign kommt ohne Schatten aus. Alle drei `event_card.variant`-Varianten funktionieren in beiden Layouts.
+
+## Ortskarte und Ortsdetails
+
+Die Karte wird über die JSON-Konfiguration aktiviert:
+
+```json
+"map": {
+  "enabled": true,
+  "center": [9.67, 54.3],
+  "zoom": 11,
+  "height": 500
+}
+```
+
+Oberhalb des Inhalts erscheinen „Veranstaltungen“ und „Orte / Karte“. Event-Filter,
+geladene Listeneinträge und die Kartenposition bleiben beim Wechsel erhalten.
+Die Karte lädt Orte für den sichtbaren Ausschnitt und das konfigurierte Portal.
+Event-Filter wie Datum, Kategorien und Freitext gelten für die Event-Liste; die
+Karte zeigt auch Orte ohne passende Veranstaltungen. Marker öffnen ein Popup mit
+Website und Ortsdetails. Cluster lassen sich anklicken, um hineinzuzoomen.
+Eine aufklappbare Ortsliste unter der Karte bietet dieselben Detail-Links per Tastatur.
+
+Die Ortsansicht zeigt Beschreibung, Foto/Logo soweit vorhanden, Adresse, Website,
+Organisation und Veranstaltungen. Deren Abfrage behält die konfigurierten Filter
+und das Portal bei und ergänzt `venue_uuids`. Die interaktiven Filter der Übersicht
+ändern diese Ortsliste nicht. Der Button „Standort auf Karte anzeigen“ lädt bei
+Bedarf eine kleine Standortkarte. Ortsdetails sind auch aus Event-Details erreichbar.
+
+| Einstellung | Standard | Bedeutung |
+| --- | --- | --- |
+| `map.enabled` | `false` | Umschaltung und große Ortskarte aktivieren. |
+| `map.initialView` | `"events"` | Startansicht, alternativ `"map"`. |
+| `map.center` | `[9.5, 54.3]` | Mittelpunkt als `[Längengrad, Breitengrad]`. |
+| `map.zoom` | `8` | Anfangszoom zwischen 2 und 19. |
+| `map.height` | `500` | Kartenhöhe in Pixeln, mindestens 300. |
+| `map.styleUrl` | mitgelieferter VersaTiles-Stil | Eigene MapLibre-Style-URL. Relative URLs beziehen sich auf die Website. |
+| `map.showBuildings` | `true` | Gebäudeumrisse anzeigen. |
+| `map.showPortalBoundary` | `true` | Grenze des konfigurierten Portals anzeigen. |
+| `venue_details.enabled` | `true` | Ortsdetailansichten und interne Ortslinks aktivieren. |
+
+Direktlinks verwenden `uw-view=map` bzw. `uw-view=events` und `uw-venue=<UUID>`.
+Event-Links behalten `event=<UUID>&date=<Terminslug>`. Der vorhandene Parameter
+`venue` bleibt ein Filter nach Ortsname. Pfad, fremde URL-Parameter und Anker der
+Website bleiben erhalten. Browser-Zurück/-Vorwärts und der Zurück-Button führen
+zum vorherigen Kontext; ein direkter Detailaufruf hat einen Rückweg zur Übersicht.
+Weiterhin ein Widget pro Seite verwenden.
+
+Die Kartenbibliothek und ihr CSS werden getrennt vom Hauptbundle geladen.
+Nach dem Build beim Aktualisieren immer das gesamte `dist/`-Verzeichnis gemeinsam
+ausliefern. Das Basiskartenmaterial benötigt Netzwerkzugriff auf die im
+[mitgelieferten Stil](vue/public/versatiles/versatiles-style.json) hinterlegten
+VersaTiles-Server. Bei einer Content Security Policy müssen diese Ressourcen und
+MapLibre-Web-Worker erlaubt sein. Ortsdaten kommen aus der konfigurierten Uranus-API.
+Die bestehenden Theme-Dateien können `.uw-view-switch`, `.uw-map` und `.uw-venue`
+sowie die bisherigen Farbvariablen gestalten.
 
 ## Design anpassen
 

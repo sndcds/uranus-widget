@@ -134,6 +134,20 @@ Die Klassen `.uw-list--grid` und `.uw-event-card--tile` lassen sich in einer
 
 `event_list` wie `event_card` über JSON oder die `config`-Property setzen.
 
+### Optionale Ortskarte
+
+Mit `"map": { "enabled": true, "center": [9.67, 54.3], "zoom": 11, "height": 500 }`
+auf der obersten Ebene der Konfiguration erscheinen die Ansichten „Veranstaltungen“
+und „Orte / Karte“. Die Karte zeigt Orte im Portal unabhängig von Event-Filtern.
+Ortsdetails enthalten die Veranstaltungen des Ortes unter den konfigurierten
+Einschränkungen. `"venue_details": { "enabled": false }` deaktiviert Ortsdetails.
+
+Für die Karte **den gesamten Inhalt von `vue/dist/`** auf den Server kopieren,
+einschließlich `uranus-widget-map.js`, `map/markers/` und `versatiles/`.
+Das Kartenpaket lädt erst beim Öffnen einer Karte. Die Demo aktiviert die Karte.
+Weitere Optionen und Direktlinks stehen in der
+[Konfigurationsreferenz](README.md#ortskarte-und-ortsdetails).
+
 ### `theme.css`
 
 Diese Datei enthält das eigene Design. Das Widget lädt sie über `styles` und fügt sie **in seinen Shadow DOM** ein. Darin bezeichnet `:host` das äußere `<uranus-widget>`-Element. Normale Regeln im Stylesheet der Website wie `.uw-card { ... }` erreichen die internen Elemente nicht. Ein bloßes `<link>` im Seitenkopf oder WordPress „Zusätzliches CSS“ ersetzt daher das Laden über `styles` nicht.

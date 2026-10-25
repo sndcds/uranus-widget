@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Uranus Widget — Einbindung (Vue3)</title>
-    <script src="../dist/uranus-widget-vue.js?v=20260810" defer></script>
+    <script src="../dist/uranus-widget-vue.js" defer></script>
     <style>
         body {
             font-family: "Inter", sans-serif;
@@ -12,7 +12,7 @@
     </style>
 </head>
 
-<body style="margin:4rem;">
+<body style="margin:clamp(1rem, 4vw, 4rem);">
     <h1>Uranus Events</h1>
     <uranus-widget
         config-url="./config.json"
