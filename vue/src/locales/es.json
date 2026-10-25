@@ -90,7 +90,9 @@
     "3": "Deportes",
     "4": "Ocio",
     "5": "Familia",
-    "6": "Sociedad"
+    "6": "Sociedad",
+    "7": "Creatividad",
+    "8": "Comida y bebida"
   },
   "retry": "Reintentar",
   "views": {
@@ -120,8 +122,5 @@
     "events": "Próximos eventos en este lugar",
     "showMap": "Mostrar ubicación en el mapa",
     "hideMap": "Ocultar mapa"
-    "6": "Sociedad",
-    "7": "Creatividad",
-    "8": "Comida y bebida"
   }
 }
