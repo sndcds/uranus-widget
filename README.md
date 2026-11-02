@@ -12,7 +12,7 @@
 | --- | --- |
 | Zwei Listenlayouts | Klassische Zeilen oder ein Grid, das seine Spaltenzahl an die verfügbare Breite anpasst. |
 | Drei Kartenvarianten | `standard` mit Veranstaltungsinfos, `compact` mit weniger Angaben und `minimal` ohne Bild. |
-| Suche und Filter | Volltextsuche, Kategorien, Veranstaltungstyp und Zeitraum; Vorauswahl über die Konfiguration. |
+| Suche und Filter | Volltextsuche, Kategorien, Veranstaltungstyp, Zeitraum und optionale Gebietsauswahl; Vorauswahl über die Konfiguration. |
 | Weitere Veranstaltungen | Ergebnisse schrittweise über „Mehr laden“ ergänzen. |
 | Event-Details | Beschreibung, Bilder, Termine, Veranstaltungsort und weiterführende Links. |
 | Optionale Ortskarte | MapLibre-Karte mit Clustern, Ortsmarkern, Gebäudeumrissen und Portalgrenze; lädt erst beim Öffnen. |
@@ -85,6 +85,29 @@ Das Script einmal pro Seite laden und ein Widget pro Seite vorsehen: Detailansic
 **TYPO3:** Das Element lässt sich in einem HTML-Inhaltselement oder Fluid-Template platzieren. Für Dateien unter `fileadmin` die Pfade entsprechend anpassen. [Zur TYPO3-Anleitung](ANLEITUNG.md#6-einbindung-in-typo3)
 
 **WordPress:** Script und Element können über einen individuellen HTML-Block oder ein eigenes Plugin eingebunden werden. [Zur WordPress-Anleitung](ANLEITUNG.md#7-einbindung-in-wordpress)
+
+## Gebietsauswahl
+
+Mit `geometry_group` unter `filter` erscheint eine zusätzliche Auswahl für
+die Gebiete des konfigurierten Portals:
+
+```json
+"filter": {
+  "portal": "HIER-DIE-PORTAL-UUID-EINTRAGEN",
+  "categories": [],
+  "limit": 16,
+  "geometry_group": 1
+}
+```
+
+Das Widget lädt die Auswahl über
+`{apiBaseUrl}/portal/{filter.portal}/geometries/select?group=1`.
+Eine ausgewählte Geometrie wird als `geometry: "UUID"` an die Event-API
+übergeben, damit nur Veranstaltungen mit Orten innerhalb des Gebiets
+erscheinen. Liste und Anzahlen werden mit den bestehenden Filtern neu geladen.
+„Alle Orte“ hebt die Auswahl auf. Ohne `geometry_group` bleibt die Auswahl
+ausgeblendet. Ist der Endpunkt noch nicht verfügbar, bleibt die Liste nutzbar
+und die Gebietsauswahl bietet einen Wiederholungsbutton.
 
 ## Liste oder Kachel-Grid
 

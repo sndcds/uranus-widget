@@ -26,6 +26,14 @@
     "ariaLabel": "Nach Event-Typ filtern",
     "all": "Alle Event-Typen"
   },
+  "geometry": {
+    "ariaLabel": "Nach Gebiet filtern",
+    "all": "Alle Orte",
+    "loading": "Lade Gebiete…",
+    "empty": "Keine Gebiete verfügbar",
+    "unavailable": "Gebietsauswahl nicht verfügbar",
+    "loadError": "Die Gebiete konnten nicht geladen werden."
+  },
   "noImage": "Kein Bild",
   "eventCard": {
     "priceFree": "Kostenlos",

@@ -2,11 +2,14 @@ import { PARAM_MAP, OVERRIDABLE_PARAMS } from './constants.js'
 
 export function buildEventFilter(config, selection = {}, search = '') {
   const filter = { ...(config.filter || {}) }
+  // geometry_group configures the selection lookup, not the event query.
+  delete filter.geometry_group
   for (const [key, value] of Object.entries(config)) {
     if (PARAM_MAP[key] && key !== 'limit') filter[PARAM_MAP[key]] = value
   }
   if (selection.categories?.length) filter.categories = [...selection.categories]
   if (selection.type != null) filter.event_types = [Number(selection.type)]
+  if (selection.geometry) filter.geometry = selection.geometry
   if (selection.range) {
     for (const key of ['start', 'end']) {
       if (selection.range[key]) filter[key] = selection.range[key]

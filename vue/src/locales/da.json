@@ -26,6 +26,14 @@
     "ariaLabel": "Filtrer efter begivenhedstype",
     "all": "Alle begivenhedstyper"
   },
+  "geometry": {
+    "ariaLabel": "Filtrer efter område",
+    "all": "Alle steder",
+    "loading": "Indlæser områder…",
+    "empty": "Ingen områder tilgængelige",
+    "unavailable": "Områdevalg er ikke tilgængeligt",
+    "loadError": "Områderne kunne ikke indlæses."
+  },
   "noImage": "Intet billede",
   "eventCard": {
     "priceFree": "Gratis",

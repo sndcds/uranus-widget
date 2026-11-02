@@ -26,5 +26,26 @@
 
 .uw-filter__selects {
     display: flex;
+    flex-wrap: wrap;
     gap: 8px;
+    min-width: 0;
+    max-width: 100%;
+}
+
+.uw-filter__geometry {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    max-width: 100%;
+}
+
+.uw-filter__geometry-select {
+    max-width: 100%;
+}
+
+.uw-filter__geometry-error {
+    color: var(--uw-color-danger);
+    font-size: 0.875rem;
 }

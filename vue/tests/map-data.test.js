@@ -32,3 +32,14 @@ test('event filters retain configured portal and limits and ignore view paramete
     { categories: [2], type: 4, search: 'music' }, '?uw-venue=other&uw-view=map&venue=Theater&portal=other')
   assert.deepEqual(filter, { portal: 'p', limit: 8, tags: ['one', 'two'], categories: [2], venue_uuids: ['v'], venue: 'Theater', event_types: [4], search: 'music', lang: 'da' })
 })
+
+test('geometry selections supplement existing event filters without forwarding the lookup group', () => {
+  const config = { language: 'de', filter: { portal: 'p', geometry_group: 1, limit: 16, venue_uuids: ['v'] } }
+  const selection = { geometry: 'region-uuid', categories: [2], type: 4, range: { start: '2026-11-02' }, search: 'Musik' }
+  assert.deepEqual(buildEventFilter(config, selection), {
+    portal: 'p', limit: 16, venue_uuids: ['v'], categories: [2], event_types: [4],
+    geometry: 'region-uuid', start: '2026-11-02', search: 'Musik', lang: 'de',
+  })
+  assert.equal('geometry' in buildEventFilter(config, { geometry: null }), false)
+  assert.equal(config.filter.geometry_group, 1)
+})
