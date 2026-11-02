@@ -1,0 +1,22 @@
+{
+  "styles": ["/wp-content/widgets/theme.css?v=1"],
+  "language": "de",
+
+  "apiBaseUrl": "https://api.kulturbytes.de/api",
+
+  "event_card": {
+    "variant": "standard",
+    "image": {
+      "ratio": "16/9",
+      "width": 480,
+      "quality": 80,
+      "type": "webp"
+    }
+  },
+
+  "filter": {
+    "portal": "019e0b75-b034-7220-a7ba-23b7ee35b1a9",
+    "categories": [],
+    "limit": 16
+  }
+}
