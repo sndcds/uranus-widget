@@ -2,6 +2,7 @@
 import { inject, ref, watch } from 'vue'
 import { CATEGORIES } from '../lib/constants'
 import EventTypeSelect from './EventTypeSelect.vue'
+import GeometrySelect from './GeometrySelect.vue'
 
 const t = inject('t', (k) => k)
 
@@ -25,10 +26,13 @@ const props = defineProps({
   selectedType: {
     type: [Number, String],
     default: null
-  }
+  },
+  portal: { type: String, default: '' },
+  geometryGroup: { type: [Number, String], default: null },
+  selectedGeometry: { type: String, default: null },
 })
 
-const emit = defineEmits(['update:modelValue', 'change', 'search', 'update:selectedType', 'typeChange', 'rangeChange'])
+const emit = defineEmits(['update:modelValue', 'change', 'search', 'update:selectedType', 'typeChange', 'rangeChange', 'geometryChange'])
 
 const query = ref(props.search)
 
@@ -151,6 +155,15 @@ function onTypeChange(value) {
     </form>
 
     <div class="uw-filter__selects">
+      <GeometrySelect
+        v-if="geometryGroup != null"
+        :model-value="selectedGeometry"
+        :api-base-url="apiBaseUrl"
+        :portal="portal"
+        :group="geometryGroup"
+        @update:model-value="emit('geometryChange', $event)"
+      />
+
       <EventTypeSelect
         :model-value="selectedType"
         :summary="summary"

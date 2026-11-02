@@ -73,6 +73,7 @@ Diese Datei enthält die Einstellungen als gültiges JSON: doppelte Anführungsz
 | `filter.portal` | Kennung des Veranstaltungsportals. |
 | `filter.limit` | Positive ganze Zahl: Veranstaltungen pro Abruf, Standard `12`. Weitere Einträge werden über „Mehr laden“ ergänzt. |
 | `filter.categories` | Array numerischer Kategorie-IDs, z. B. `[1, 5]`; `[]` bedeutet keine Kategorie-Vorauswahl. |
+| `filter.geometry_group` | Optionale Gruppen-ID, z. B. `1`. Lädt die Gebiete des konfigurierten Portals und zeigt eine zusätzliche Gebietsauswahl. Ohne diese Option erfolgt keine Gebietsabfrage. |
 | `filter.city` | Optionaler Stadtfilter, z. B. `"Flensburg"`; wird an die API weitergereicht. |
 | `filter.start`, `filter.end` | Optionaler Zeitraum in der Form `"2026-10-01"` bzw. `"2026-12-31"`. Ein festes Enddatum muss später gepflegt werden. |
 | `filter.tags`, `filter.venue` | Optionale Tag- bzw. Veranstaltungsortfilter. Werte und Datentypen müssen der angeschlossenen Filter-API entsprechen; das Widget reicht JSON-Werte weiter. |
@@ -133,6 +134,27 @@ Die Klassen `.uw-list--grid` und `.uw-event-card--tile` lassen sich in einer
 ```
 
 `event_list` wie `event_card` über JSON oder die `config`-Property setzen.
+
+### Optionale Gebietsauswahl
+
+In `filter` die Option `"geometry_group": 1` ergänzen. Die Auswahl wird über
+`GET {apiBaseUrl}/portal/{filter.portal}/geometries/select?group=1` geladen.
+Die Einträge aus `data.select` werden nach `order` sortiert; bei gleichem Wert
+bleibt die Reihenfolge der API erhalten. Angezeigt wird `name`, ausgewählt wird
+`geometry_uuid`.
+
+Bei einer Auswahl übergibt das Widget die UUID als `geometry: "…"` an
+`POST /events/filter` und als Query-Parameter `geometry` an
+`GET /events/type-summary`. Die API begrenzt damit Veranstaltungen auf Orte
+innerhalb des Gebiets. Bestehende Filter bleiben erhalten; die Ergebnisliste
+und ihre Anzahlen werden neu geladen. „Alle Orte“ entfernt den interaktiven
+Gebietsfilter. `geometry_group` wird nicht an die Event-Endpunkte gesendet.
+
+Ohne Auswahl bleibt die bisherige Veranstaltungsliste bestehen. Ist der
+Auswahl-Endpunkt nicht erreichbar, erscheint eine Fehlermeldung mit
+„Erneut versuchen“; die anderen Filter und die Veranstaltungsliste bleiben
+bedienbar. Die Gebietsauswahl gilt wie die anderen interaktiven Filter nur
+für die Veranstaltungsübersicht.
 
 ### Optionale Ortskarte
 
@@ -356,8 +378,10 @@ Später geladene Regeln gewinnen bei gleicher Priorität und Spezifität. Gegen 
 | `.uw-input` | Allgemeine Eingabefeld-Gestaltung. |
 | `.uw-filter__search-input` | Suchfeld speziell. |
 | `.uw-filter__search-button` | Suchbutton speziell. |
-| `.uw-filter__selects` | Gemeinsamer Container für Typ- und Zeitraum-Auswahl. |
-| `.uw-select` | Beide Auswahlfelder; mit `:disabled` auch der Ladezustand. |
+| `.uw-filter__selects` | Gemeinsamer Container für Gebiets-, Typ- und Zeitraum-Auswahl. |
+| `.uw-select` | Auswahlfelder; mit `:disabled` auch der Ladezustand. |
+| `.uw-filter__geometry`, `.uw-filter__geometry-select` | Container und Auswahlfeld der optionalen Gebietsauswahl. |
+| `.uw-filter__geometry-error` | Fehlermeldung und Wiederholungsbutton der Gebietsauswahl. |
 | `.uw-button` | Alle Buttons einschließlich Zurück-, Such-, Nachladen- und bestimmter Link-Buttons. |
 | `.uw-button--big` | Große Buttons, z. B. „Mehr laden“ und „Zurück“. |
 | `.uw-chips` | Allgemeiner Chip-Container, auch bei Veranstaltungstypen. |

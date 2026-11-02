@@ -49,3 +49,50 @@ test('venue results retain the portal and never widen a configured venue UUID re
     assert.equal(denied.hasMore.value, false)
   } finally { scope.stop(); globalThis.fetch = previousFetch; delete globalThis.window }
 })
+
+test('geometry changes refresh events and counts, reset pagination, and retain the other filters', async t => {
+  const previousWindow = globalThis.window
+  globalThis.window = { location: { search: '' } }
+  const requests = []
+  t.mock.method(globalThis, 'fetch', async (url, options) => {
+    requests.push({ url, filter: options?.body ? JSON.parse(options.body) : Object.fromEntries(new URL(url).searchParams) })
+    return { ok: true, json: async () => ({ data: options?.body
+      ? { events: [{ uuid: 'event' }], last_event_date_uuid: 'cursor', last_event_start_at: '2026-11-02' }
+      : { total_event_count: 1 } }) }
+  })
+  const scope = effectScope()
+  const api = scope.run(() => useEventsApi(ref({ apiBaseUrl: 'https://example.org/api', filter: { portal: 'p', geometry_group: 1, limit: 1 } })))
+  const settle = () => new Promise(resolve => setTimeout(resolve, 0))
+  try {
+    api.selectCategories([2])
+    await settle()
+    api.selectType(4)
+    await settle()
+    api.setSearch('Musik')
+    await settle()
+    await api.loadMore()
+    assert.equal(requests.at(-1).filter.last_event_date_uuid, 'cursor')
+
+    api.selectGeometry('geometry-1')
+    await settle()
+    const [events, summary] = requests.slice(-2)
+    assert.deepEqual(events.filter, { portal: 'p', limit: 1, categories: [2], event_types: [4], search: 'Musik', geometry: 'geometry-1', lang: 'de' })
+    assert.equal(summary.filter.geometry, 'geometry-1')
+    assert.equal('geometry_group' in summary.filter, false)
+    assert.equal(api.selectedGeometry.value, 'geometry-1')
+    assert.equal(api.events.value.length, 1)
+
+    await api.loadMore()
+    assert.equal(requests.at(-1).filter.geometry, 'geometry-1')
+    assert.equal(requests.at(-1).filter.last_event_date_uuid, 'cursor')
+
+    api.selectGeometry(null)
+    await settle()
+    for (const { filter } of requests.slice(-2)) {
+      assert.equal('geometry' in filter, false)
+      assert.equal('geometry_group' in filter, false)
+      assert.equal('last_event_date_uuid' in filter, false)
+    }
+    assert.equal(api.selectedGeometry.value, null)
+  } finally { scope.stop(); globalThis.window = previousWindow }
+})

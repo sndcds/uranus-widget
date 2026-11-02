@@ -38,8 +38,8 @@ const { host: rootEl, styleError, applyStyles } = useStyles()
 const navigation = useWidgetNavigation(config, rootEl)
 const { view, venueUuid, eventUuid, revision, openEvent, openVenue, selectView, back, settleScroll } = navigation
 const {
-  events, hasMore, loading, error, summary, selectedCategories, selectedType, searchTerm,
-  loadMore, ensureLoaded, selectCategories, selectType, selectRange, setCategories, setSearch,
+  events, hasMore, loading, error, summary, selectedCategories, selectedType, selectedGeometry, searchTerm,
+  loadMore, ensureLoaded, selectCategories, selectType, selectRange, selectGeometry, setCategories, setSearch,
 } = useEventsApi(config)
 const { detailData, detailLoading, detailError, detailLinks, reload: reloadDetail } = useEventDetail(config, eventUuid, navigation.dateSlug)
 const mapVisited = ref(false)
@@ -82,8 +82,9 @@ onUnmounted(() => { disposed = true; navigation.dispose() })
         <WidgetHeader :summary="summary" />
         <FilterBar v-model="selectedCategories" :search="searchTerm" :summary="summary"
           :api-base-url="config.apiBaseUrl" :selected-type="selectedType"
+          :portal="config.filter.portal || ''" :geometry-group="config.filter.geometry_group" :selected-geometry="selectedGeometry"
           @change="() => selectCategories(selectedCategories)" @type-change="selectType"
-          @range-change="selectRange" @search="setSearch" />
+          @range-change="selectRange" @geometry-change="selectGeometry" @search="setSearch" />
         <EventsList :events="events" :loading="loading" :error="error" :layout="config.event_list.layout"
           :max-columns="config.event_list.max_columns" :event-card-config="config.event_card"
           :api-base-url="config.apiBaseUrl" @open="openEvent" @retry="loadMore" />

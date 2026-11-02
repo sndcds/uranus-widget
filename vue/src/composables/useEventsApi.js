@@ -12,6 +12,7 @@ export default function useEventsApi(config, { venueUuid } = {}) {
   const selectedCategories = ref([])
   const selectedType = ref(null)
   const selectedRange = ref(null)
+  const selectedGeometry = ref(null)
   const searchTerm = ref('')
   let cursor = null
   let initialized = false
@@ -24,6 +25,7 @@ export default function useEventsApi(config, { venueUuid } = {}) {
       categories: selectedCategories.value,
       type: selectedType.value,
       range: selectedRange.value,
+      geometry: selectedGeometry.value,
       search: searchTerm.value,
     }, window.location.search)
     if (venueUuid?.value) filter.venue_uuids = [venueUuid.value]
@@ -107,13 +109,14 @@ export default function useEventsApi(config, { venueUuid } = {}) {
   function setCategories(next) { selectedCategories.value = Array.isArray(next) ? [...next] : [] }
   function selectType(next) { selectedType.value = next === '' || next == null ? null : Number(next); refresh() }
   function selectRange(next) { selectedRange.value = next; refresh() }
+  function selectGeometry(next) { selectedGeometry.value = next || null; refresh() }
   function setSearch(next) { searchTerm.value = String(next || '').trim(); refresh() }
 
   onScopeDispose(() => { version++; controller?.abort(); summaryController?.abort() })
   return {
     events, hasMore, loading, error, summary,
-    selectedCategories, selectedType, selectedRange, searchTerm,
+    selectedCategories, selectedType, selectedRange, selectedGeometry, searchTerm,
     loadMore, loadSummary, refresh, reset, ensureLoaded,
-    selectCategories, setCategories, selectType, selectRange, setSearch,
+    selectCategories, setCategories, selectType, selectRange, selectGeometry, setSearch,
   }
 }

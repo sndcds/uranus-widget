@@ -26,6 +26,14 @@
     "ariaLabel": "Filtrar por tipo de evento",
     "all": "Todos los tipos de evento"
   },
+  "geometry": {
+    "ariaLabel": "Filtrar por zona",
+    "all": "Todos los lugares",
+    "loading": "Cargando zonas…",
+    "empty": "No hay zonas disponibles",
+    "unavailable": "Selección de zona no disponible",
+    "loadError": "No se pudieron cargar las zonas."
+  },
   "noImage": "Sin imagen",
   "eventCard": {
     "priceFree": "Gratis",

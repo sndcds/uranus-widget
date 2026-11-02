@@ -76,6 +76,116 @@ test('map is loaded on demand; place → event → back preserves map, filters a
   expect(errors).toEqual([])
 })
 
+const geometryOptions = [
+  { name: 'Büdelsdorf', order: 2, group_id: 1, admin_level: 6, geometry_uuid: 'e2705f39-00fe-415f-9029-3e326d1c0497' },
+  { name: 'Rendsburg Kulturregion', order: 1, group_id: 1, admin_level: 6, geometry_uuid: '18cd6130-ff7f-4d95-a680-fc6eeb06dcb5' },
+  { name: 'Alt Duvenstedt', order: 2, group_id: 1, admin_level: 8, geometry_uuid: '786507f2-e513-4060-badf-2ab0cf6388d3' },
+]
+
+test('geometry selection filters events and counts, resets pages and survives detail navigation', async ({ page }) => {
+  const errors = await setup(page, { map: { enabled: false }, filter: { portal: 'portal-1', limit: 1, categories: [1], geometry_group: 1 } })
+  const geometryRequests = []
+  const eventRequests = []
+  const summaryRequests = []
+  await page.route('**/api/portal/*/geometries/select?*', route => {
+    geometryRequests.push(route.request().url())
+    return route.fulfill({ json: { status: 200, data: { select: geometryOptions } } })
+  })
+  await page.route('**/api/events/filter', route => {
+    const filter = route.request().postDataJSON()
+    eventRequests.push(filter)
+    const nextPage = !!filter.last_event_date_uuid
+    return route.fulfill({ json: { status: 200, data: {
+      events: [{ ...event, uuid: nextPage ? 'event-2' : event.uuid,
+        title: filter.geometry ? 'Konzert in Büdelsdorf' : nextPage ? 'Zweites Konzert' : event.title }],
+      ...(!filter.geometry && !nextPage ? { last_event_date_uuid: 'next-page', last_event_start_at: '2026-11-02' } : {}),
+    } } })
+  })
+  await page.route('**/api/events/type-summary?*', route => {
+    const params = new URL(route.request().url()).searchParams
+    summaryRequests.push(Object.fromEntries(params))
+    return route.fulfill({ json: { status: 200, data: { total_event_count: params.has('geometry') ? 1 : 2 } } })
+  })
+  await page.goto('/demo/embed.html')
+  const select = page.getByRole('combobox', { name: 'Nach Gebiet filtern' })
+  await expect(select).toBeEnabled()
+  await expect(select.locator('option')).toHaveText(['Alle Orte', 'Rendsburg Kulturregion', 'Büdelsdorf', 'Alt Duvenstedt'])
+  expect(geometryRequests).toHaveLength(1)
+  expect(new URL(geometryRequests[0]).pathname).toBe('/api/portal/portal-1/geometries/select')
+  expect(new URL(geometryRequests[0]).search).toBe('?group=1')
+  expect(eventRequests[0]).not.toHaveProperty('geometry')
+  expect(eventRequests[0]).not.toHaveProperty('geometry_group')
+  await expect(page.locator('.uw-widget__count')).toHaveText('2 Events')
+  await page.getByRole('button', { name: 'Mehr laden', exact: true }).click()
+  await expect(page.locator('.uw-event-card')).toHaveCount(2)
+  expect(eventRequests.at(-1).last_event_date_uuid).toBe('next-page')
+
+  const geometry = geometryOptions[0].geometry_uuid
+  await select.selectOption(geometry)
+  await expect(page.locator('.uw-event-card')).toHaveCount(1)
+  await expect(page.locator('.uw-event-card')).toContainText('Konzert in Büdelsdorf')
+  await expect(page.locator('.uw-widget__count')).toHaveText('1 Events')
+  expect(eventRequests.at(-1)).toMatchObject({ portal: 'portal-1', categories: [1], geometry })
+  expect(eventRequests.at(-1)).not.toHaveProperty('last_event_date_uuid')
+  expect(summaryRequests.at(-1).geometry).toBe(geometry)
+  expect(summaryRequests.at(-1)).not.toHaveProperty('geometry_group')
+
+  await page.getByRole('button', { name: 'Bildung', exact: true }).click()
+  await expect.poll(() => eventRequests.at(-1).categories).toEqual([1, 2])
+  expect(eventRequests.at(-1).geometry).toBe(geometry)
+  await page.getByRole('searchbox').fill('Musik')
+  await page.getByRole('button', { name: 'Suchen', exact: true }).click()
+  await expect.poll(() => eventRequests.at(-1).search).toBe('Musik')
+  await expect(page.locator('.uw-event-card')).toBeVisible()
+  const loaded = eventRequests.length
+  await page.locator('.uw-event-card').click()
+  await expect(page.locator('.uw-event-detail__header')).toBeVisible()
+  await page.goBack()
+  await expect(select).toBeVisible()
+  await expect(select).toHaveValue(geometry)
+  expect(eventRequests).toHaveLength(loaded)
+  expect(geometryRequests).toHaveLength(1)
+
+  await select.selectOption('')
+  await expect(page.locator('.uw-widget__count')).toHaveText('2 Events')
+  await expect(page.locator('.uw-event-card')).toContainText(event.title)
+  expect(eventRequests.at(-1)).toMatchObject({ categories: [1, 2], search: 'Musik' })
+  expect(eventRequests.at(-1)).not.toHaveProperty('geometry')
+  expect(summaryRequests.at(-1)).not.toHaveProperty('geometry')
+  expect(errors).toEqual([])
+})
+
+test('without geometry_group there is no geometry lookup or extra select', async ({ page }) => {
+  await setup(page)
+  const requests = []
+  page.on('request', request => { if (request.url().includes('/geometries/select')) requests.push(request.url()) })
+  await page.goto('/demo/embed.html')
+  await expect(page.locator('.uw-event-card')).toBeVisible()
+  await expect(page.getByRole('combobox', { name: 'Nach Gebiet filtern' })).toHaveCount(0)
+  expect(requests).toEqual([])
+})
+
+test('an unavailable geometry API leaves events usable and can be retried on a narrow screen', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 900 })
+  const errors = await setup(page, { map: { enabled: false }, filter: { portal: 'portal-1', geometry_group: 1 } })
+  let attempts = 0
+  await page.route('**/api/portal/*/geometries/select?*', route => ++attempts === 1
+    ? route.fulfill({ status: 503, json: { message: 'Unavailable' } })
+    : route.fulfill({ json: { status: 200, data: { select: geometryOptions } } }))
+  await page.goto('/demo/embed.html')
+  const select = page.getByRole('combobox', { name: 'Nach Gebiet filtern' })
+  await expect(select).toBeDisabled()
+  await expect(page.getByRole('status')).toContainText('Die Gebiete konnten nicht geladen werden.')
+  await expect(page.locator('.uw-event-card')).toBeVisible()
+  await page.getByRole('button', { name: 'Erneut versuchen', exact: true }).click()
+  await expect(select).toBeEnabled()
+  await expect(page.locator('.uw-filter__geometry-error')).toHaveCount(0)
+  expect(attempts).toBe(2)
+  const box = await select.boundingBox()
+  expect(box.x + box.width).toBeLessThanOrEqual(390)
+  expect(errors).toEqual([])
+})
+
 test('event grid respects its configured column limit and adapts to a narrow container', async ({ page }) => {
   await page.setViewportSize({ width: 1800, height: 1000 })
   await setup(page, { event_list: { layout: 'grid', max_columns: 2 } })

@@ -26,6 +26,14 @@
     "ariaLabel": "Filter by event type",
     "all": "All event types"
   },
+  "geometry": {
+    "ariaLabel": "Filter by area",
+    "all": "All places",
+    "loading": "Loading areas…",
+    "empty": "No areas available",
+    "unavailable": "Area selection unavailable",
+    "loadError": "The areas could not be loaded."
+  },
   "noImage": "No image",
   "eventCard": {
     "priceFree": "Free",
